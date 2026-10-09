@@ -1,9 +1,12 @@
 # AegisCare AI - Smart Healthcare Risk Prediction & Clinical Decision Support System (CDSS)
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-success?style=for-the-badge&logo=github)](https://sat9219.github.io/smart-healthcare-risk-prediction-system/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![Standards: HL7 FHIR R4](https://img.shields.io/badge/FHIR-HL7%20R4%20Compliant-orange.svg)](https://hl7.org/fhir/)
 [![XAI: TreeSHAP](https://img.shields.io/badge/XAI-SHAP%20Attribution-emerald.svg)](https://github.com/slundberg/shap)
+
+🔗 **Live Interactive App:** [https://sat9219.github.io/smart-healthcare-risk-prediction-system/](https://sat9219.github.io/smart-healthcare-risk-prediction-system/)
 
 AegisCare AI is an end-to-end, production-grade **Clinical Decision Support System (CDSS)** engineered to bridge the gap between machine learning risk scoring and bedside clinician workflows. It features multi-outcome adverse event prediction, patient-specific **TreeSHAP explainability**, longitudinal biomarker tracking, and an interactive **"What-If" Intervention Simulator**.
 
