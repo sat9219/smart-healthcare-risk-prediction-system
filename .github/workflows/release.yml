@@ -1,0 +1,48 @@
+name: Create GitHub Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for release (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name || inputs.tag_name }}
+          name: AegisCare AI ${{ github.ref_name || inputs.tag_name }} - Production Release
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            ## AegisCare AI - Production Release v1.0.0
+            
+            ### 🏥 Clinical Decision Support System (CDSS)
+            
+            We are excited to release **AegisCare AI v1.0.0**, an end-to-end, production-grade Clinical Decision Support System engineered to bridge predictive machine learning risk scoring and bedside clinician workflows.
+
+            #### 🚀 Highlights & Features
+            - **Multi-Outcome Risk Engine:** Calibrated prediction probabilities for 30-Day Hospital Readmission, In-Hospital Deterioration, and Major Adverse Cardiac Events (MACE).
+            - **TreeSHAP Explainability (XAI):** Patient-level feature attribution isolating exact directional risk contributions for Troponin I, eGFR, SBP, SDoH barriers, and comorbidities.
+            - **Interactive "What-If" Intervention Simulator:** Bedside therapeutic lever tuning (target BP, renal protection, GDMT, social care navigation, remote telemetry) with real-time risk delta forecasting.
+            - **Evidence-Based Benchmarks:** Integrated NEWS2 scoring, Charlson Comorbidity Index (CCI), qSOFA Sepsis screening, and Area Deprivation Index (ADI).
+            - **HL7 FHIR R4 Interoperability:** Spec-compliant export of FHIR R4 `Bundle`, `Patient`, `Observation`, and `RiskAssessment` resources ready for EHR ingestion.
+            - **Interactive Web App:** High-performance glassmorphic clinical UI.
+
+            #### 🔗 Live Demo
+            Interactive App: https://sat9219.github.io/smart-healthcare-risk-prediction-system/

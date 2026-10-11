@@ -17,3 +17,8 @@ Thumbs.db
 # Raw browser download artifacts (temporary)
 *.download
 *.tmp
+frame.html
+*-*.css
+conversation-*.css
+root-*.css
+

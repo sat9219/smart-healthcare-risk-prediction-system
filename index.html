@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AegisCare AI - Smart Healthcare Risk Prediction & Clinical Decision Support System</title>
+  <meta name="description" content="Production-grade Clinical Decision Support System (CDSS) featuring multi-outcome adverse event prediction, TreeSHAP explainability, What-If intervention simulator, and HL7 FHIR R4 interoperability.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Background Glow Accents -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v8"/>
+            <path d="M8 12h8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title-wrap">
+            <h1 class="brand-title">AegisCare AI</h1>
+            <span class="version-tag">v1.0.0-prod</span>
+            <span class="status-live-pulse" title="System Operational"></span>
+          </div>
+          <p class="brand-subtitle">Smart Healthcare Risk Prediction & Clinical Decision Support System (CDSS)</p>
+        </div>
+      </div>
+
+      <div class="header-badges">
+        <span class="badge badge-fhir">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          HL7 FHIR R4
+        </span>
+        <span class="badge badge-xai">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          TreeSHAP XAI
+        </span>
+        <span class="badge badge-ehr">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          EHR Integrated
+        </span>
+        <button id="btn-new-patient" class="btn btn-secondary btn-sm" aria-label="Enter New Patient Data">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Assessment
+        </button>
+        <button id="btn-export-fhir" class="btn btn-primary btn-sm" aria-label="Export HL7 FHIR Bundle">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export FHIR R4
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    <!-- Patient Selector Ribbon -->
+    <section class="patient-cohort-bar card glass-card">
+      <div class="cohort-header">
+        <div class="cohort-title-area">
+          <span class="section-eyebrow">COHORT SELECTION</span>
+          <h2 class="section-title-sm">Active Inpatient & High-Risk Cohort</h2>
+        </div>
+        <div class="cohort-filter-tabs">
+          <button class="filter-chip active" data-filter="all">All (5)</button>
+          <button class="filter-chip" data-filter="critical">High Risk (2)</button>
+          <button class="filter-chip" data-filter="moderate">Moderate (2)</button>
+          <button class="filter-chip" data-filter="low">Low Risk (1)</button>
+        </div>
+      </div>
+
+      <div class="patient-card-scroll" id="patient-card-scroll">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+    </section>
+
+    <!-- Main Clinical Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Left Column: Patient Profile & Risk Outcome Gauges -->
+      <div class="grid-col col-left">
+        <!-- Active Patient Header Card -->
+        <section class="card glass-card patient-banner" id="patient-banner">
+          <div class="patient-banner-top">
+            <div class="patient-avatar-group">
+              <div class="patient-avatar" id="patient-avatar">--</div>
+              <div>
+                <div class="patient-name-row">
+                  <h3 class="patient-name" id="patient-name">Loading Patient...</h3>
+                  <span class="patient-mrn" id="patient-mrn">MRN: --</span>
+                </div>
+                <div class="patient-meta" id="patient-meta">-- yrs • -- • Ward: --</div>
+              </div>
+            </div>
+            <div class="patient-acuity-tag" id="patient-acuity-badge">Evaluating...</div>
+          </div>
+
+          <div class="vitals-strip" id="vitals-strip">
+            <!-- Vitals metrics populated dynamically -->
+          </div>
+        </section>
+
+        <!-- Multi-Outcome Risk Engine -->
+        <section class="card glass-card risk-gauges-section">
+          <div class="section-heading-row">
+            <div>
+              <span class="section-eyebrow">CALIBRATED INFERENCE ENGINE</span>
+              <h2 class="card-heading">Multi-Outcome Adverse Event Probabilities</h2>
+            </div>
+            <span class="engine-tag">XGBoost-Ensemble</span>
+          </div>
+
+          <div class="gauges-container">
+            <!-- Outcome 1: 30-Day Readmission -->
+            <div class="gauge-card" id="gauge-card-readmission">
+              <div class="gauge-svg-wrap">
+                <svg class="radial-gauge" viewBox="0 0 120 120">
+                  <circle class="gauge-bg" cx="60" cy="60" r="50"/>
+                  <circle class="gauge-fill" id="gauge-fill-readmit" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+                </svg>
+                <div class="gauge-value-center">
+                  <span class="gauge-number" id="val-readmit">0%</span>
+                  <span class="gauge-sublabel">Risk</span>
+                </div>
+              </div>
+              <div class="gauge-info">
+                <h4 class="gauge-title">30-Day Hospital Readmission</h4>
+                <p class="gauge-desc" id="desc-readmit">Baseline calibrated probability based on discharge markers.</p>
+                <span class="tier-pill tier-high" id="tier-readmit">High Risk</span>
+              </div>
+            </div>
+
+            <!-- Outcome 2: In-Hospital Deterioration -->
+            <div class="gauge-card" id="gauge-card-deterioration">
+              <div class="gauge-svg-wrap">
+                <svg class="radial-gauge" viewBox="0 0 120 120">
+                  <circle class="gauge-bg" cx="60" cy="60" r="50"/>
+                  <circle class="gauge-fill" id="gauge-fill-deterioration" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+                </svg>
+                <div class="gauge-value-center">
+                  <span class="gauge-number" id="val-deterioration">0%</span>
+                  <span class="gauge-sublabel">Risk</span>
+                </div>
+              </div>
+              <div class="gauge-info">
+                <h4 class="gauge-title">In-Hospital Deterioration</h4>
+                <p class="gauge-desc" id="desc-deterioration">ICU transfer / acute decompensation risk within 72h.</p>
+                <span class="tier-pill tier-moderate" id="tier-deterioration">Moderate</span>
+              </div>
+            </div>
+
+            <!-- Outcome 3: Major Adverse Cardiac Event (MACE) -->
+            <div class="gauge-card" id="gauge-card-mace">
+              <div class="gauge-svg-wrap">
+                <svg class="radial-gauge" viewBox="0 0 120 120">
+                  <circle class="gauge-bg" cx="60" cy="60" r="50"/>
+                  <circle class="gauge-fill" id="gauge-fill-mace" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+                </svg>
+                <div class="gauge-value-center">
+                  <span class="gauge-number" id="val-mace">0%</span>
+                  <span class="gauge-sublabel">Risk</span>
+                </div>
+              </div>
+              <div class="gauge-info">
+                <h4 class="gauge-title">Major Adverse Cardiac Events</h4>
+                <p class="gauge-desc" id="desc-mace">Composite MI, acute decompensated heart failure, or arrhythmia.</p>
+                <span class="tier-pill tier-low" id="tier-mace">Low Risk</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Clinical Validation Benchmarks -->
+        <section class="card glass-card benchmarks-section">
+          <div class="section-heading-row">
+            <div>
+              <span class="section-eyebrow">EVIDENCE-BASED STANDARDS</span>
+              <h2 class="card-heading">Clinical Benchmarks & Severity Scores</h2>
+            </div>
+          </div>
+
+          <div class="benchmark-grid">
+            <div class="benchmark-item">
+              <div class="benchmark-metric-top">
+                <span class="benchmark-label">NEWS2 Score</span>
+                <span class="benchmark-val" id="bm-news2-val">--</span>
+              </div>
+              <div class="benchmark-status" id="bm-news2-status">National Early Warning Score</div>
+              <div class="benchmark-progress"><div class="bm-bar" id="bm-news2-bar" style="width: 50%;"></div></div>
+            </div>
+
+            <div class="benchmark-item">
+              <div class="benchmark-metric-top">
+                <span class="benchmark-label">Charlson Comorbidity (CCI)</span>
+                <span class="benchmark-val" id="bm-cci-val">--</span>
+              </div>
+              <div class="benchmark-status" id="bm-cci-status">10-Year Survival Estimation</div>
+              <div class="benchmark-progress"><div class="bm-bar" id="bm-cci-bar" style="width: 40%;"></div></div>
+            </div>
+
+            <div class="benchmark-item">
+              <div class="benchmark-metric-top">
+                <span class="benchmark-label">qSOFA Sepsis Screen</span>
+                <span class="benchmark-val" id="bm-qsofa-val">--</span>
+              </div>
+              <div class="benchmark-status" id="bm-qsofa-status">Bedside Sepsis Organ Failure</div>
+              <div class="benchmark-progress"><div class="bm-bar" id="bm-qsofa-bar" style="width: 33%;"></div></div>
+            </div>
+
+            <div class="benchmark-item">
+              <div class="benchmark-metric-top">
+                <span class="benchmark-label">Area Deprivation (ADI)</span>
+                <span class="benchmark-val" id="bm-adi-val">--</span>
+              </div>
+              <div class="benchmark-status" id="bm-adi-status">SDoH Neighborhood Adversity Decile</div>
+              <div class="benchmark-progress"><div class="bm-bar" id="bm-adi-bar" style="width: 80%;"></div></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: TreeSHAP XAI & What-If Intervention Simulator -->
+      <div class="grid-col col-right">
+        <!-- Explainable AI: TreeSHAP Feature Attribution -->
+        <section class="card glass-card shap-section">
+          <div class="section-heading-row">
+            <div>
+              <span class="section-eyebrow">EXPLAINABLE AI (XAI)</span>
+              <h2 class="card-heading">TreeSHAP Attribution Waterfall</h2>
+            </div>
+            <div class="shap-legend">
+              <span class="legend-chip legend-risk"><span class="dot-red"></span> Increased Risk</span>
+              <span class="legend-chip legend-safe"><span class="dot-green"></span> Protective Factor</span>
+            </div>
+          </div>
+          <p class="section-summary-text">
+            Patient-specific Shapley values isolating exactly how each clinical lab, vital sign, and social determinant shifts this individual's probability from baseline.
+          </p>
+
+          <div class="shap-bars-container" id="shap-bars-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- Interactive What-If Intervention Simulator -->
+        <section class="card glass-card simulator-section">
+          <div class="simulator-header">
+            <div>
+              <span class="section-eyebrow">DYNAMIC PROGNOSTIC SIMULATOR</span>
+              <h2 class="card-heading">"What-If" Clinical Intervention Engine</h2>
+            </div>
+            <button id="btn-reset-sim" class="btn btn-ghost btn-sm" title="Reset Levers to Baseline">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              Reset Levers
+            </button>
+          </div>
+          <p class="section-summary-text">
+            Simulate bedside therapeutic adjustments, guideline-directed medications, or social care support to forecast real-time post-intervention risk attenuation.
+          </p>
+
+          <!-- Real-Time Impact Banner -->
+          <div class="sim-impact-banner" id="sim-impact-banner">
+            <div class="sim-impact-col">
+              <span class="sim-sub">Baseline Risk</span>
+              <span class="sim-main-val" id="sim-base-val">42.8%</span>
+            </div>
+            <div class="sim-arrow">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <div class="sim-impact-col">
+              <span class="sim-sub">Projected Post-Intervention</span>
+              <span class="sim-main-val" id="sim-projected-val">28.4%</span>
+            </div>
+            <div class="sim-delta-badge" id="sim-delta-badge">
+              <span class="sim-delta-sign">-14.4%</span>
+              <span class="sim-delta-lbl">Absolute Reduction</span>
+            </div>
+          </div>
+
+          <!-- Interactive Levers -->
+          <div class="sim-levers-grid">
+            <!-- Lever 1: SBP Titration -->
+            <div class="lever-control">
+              <div class="lever-header">
+                <label for="lever-sbp" class="lever-title">Target Systolic BP (mmHg)</label>
+                <span class="lever-current-val" id="lever-sbp-disp">138 mmHg</span>
+              </div>
+              <input type="range" id="lever-sbp" min="105" max="185" step="1" value="138" class="range-slider">
+              <div class="range-bounds">
+                <span>105 mmHg (Aggressive)</span>
+                <span>185 mmHg (Severe HTN)</span>
+              </div>
+            </div>
+
+            <!-- Lever 2: Renal Optimization eGFR -->
+            <div class="lever-control">
+              <div class="lever-header">
+                <label for="lever-egfr" class="lever-title">Target eGFR / Hydration Protocol</label>
+                <span class="lever-current-val" id="lever-egfr-disp">55 mL/min</span>
+              </div>
+              <input type="range" id="lever-egfr" min="20" max="110" step="1" value="55" class="range-slider">
+              <div class="range-bounds">
+                <span>20 (Stage 4 CKD)</span>
+                <span>110 (Normal Glomerular)</span>
+              </div>
+            </div>
+
+            <!-- Lever 3: Guideline-Directed Medical Therapy (GDMT) -->
+            <div class="lever-toggle-group">
+              <div class="toggle-card">
+                <div class="toggle-info">
+                  <span class="toggle-name">Guideline-Directed Medical Therapy (GDMT)</span>
+                  <span class="toggle-sub">Initiate or uptitrate SGLT2i + ARNI / ACEi regimen</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggle-gdmt">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+
+              <!-- Lever 4: SDoH Community Navigation -->
+              <div class="toggle-card">
+                <div class="toggle-info">
+                  <span class="toggle-name">SDoH Transportation & Pharmacy Assistance</span>
+                  <span class="toggle-sub">Enroll in medical transit voucher & co-pay waiver</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggle-sdoh">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+
+              <!-- Lever 5: Remote Telemonitoring (RPM) -->
+              <div class="toggle-card">
+                <div class="toggle-info">
+                  <span class="toggle-name">30-Day Post-Discharge Remote Telemetry (RPM)</span>
+                  <span class="toggle-sub">Cellular BP cuff, SpO2 pulse oximeter & nurse check-in</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggle-rpm">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recommended Actionable Orders & Clinical Protocol -->
+        <section class="card glass-card protocol-section">
+          <div class="section-heading-row">
+            <div>
+              <span class="section-eyebrow">ORDER SET DECISION SUPPORT</span>
+              <h2 class="card-heading">Algorithmic Clinical Protocol Directives</h2>
+            </div>
+            <button id="btn-copy-orders" class="btn btn-ghost btn-sm">Copy Orders</button>
+          </div>
+
+          <div class="orders-list" id="orders-list">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: FHIR R4 JSON Viewer & Export -->
+  <div class="modal-backdrop" id="modal-fhir" role="dialog" aria-modal="true" aria-labelledby="modal-fhir-title">
+    <div class="modal-dialog glass-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="icon-chip icon-chip-cyan">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div>
+            <h3 id="modal-fhir-title" class="modal-title">HL7 FHIR R4 Standardized Resource Bundle</h3>
+            <p class="modal-subtitle">Directly ingestible into hospital EHR systems (Epic, Cerner, MEDITECH)</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="modal-fhir-close" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="fhir-toolbar">
+          <span class="code-badge">Resource: Bundle (type: collection)</span>
+          <div class="fhir-actions">
+            <button id="btn-copy-fhir" class="btn btn-secondary btn-sm">Copy JSON</button>
+            <button id="btn-download-fhir" class="btn btn-primary btn-sm">Download .json</button>
+          </div>
+        </div>
+        <pre class="json-code-viewer"><code id="fhir-json-code">{/* Loaded dynamically */}</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Custom Patient Intake Assessment -->
+  <div class="modal-backdrop" id="modal-patient" role="dialog" aria-modal="true" aria-labelledby="modal-patient-title">
+    <div class="modal-dialog glass-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="icon-chip icon-chip-primary">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          </div>
+          <div>
+            <h3 id="modal-patient-title" class="modal-title">Evaluate New Patient Telemetry</h3>
+            <p class="modal-subtitle">Execute instantaneous ML inference across vitals, labs, and SDoH</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="modal-patient-close" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="form-new-patient" class="modal-body">
+        <div class="form-grid">
+          <!-- Demographics -->
+          <div class="form-group">
+            <label for="inp-name">Patient Full Name</label>
+            <input type="text" id="inp-name" required value="Eleanor Vance" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="inp-age">Age (Years)</label>
+            <input type="number" id="inp-age" required min="18" max="100" value="68" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="inp-gender">Gender</label>
+            <select id="inp-gender" class="form-control">
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+            </select>
+          </div>
+
+          <!-- Vitals -->
+          <div class="form-group">
+            <label for="inp-sbp">Systolic BP (mmHg)</label>
+            <input type="number" id="inp-sbp" required min="80" max="230" value="152" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="inp-dbp">Diastolic BP (mmHg)</label>
+            <input type="number" id="inp-dbp" required min="40" max="130" value="92" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="inp-hr">Heart Rate (BPM)</label>
+            <input type="number" id="inp-hr" required min="40" max="180" value="88" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="inp-spo2">SpO2 Oxygen Saturation (%)</label>
+            <input type="number" id="inp-spo2" required min="70" max="100" step="0.1" value="94.0" class="form-control">
+          </div>
+
+          <!-- Labs -->
+          <div class="form-group">
+            <label for="inp-egfr">eGFR (mL/min/1.73m²)</label>
+            <input type="number" id="inp-egfr" required min="5" max="130" step="0.1" value="48.0" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="inp-troponin">High-Sensitivity Troponin I (ng/mL)</label>
+            <input type="number" id="inp-troponin" required min="0.001" max="5.0" step="0.001" value="0.082" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="inp-hba1c">HbA1c Glycated Hemoglobin (%)</label>
+            <input type="number" id="inp-hba1c" required min="4" max="15" step="0.1" value="8.4" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="inp-wbc">White Blood Cells (10³/µL)</label>
+            <input type="number" id="inp-wbc" required min="2" max="30" step="0.1" value="9.8" class="form-control">
+          </div>
+
+          <!-- Comorbidities -->
+          <div class="form-group col-span-2">
+            <label class="form-lbl-sub">Comorbidities</label>
+            <div class="checkbox-row">
+              <label class="check-container"><input type="checkbox" id="inp-hf" checked> Heart Failure (HF)</label>
+              <label class="check-container"><input type="checkbox" id="inp-ckd" checked> Chronic Kidney Disease (CKD)</label>
+              <label class="check-container"><input type="checkbox" id="inp-t2d" checked> Type 2 Diabetes</label>
+              <label class="check-container"><input type="checkbox" id="inp-copd"> COPD / Asthma</label>
+            </div>
+          </div>
+
+          <!-- SDoH -->
+          <div class="form-group">
+            <label for="inp-adi">Area Deprivation Index (ADI 1-10)</label>
+            <input type="number" id="inp-adi" required min="1" max="10" value="8" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-lbl-sub">Social Risk Factors</label>
+            <div class="checkbox-row">
+              <label class="check-container"><input type="checkbox" id="inp-transport" checked> Transport Insecurity</label>
+              <label class="check-container"><input type="checkbox" id="inp-medcost" checked> Med Cost Distress</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="modal-patient-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Run Calibrated Risk Evaluation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <p><strong>AegisCare AI</strong> &bull; Clinical Decision Support System &bull; Research & Investigation Grade</p>
+        <p class="footer-disclaimer">Not intended as a standalone diagnostic tool. Compliant with HIPAA de-identification & HL7 FHIR standard specification.</p>
+      </div>
+      <div class="footer-right">
+        <a href="https://github.com/sat9219/smart-healthcare-risk-prediction-system" target="_blank" rel="noopener noreferrer" class="footer-link">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub Repository
+        </a>
+        <a href="https://sat9219.github.io/smart-healthcare-risk-prediction-system/" target="_blank" rel="noopener noreferrer" class="footer-link">Live App</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
