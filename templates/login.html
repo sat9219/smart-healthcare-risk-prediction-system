@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Portal Login | SmartHealth AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent-cyan: #00d2ff;
+            --accent-emerald: #10b981;
+            --bg-deep: #060913;
+            --card-bg: rgba(15, 23, 42, 0.88);
+            --card-border: rgba(255, 255, 255, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 3D WEBGL / CANVAS BACKGROUND */
+        #bg3dCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Ambient Glowing Color Glows */
+        .ambient-glow-1 {
+            position: fixed;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.18), transparent 70%);
+            top: -150px;
+            left: -100px;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseGlow 14s ease-in-out infinite alternate;
+        }
+
+        .ambient-glow-2 {
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.16), transparent 70%);
+            bottom: -200px;
+            right: -150px;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseGlow 18s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.7; }
+            100% { transform: scale(1.15) translate(40px, 30px); opacity: 1; }
+        }
+
+        /* Centered Clean & Stable Login Card */
+        .login-card-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 42px 38px;
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 210, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .login-card:hover {
+            border-color: rgba(0, 210, 255, 0.35);
+            box-shadow: 0 35px 70px -10px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 210, 255, 0.25);
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff, #3b82f6, #10b981);
+        }
+
+        /* Brand Header */
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-badge-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 14px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #00d2ff 0%, #2563eb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 26px;
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.45);
+        }
+
+        .login-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .login-header h1 span {
+            background: linear-gradient(135deg, #00d2ff 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-header p {
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        /* Form Inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            color: #64748b;
+            font-size: 15px;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .styled-input {
+            width: 100%;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 14px 16px 14px 44px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.25s;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .styled-input:focus {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: #00d2ff;
+            box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .styled-input:focus + .input-icon,
+        .input-wrapper:focus-within .input-icon {
+            color: #00d2ff;
+        }
+
+        .toggle-password-btn {
+            position: absolute;
+            right: 14px;
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px;
+        }
+
+        .toggle-password-btn:hover {
+            color: #cbd5e1;
+        }
+
+        /* Buttons */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #00d2ff 0%, #2563eb 100%);
+            border: none;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 800;
+            padding: 14px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(0, 210, 255, 0.35);
+            transition: all 0.25s;
+            margin-top: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 210, 255, 0.55);
+        }
+
+        .btn-demo {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #38bdf8;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-demo:hover {
+            background: rgba(56, 189, 248, 0.12);
+            border-color: #38bdf8;
+            color: #ffffff;
+        }
+
+        .footer-compliance {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .footer-compliance span {
+            color: #10b981;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D ANIMATED BACKGROUND CANVAS -->
+    <canvas id="bg3dCanvas"></canvas>
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <!-- CLEAN & ACCESSIBLE LOGIN CARD -->
+    <div class="login-card-wrapper">
+        <div class="login-card">
+            
+            <!-- Header -->
+            <div class="login-header">
+                <div class="logo-badge-icon">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <h1>SmartHealth <span>AI</span></h1>
+                <p>Clinical Risk Suite &amp; Exact Disease Predictor</p>
+            </div>
+
+            <!-- Form -->
+            <form action="/login" method="POST" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">Clinician ID / Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user-doctor input-icon"></i>
+                        <input type="text" id="email" name="username" class="styled-input" placeholder="doctor@smarthealth.ai" value="dr.satyam@smarthealth.ai" required autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Security Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" id="password" name="password" class="styled-input" placeholder="••••••••••••" value="clinical2026" required autocomplete="current-password">
+                        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()">
+                            <i class="fa-solid fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <span>Access Clinical Portal</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+                <button type="button" class="btn-demo" onclick="autoSignInDoctor()">
+                    <i class="fa-solid fa-bolt text-warning" style="color:#f59e0b;"></i>
+                    <span>Instant 1-Click Doctor Sign-In</span>
+                </button>
+            </form>
+
+            <div class="footer-compliance">
+                <span><i class="fa-solid fa-shield-halved"></i> HIPAA &amp; WHO Standards</span> &bull; 256-Bit Encrypted
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D MEDICAL PARTICLE & WAVE ANIMATION SCRIPT -->
+    <script>
+        const canvas = document.getElementById('bg3dCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        // Mouse 3D Camera Rotation
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetRotX = 0;
+        let targetRotY = 0;
+        let rotX = 0;
+        let rotY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - width / 2) / (width / 2);
+            mouseY = (e.clientY - height / 2) / (height / 2);
+            targetRotY = mouseX * 0.45;
+            targetRotX = -mouseY * 0.45;
+        });
+
+        // 3D Particles Matrix (Medical Synapse & Grid Nodes)
+        const PARTICLE_COUNT = 140;
+        const particles = [];
+        const fov = 450;
+
+        class Particle3D {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = (Math.random() - 0.5) * 1400;
+                this.y = (Math.random() - 0.5) * 900;
+                this.z = Math.random() * 1000 - 200;
+                this.vx = (Math.random() - 0.5) * 0.6;
+                this.vy = (Math.random() - 0.5) * 0.6;
+                this.vz = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 2.5 + 1.2;
+                this.colorType = Math.random() > 0.4 ? '#00d2ff' : Math.random() > 0.5 ? '#3b82f6' : '#10b981';
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.z += this.vz;
+
+                // Boundary loop
+                if (this.x > 700) this.x = -700;
+                if (this.x < -700) this.x = 700;
+                if (this.y > 450) this.y = -450;
+                if (this.y < -450) this.y = 450;
+                if (this.z > 800) this.z = -200;
+                if (this.z < -200) this.z = 800;
+            }
+        }
+
+        function initParticles() {
+            particles.length = 0;
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push(new Particle3D());
+            }
+        }
+        initParticles();
+
+        // 3D Wave Grid Ring Points
+        const WAVE_POINTS = 60;
+        let waveAngle = 0;
+
+        function render3D() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Smooth 3D Camera Rotation
+            rotX += (targetRotX - rotX) * 0.05;
+            rotY += (targetRotY - rotY) * 0.05;
+            waveAngle += 0.02;
+
+            const cosY = Math.cos(rotY);
+            const sinY = Math.sin(rotY);
+            const cosX = Math.cos(rotX);
+            const sinX = Math.sin(rotX);
+
+            const projected = [];
+
+            // 1. Project and Render 3D Particles
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.update();
+
+                // Rotate Y
+                let x1 = p.x * cosY - p.z * sinY;
+                let z1 = p.z * cosY + p.x * sinY;
+
+                // Rotate X
+                let y1 = p.y * cosX - z1 * sinX;
+                let z2 = z1 * cosX + p.y * sinX;
+
+                // Depth projection
+                const scale = fov / (fov + z2 + 300);
+                if (scale > 0) {
+                    const x2d = x1 * scale + width / 2;
+                    const y2d = y1 * scale + height / 2;
+                    const r2d = p.radius * scale;
+
+                    projected.push({ x: x2d, y: y2d, z: z2, scale, color: p.colorType, r: r2d });
+
+                    // Draw glowing node
+                    ctx.beginPath();
+                    ctx.arc(x2d, y2d, Math.max(r2d, 0.8), 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.shadowColor = p.color;
+                    ctx.shadowBlur = 8 * scale;
+                    ctx.globalAlpha = Math.min(Math.max((scale - 0.2) * 1.4, 0.1), 0.9);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            // 2. Draw 3D Synapse Interconnection Lines
+            ctx.lineWidth = 0.6;
+            for (let i = 0; i < projected.length; i++) {
+                for (let j = i + 1; j < projected.length; j++) {
+                    const p1 = projected[i];
+                    const p2 = projected[j];
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 110) {
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        const alpha = (1 - dist / 110) * 0.25 * Math.min(p1.scale, p2.scale);
+                        ctx.strokeStyle = p1.color;
+                        ctx.globalAlpha = Math.max(alpha, 0);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // 3. Draw 3D Floating DNA Helix Ribbon Waves in Background
+            ctx.globalAlpha = 0.35;
+            ctx.lineWidth = 1.8;
+            for (let strand = 0; strand < 2; strand++) {
+                const phase = strand * Math.PI;
+                ctx.beginPath();
+                for (let k = -30; k <= 30; k++) {
+                    const t = k * 0.15 + waveAngle;
+                    const x3d = k * 28;
+                    const y3d = Math.sin(t + phase) * 140;
+                    const z3d = Math.cos(t + phase) * 180 + 100;
+
+                    // 3D rotation
+                    let xRot = x3d * cosY - z3d * sinY;
+                    let zRot = z3d * cosY + x3d * sinY;
+                    let yRot = y3d * cosX - zRot * sinX;
+                    let zFin = zRot * cosX + y3d * sinX;
+
+                    const scale = fov / (fov + zFin + 300);
+                    const x2 = xRot * scale + width / 2;
+                    const y2 = yRot * scale + height / 2;
+
+                    if (k === -30) ctx.moveTo(x2, y2);
+                    else ctx.lineTo(x2, y2);
+                }
+                ctx.strokeStyle = strand === 0 ? '#00d2ff' : '#10b981';
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(render3D);
+        }
+
+        render3D();
+
+        // UI Functions
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.className = 'fa-solid fa-eye-slash';
+            } else {
+                passInput.type = 'password';
+                eyeIcon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        function autoSignInDoctor() {
+            document.getElementById('email').value = 'dr.satyam@smarthealth.ai';
+            document.getElementById('password').value = 'clinical2026';
+            document.getElementById('loginForm').submit();
+        }
+    </script>
+<script src="/static/js/3d_bg_animation.js"></script>
+</body>
+</html>

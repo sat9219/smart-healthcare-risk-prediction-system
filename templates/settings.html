@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings | Smart Health</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --sidebar-bg: #0f172a;
+            --dark: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 28px 18px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 35px;
+            padding-left: 10px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        nav a svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 35px 40px;
+        }
+
+        .topbar h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .topbar p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 4px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .status-badge {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">SH</div>
+            <div>Smart Health</div>
+        </div>
+
+        <nav>
+            <a href="/">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+            <a href="/patients">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Patients
+            </a>
+            <a href="/prediction">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+                Risk Prediction
+            </a>
+            <a href="/analytics">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Analytics
+            </a>
+            <a href="/history">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Prediction History
+            </a>
+            <a href="/settings" class="active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Settings
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <h1>System Settings & Configuration</h1>
+            <p>Healthcare Risk Prediction platform configuration and database diagnostics.</p>
+        </header>
+
+        <div class="card">
+            <h2>System Health & Status</h2>
+            <div class="info-row">
+                <span class="info-label">Application Status</span>
+                <span class="status-badge">Operational & Healthy</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Database Engine</span>
+                <span class="info-value">SQLite3 via SQLAlchemy</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Database File</span>
+                <span class="info-value">healthcare.db</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Total Registered Patients</span>
+                <span class="info-value">{{ patient_count }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Total Predictions Evaluated</span>
+                <span class="info-value">{{ prediction_count }}</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Clinical Risk Scoring Thresholds</h2>
+            <div class="info-row">
+                <span class="info-label">High Risk Cutoff</span>
+                <span class="info-value" style="color:#ef4444;">Score &ge; 60%</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Medium Risk Cutoff</span>
+                <span class="info-value" style="color:#f59e0b;">Score 30% - 59%</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Low Risk Threshold</span>
+                <span class="info-value" style="color:#10b981;">Score &lt; 30%</span>
+            </div>
+        </div>
+    </main>
+
+<script src="/static/js/3d_engine.js"></script>
+<script src="/static/js/3d_bg_animation.js"></script>
+</body>
+</html>

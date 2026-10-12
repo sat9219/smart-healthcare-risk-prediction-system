@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction History | Smart Health</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --sidebar-bg: #0f172a;
+            --dark: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 28px 18px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 35px;
+            padding-left: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+        }
+
+        .logo-sub {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        nav a svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 35px 40px;
+            min-width: 0;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .topbar h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .topbar p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 13px 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-high { background: var(--danger-bg); color: var(--danger); }
+        .badge-medium { background: var(--warning-bg); color: var(--warning); }
+        .badge-low { background: var(--success-bg); color: var(--success); }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 20px; }
+            .topbar { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Ambient Background & Glassmorphic Elevation */
+        body {
+            background-color: #f8fafc !important;
+            background-image: 
+                radial-gradient(rgba(37, 99, 235, 0.07) 1.5px, transparent 1.5px), 
+                radial-gradient(rgba(6, 182, 212, 0.05) 1.5px, #f8fafc 1.5px) !important;
+            background-size: 28px 28px !important;
+            background-position: 0 0, 14px 14px !important;
+        }
+        .ambient-glow-wrapper {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.45;
+            animation: floatGlow 18s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.22), rgba(6, 182, 212, 0.15));
+            top: -80px;
+            right: -60px;
+        }
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.12));
+            bottom: -120px;
+            left: 120px;
+            animation-delay: -6s;
+        }
+        .orb-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+            top: 35%;
+            right: 20%;
+            animation-delay: -12s;
+        }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 30px) scale(1.08); }
+            100% { transform: translate(-30px, 50px) scale(0.95); }
+        }
+        .card, .panel-card, .table-card, .risk-card, .stat-card, .vital-box {
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(18px) !important;
+            -webkit-backdrop-filter: blur(18px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.85) !important;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.07), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- DYNAMIC AMBIENT GLOW BACKGROUND -->
+    <div class="ambient-glow-wrapper">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+
+
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">SH</div>
+            <div>
+                Smart Health
+                <span class="logo-sub">Audit History</span>
+            </div>
+        </div>
+
+        <nav>
+            <a href="/">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+            <a href="/patients">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Patients
+            </a>
+            <a href="/prediction">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+                Risk Prediction
+            </a>
+            <a href="/analytics">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Analytics
+            </a>
+            <a href="/history" class="active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Prediction History
+            </a>
+            <a href="/settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Settings
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <h1>Clinical Prediction Audit History</h1>
+                <p>Archived record of all evaluated health risk assessments.</p>
+            </div>
+            <div class="actions">
+                <a href="/export/predictions" class="btn btn-outline">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Export CSV
+                </a>
+                <a href="/prediction" class="btn btn-primary">
+                    + New Prediction
+                </a>
+            </div>
+        </header>
+
+        <div class="card">
+            {% if predictions %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Assessment ID</th>
+                            <th>Patient ID</th>
+                            <th>Diabetes Risk</th>
+                            <th>Cardiovascular Risk</th>
+                            <th>Hypertension Risk</th>
+                            <th>Recorded Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pred in predictions %}
+                        <tr>
+                            <td><strong>#{{ pred.id }}</strong></td>
+                            <td>Patient #{{ pred.patient_id }}</td>
+                            <td>
+                                <span class="badge {% if pred.diabetes_risk == 'High' %}badge-high{% elif pred.diabetes_risk == 'Medium' %}badge-medium{% else %}badge-low{% endif %}">
+                                    {{ pred.diabetes_risk }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if pred.heart_risk == 'High' %}badge-high{% elif pred.heart_risk == 'Medium' %}badge-medium{% else %}badge-low{% endif %}">
+                                    {{ pred.heart_risk }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if pred.hypertension_risk == 'High' %}badge-high{% elif pred.hypertension_risk == 'Medium' %}badge-medium{% else %}badge-low{% endif %}">
+                                    {{ pred.hypertension_risk }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if pred.created_at %}
+                                    {{ pred.created_at.strftime('%d %b %Y, %H:%M') }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div style="text-align:center; padding:40px; color:var(--text-muted);">
+                <p>No historical predictions recorded.</p>
+                <a href="/prediction" class="btn btn-primary" style="margin-top:12px;">Start First Prediction</a>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+<script src="/static/js/3d_engine.js"></script>
+<script src="/static/js/3d_bg_animation.js"></script>
+</body>
+</html>

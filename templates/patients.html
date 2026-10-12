@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients Registry | Smart Health</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --sidebar-bg: #0f172a;
+            --dark: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --success: #10b981;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 28px 18px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 35px;
+            padding-left: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+        }
+
+        .nav-link.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px 48px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .header p {
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-size: 15px;
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: white;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .btn-assess { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .btn-assess:hover { background: #dbeafe; }
+        .btn-edit { background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; }
+        .btn-edit:hover { background: #e2e8f0; }
+        .btn-del { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        .btn-del:hover { background: #fee2e2; }
+
+        .table-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        thead {
+            background: #f8fafc;
+            border-bottom: 2px solid var(--border);
+        }
+
+        th {
+            padding: 16px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--text-main);
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .patient-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #eff6ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .badge-smoking {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .badge-sm-yes { background: #fee2e2; color: #b91c1c; }
+        .badge-sm-no { background: #f0fdf4; color: #15803d; }
+    </style>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Ambient Background & Glassmorphic Elevation */
+        body {
+            background-color: #f8fafc !important;
+            background-image: 
+                radial-gradient(rgba(37, 99, 235, 0.07) 1.5px, transparent 1.5px), 
+                radial-gradient(rgba(6, 182, 212, 0.05) 1.5px, #f8fafc 1.5px) !important;
+            background-size: 28px 28px !important;
+            background-position: 0 0, 14px 14px !important;
+        }
+        .ambient-glow-wrapper {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.45;
+            animation: floatGlow 18s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.22), rgba(6, 182, 212, 0.15));
+            top: -80px;
+            right: -60px;
+        }
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.12));
+            bottom: -120px;
+            left: 120px;
+            animation-delay: -6s;
+        }
+        .orb-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+            top: 35%;
+            right: 20%;
+            animation-delay: -12s;
+        }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 30px) scale(1.08); }
+            100% { transform: translate(-30px, 50px) scale(0.95); }
+        }
+        .card, .panel-card, .table-card, .risk-card, .stat-card, .vital-box {
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(18px) !important;
+            -webkit-backdrop-filter: blur(18px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.85) !important;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.07), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- DYNAMIC AMBIENT GLOW BACKGROUND -->
+    <div class="ambient-glow-wrapper">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+
+
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">🏥</div>
+            <span>Smart Health</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/login" class="nav-link"><span>🔒</span> Clinician Login</a></li>
+            <li><a href="/" class="nav-link"><span>🏠</span> Dashboard</a></li>
+            <li><a href="/patients" class="nav-link active"><span>👥</span> Patients</a></li>
+            <li><a href="/prediction" class="nav-link"><span>⚡</span> Risk Prediction</a></li>
+            <li><a href="/history" class="nav-link"><span>📋</span> Prediction History</a></li>
+            <li><a href="/analytics" class="nav-link"><span>📊</span> Analytics</a></li>
+            <li><a href="/models/metrics" class="nav-link"><span>🤖</span> AI Model Metrics</a></li>
+            <li><a href="/settings" class="nav-link"><span>⚙️</span> Settings</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <div>
+                <h1>Patients Registry</h1>
+                <p>Manage patient biometric profiles, diagnostic histories, and risk assessments</p>
+            </div>
+            <div>
+                <a href="/patients/add" class="btn btn-primary">
+                    <span>+</span> Register New Patient
+                </a>
+            </div>
+        </div>
+
+        
+        <!-- OFFICIAL GOVERNMENT DATASET BENCHMARK BANNER -->
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); border-radius: var(--radius-lg); padding: 20px 24px; color: #ffffff; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.12); border: 1px solid rgba(255,255,255,0.1);">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="background: #3b82f6; color: #ffffff; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 9999px; text-transform: uppercase;">
+                        🏛️ Verified Government Clinical Repositories
+                    </span>
+                    <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 9999px; border: 1px solid #10b981;">
+                        CDC NHANES • NIH NIDDK • Framingham • WHO • ICMR
+                    </span>
+                </div>
+                <h2 style="font-size: 20px; font-weight: 800; margin: 0 0 4px 0; color: #ffffff;">
+                    Government Clinical Benchmark Registry
+                </h2>
+                <p style="font-size: 13px; color: #cbd5e1; margin: 0;">
+                    Patient profiles calibrated against official epidemiological health surveys for hyper-reliable risk stratification and exact disease cures.
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="/import_gov_dataset" class="btn" style="background: linear-gradient(135deg, #10b981, #059669); color: white; font-weight: 700; border: none; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); text-decoration: none; padding: 10px 18px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;" title="Reload official CDC, NIH, and WHO cohorts">
+                    <span>📥</span> Reload Government Datasets
+                </a>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="patientSearch" class="search-input" placeholder="Search patients by name, age, gender..." onkeyup="filterPatients()">
+            </div>
+            <div style="font-size: 14px; color: var(--text-muted); font-weight: 600;">
+                Showing <strong id="visibleCount" style="color: var(--dark);">{{ patients|length }}</strong> of {{ patients|length }} registered patients
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div style="overflow-x: auto;">
+                <table id="patientsTable">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Age / Sex</th>
+                            <th>BMI</th>
+                            <th>Fasting Glucose</th>
+                            <th>Blood Pressure</th>
+                            <th>Cholesterol</th>
+                            <th>Smoking</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if patients %}
+                            {% for p in patients %}
+                            <tr class="patient-row">
+                                <td>
+                                    <div class="patient-cell">
+                                        <div class="avatar-circle">
+                                            {{ p.name[:2]|upper }}
+                                        </div>
+                                        <div>
+                                            <strong style="color: var(--dark); font-size: 14.5px;">{{ p.name }}</strong>
+                                            <div style="font-size: 12px; color: var(--text-muted);">ID: #{{ p.id }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong>{{ p.age }}</strong> yrs
+                                    <div style="font-size: 12px; color: var(--text-muted);">{{ p.gender }}</div>
+                                </td>
+                                <td>
+                                    <strong>{{ p.bmi }}</strong>
+                                    <div style="font-size: 11px; color: {% if p.bmi >= 30 %}#ef4444{% elif p.bmi >= 25 %}#f59e0b{% else %}#10b981{% endif %}; font-weight: 600;">
+                                        {% if p.bmi >= 30 %}Obese{% elif p.bmi >= 25 %}Overweight{% else %}Normal{% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong>{{ p.glucose }}</strong> mg/dL
+                                    <div style="font-size: 11px; color: {% if p.glucose >= 126 %}#ef4444{% elif p.glucose >= 100 %}#f59e0b{% else %}#10b981{% endif %}; font-weight: 600;">
+                                        {% if p.glucose >= 126 %}High{% elif p.glucose >= 100 %}Pre-Diab{% else %}Normal{% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong>{{ p.systolic_bp }} / {{ p.diastolic_bp }}</strong>
+                                    <div style="font-size: 11px; color: {% if p.systolic_bp >= 140 %}#ef4444{% elif p.systolic_bp >= 130 %}#f59e0b{% else %}#10b981{% endif %}; font-weight: 600;">
+                                        {% if p.systolic_bp >= 140 %}Stage 2{% elif p.systolic_bp >= 130 %}Stage 1{% else %}Optimal{% endif %}
+                                    </div>
+                                </td>
+                                <td>{{ p.cholesterol }} mg/dL</td>
+                                <td>
+                                    <span class="badge-smoking {% if p.smoking == 'Yes' %}badge-sm-yes{% else %}badge-sm-no{% endif %}">
+                                        {{ p.smoking }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="actions-cell">
+                                        <form action="/predict" method="POST" style="margin: 0; display: inline;">
+                                            <input type="hidden" name="patient_id" value="{{ p.id }}">
+                                            <button type="submit" class="btn btn-assess btn-sm" title="Run AI Prediction">
+                                                ⚡ Predict
+                                            </button>
+                                        </form>
+                                        <a href="/patients/edit/{{ p.id }}" class="btn btn-edit btn-sm" title="Edit Biometrics">
+                                            ✏️ Edit
+                                        </a>
+                                        <a href="/patients/delete/{{ p.id }}" class="btn btn-del btn-sm" onclick="return confirm('Permanently remove {{ p.name }} from registry?');" title="Delete">
+                                            🗑️
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 48px; color: var(--text-muted);">
+                                    No patients registered yet. Click <strong>+ Register New Patient</strong> above to get started.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function filterPatients() {
+            const query = document.getElementById('patientSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('.patient-row');
+            let visible = 0;
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    row.style.display = '';
+                    visible++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            document.getElementById('visibleCount').innerText = visible;
+        }
+    </script>
+<script src="/static/js/3d_engine.js"></script>
+<script src="/static/js/3d_bg_animation.js"></script>
+</body>
+</html>

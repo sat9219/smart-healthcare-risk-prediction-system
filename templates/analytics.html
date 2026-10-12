@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Analytics & Insights | Smart Health</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --sidebar-bg: #0f172a;
+            --dark: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 28px 18px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 35px;
+            padding-left: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+        }
+
+        .logo-sub {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 500;
+            letter-spacing: 0;
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        nav a.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        }
+
+        nav a svg {
+            width: 18px;
+            height: 18px;
+            opacity: 0.85;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 35px 40px;
+            min-width: 0;
+        }
+
+        /* Topbar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .topbar h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+        }
+
+        .topbar p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        /* KPI Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 22px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .icon-blue { background: #dbeafe; color: #2563eb; }
+        .icon-purple { background: #ede9fe; color: #7c3aed; }
+        .icon-red { background: #fee2e2; color: #ef4444; }
+        .icon-amber { background: #fef3c7; color: #d97706; }
+        .icon-green { background: #dcfce7; color: #10b981; }
+
+        .stat-info h3 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-info strong {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .col-8 { grid-column: span 8; }
+        .col-4 { grid-column: span 4; }
+        .col-6 { grid-column: span 6; }
+        .col-12 { grid-column: span 12; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-header span {
+            font-size: 12px;
+            color: var(--text-muted);
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+            width: 100%;
+        }
+
+        /* Biomarker Overview Grid */
+        .biomarkers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .biomarker-item {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .biomarker-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .biomarker-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 6px 0;
+        }
+
+        .biomarker-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Table */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--text-main);
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-high { background: var(--danger-bg); color: var(--danger); }
+        .badge-medium { background: var(--warning-bg); color: var(--warning); }
+        .badge-low { background: var(--success-bg); color: var(--success); }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        /* Print Mode */
+        @media print {
+            .sidebar, .top-actions, .btn {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 1024px) {
+            .col-8, .col-4, .col-6 {
+                grid-column: span 12;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .topbar {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Ambient Background & Glassmorphic Elevation */
+        body {
+            background-color: #f8fafc !important;
+            background-image: 
+                radial-gradient(rgba(37, 99, 235, 0.07) 1.5px, transparent 1.5px), 
+                radial-gradient(rgba(6, 182, 212, 0.05) 1.5px, #f8fafc 1.5px) !important;
+            background-size: 28px 28px !important;
+            background-position: 0 0, 14px 14px !important;
+        }
+        .ambient-glow-wrapper {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.45;
+            animation: floatGlow 18s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.22), rgba(6, 182, 212, 0.15));
+            top: -80px;
+            right: -60px;
+        }
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.12));
+            bottom: -120px;
+            left: 120px;
+            animation-delay: -6s;
+        }
+        .orb-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+            top: 35%;
+            right: 20%;
+            animation-delay: -12s;
+        }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 30px) scale(1.08); }
+            100% { transform: translate(-30px, 50px) scale(0.95); }
+        }
+        .card, .panel-card, .table-card, .risk-card, .stat-card, .vital-box {
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(18px) !important;
+            -webkit-backdrop-filter: blur(18px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.85) !important;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.07), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- DYNAMIC AMBIENT GLOW BACKGROUND -->
+    <div class="ambient-glow-wrapper">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">SH</div>
+            <div>
+                Smart Health
+                <span class="logo-sub">AI Analytics Suite</span>
+            </div>
+        </div>
+
+        <nav>
+            <a href="/">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+            <a href="/patients">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Patients
+            </a>
+            <a href="/prediction">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+                Risk Prediction
+            </a>
+            <a href="/analytics" class="active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Analytics
+            </a>
+            <a href="/history">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Prediction History
+            </a>
+            <a href="/settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Settings
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+        <!-- Top Header -->
+        <header class="topbar">
+            <div>
+                <h1>Healthcare Risk Analytics</h1>
+                <p>Real-time cohort insights, disease prevalence, and predictive risk stratifications.</p>
+            </div>
+
+            <div class="top-actions">
+                <button onclick="window.print()" class="btn btn-outline">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Print Report
+                </button>
+                <a href="/prediction" class="btn btn-primary">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Assessment
+                </a>
+            </div>
+        </header>
+
+        <!-- KPI Stats Cards -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon icon-blue">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Patients</h3>
+                    <strong>{{ total_patients }}</strong>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon icon-purple">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3>Predictions Run</h3>
+                    <strong>{{ total_predictions }}</strong>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon icon-red">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3>High Risk Cases</h3>
+                    <strong>{{ high_risk_cases }}</strong>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon icon-amber">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3>Medium Risk Cases</h3>
+                    <strong>{{ medium_risk_cases }}</strong>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon icon-green">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3>Optimal / Low Risk</h3>
+                    <strong>{{ low_risk_cases }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Row 1 -->
+        <section class="charts-grid">
+            <!-- Condition Comparison Bar Chart -->
+            <div class="card col-8">
+                <div class="card-header">
+                    <h2>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                        Risk Severity Distribution by Condition
+                    </h2>
+                    <span>Multi-Condition Analysis</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="conditionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Overall Risk Doughnut Chart -->
+            <div class="card col-4">
+                <div class="card-header">
+                    <h2>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        Overall Risk Severity
+                    </h2>
+                    <span>Proportions</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="riskShareChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Demographics Age Chart -->
+            <div class="card col-6">
+                <div class="card-header">
+                    <h2>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                        </svg>
+                        Patient Age Bracket Demographics
+                    </h2>
+                    <span>Age Stratification</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="ageChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Lifestyle Factors Chart -->
+            <div class="card col-6">
+                <div class="card-header">
+                    <h2>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        </svg>
+                        Lifestyle Risk Factors Prevalence
+                    </h2>
+                    <span>Behavioral Metrics</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="lifestyleChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cohort Health Biomarkers Overview -->
+        <section class="card" style="margin-bottom: 30px;">
+            <div class="card-header">
+                <h2>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    Cohort Average Biomarkers & Vitals Baseline
+                </h2>
+                <span>Population Means</span>
+            </div>
+
+            <div class="biomarkers-grid">
+                <div class="biomarker-item">
+                    <div class="biomarker-label">Avg Patient Age</div>
+                    <div class="biomarker-value">{{ averages.age }} <small style="font-size:12px; color:#64748b;">yrs</small></div>
+                    <div class="biomarker-sub">Across all registered</div>
+                </div>
+
+                <div class="biomarker-item">
+                    <div class="biomarker-label">Avg Fasting Glucose</div>
+                    <div class="biomarker-value">{{ averages.glucose }} <small style="font-size:12px; color:#64748b;">mg/dL</small></div>
+                    <div class="biomarker-sub">Optimal: &lt;100 mg/dL</div>
+                </div>
+
+                <div class="biomarker-item">
+                    <div class="biomarker-label">Avg Blood Pressure</div>
+                    <div class="biomarker-value">{{ averages.systolic|int }}/{{ averages.diastolic|int }} <small style="font-size:12px; color:#64748b;">mmHg</small></div>
+                    <div class="biomarker-sub">Optimal: &lt;120/80 mmHg</div>
+                </div>
+
+                <div class="biomarker-item">
+                    <div class="biomarker-label">Avg Body Mass Index</div>
+                    <div class="biomarker-value">{{ averages.bmi }} <small style="font-size:12px; color:#64748b;">kg/m²</small></div>
+                    <div class="biomarker-sub">Normal: 18.5 - 24.9</div>
+                </div>
+
+                <div class="biomarker-item">
+                    <div class="biomarker-label">Avg Cholesterol</div>
+                    <div class="biomarker-value">{{ averages.cholesterol }} <small style="font-size:12px; color:#64748b;">mg/dL</small></div>
+                    <div class="biomarker-sub">Desirable: &lt;200 mg/dL</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Predictions Table -->
+        <section class="card">
+            <div class="card-header">
+                <h2>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Recent Risk Predictions
+                </h2>
+                <a href="/history" style="text-decoration:none; color:var(--primary); font-size:13px; font-weight:700;">View Full History &rarr;</a>
+            </div>
+
+            {% if recent_predictions %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Assessment ID</th>
+                            <th>Patient Name</th>
+                            <th>Diabetes Risk</th>
+                            <th>Cardiovascular Risk</th>
+                            <th>Hypertension Risk</th>
+                            <th>Assessment Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in recent_predictions %}
+                        <tr>
+                            <td><strong>#{{ p.id }}</strong></td>
+                            <td>{{ patient_map.get(p.patient_id, 'Patient #' ~ p.patient_id) }}</td>
+                            <td>
+                                <span class="badge {% if p.diabetes_risk == 'High' %}badge-high{% elif p.diabetes_risk == 'Medium' %}badge-medium{% else %}badge-low{% endif %}">
+                                    {{ p.diabetes_risk }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if p.heart_risk == 'High' %}badge-high{% elif p.heart_risk == 'Medium' %}badge-medium{% else %}badge-low{% endif %}">
+                                    {{ p.heart_risk }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if p.hypertension_risk == 'High' %}badge-high{% elif p.hypertension_risk == 'Medium' %}badge-medium{% else %}badge-low{% endif %}">
+                                    {{ p.hypertension_risk }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if p.created_at %}
+                                    {{ p.created_at.strftime('%d %b %Y, %H:%M') }}
+                                {% else %}
+                                    Recent
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p>No health risk assessments recorded yet. Run a prediction to see live analytics.</p>
+                <a href="/prediction" class="btn btn-primary" style="margin-top: 15px;">Start First Prediction</a>
+            </div>
+            {% endif %}
+        </section>
+
+    </main>
+
+    <!-- Chart.js Visualization Scripts -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Colors
+            const red = '#ef4444';
+            const amber = '#f59e0b';
+            const green = '#10b981';
+            const blue = '#2563eb';
+            const purple = '#8b5cf6';
+            const slate = '#64748b';
+
+            // 1. Condition Comparison Chart
+            const ctxCondition = document.getElementById('conditionChart').getContext('2d');
+            new Chart(ctxCondition, {
+                type: 'bar',
+                data: {
+                    labels: ['Diabetes Risk', 'Cardiovascular Risk', 'Hypertension Risk'],
+                    datasets: [
+                        {
+                            label: 'High Risk',
+                            data: [{{ diabetes_stats.high }}, {{ heart_stats.high }}, {{ hypertension_stats.high }}],
+                            backgroundColor: red,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Medium Risk',
+                            data: [{{ diabetes_stats.medium }}, {{ heart_stats.medium }}, {{ hypertension_stats.medium }}],
+                            backgroundColor: amber,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Low Risk',
+                            data: [{{ diabetes_stats.low }}, {{ heart_stats.low }}, {{ hypertension_stats.low }}],
+                            backgroundColor: green,
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top' }
+                    }
+                }
+            });
+
+            // 2. Overall Risk Doughnut Chart
+            const ctxRisk = document.getElementById('riskShareChart').getContext('2d');
+            const totalPreds = {{ total_predictions }};
+            const highCases = {{ high_risk_cases }};
+            const medCases = {{ medium_risk_cases }};
+            const lowCases = {{ low_risk_cases }};
+
+            new Chart(ctxRisk, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+                    datasets: [{
+                        data: totalPreds > 0 ? [highCases, medCases, lowCases] : [0, 0, 1],
+                        backgroundColor: [red, amber, green],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // 3. Age Brackets Chart
+            const ctxAge = document.getElementById('ageChart').getContext('2d');
+            new Chart(ctxAge, {
+                type: 'bar',
+                data: {
+                    labels: ['< 30 yrs', '30 - 45 yrs', '46 - 60 yrs', '> 60 yrs'],
+                    datasets: [{
+                        label: 'Registered Patients',
+                        data: [{{ age_stats.under_30 }}, {{ age_stats['30_45'] }}, {{ age_stats['46_60'] }}, {{ age_stats.above_60 }}],
+                        backgroundColor: blue,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // 4. Lifestyle Factors Chart
+            const ctxLifestyle = document.getElementById('lifestyleChart').getContext('2d');
+            new Chart(ctxLifestyle, {
+                type: 'bar',
+                data: {
+                    labels: ['Active Smokers', 'Low Physical Activity', 'Family Disease History'],
+                    datasets: [{
+                        label: 'Patient Count',
+                        data: [{{ lifestyle_stats.smokers }}, {{ lifestyle_stats.sedentary }}, {{ lifestyle_stats.family_history }}],
+                        backgroundColor: [purple, amber, red],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+    </script>
+<script src="/static/js/3d_engine.js"></script>
+<script src="/static/js/3d_bg_animation.js"></script>
+</body>
+</html>

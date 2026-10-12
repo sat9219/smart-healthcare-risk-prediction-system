@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Assessment Report - {{ patient.name }} | Smart Health</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --dark: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --success: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .report-page {
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            padding: 48px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Top Bar Actions (Hidden on Print) */
+        .no-print {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-print { background: var(--primary); color: white; }
+        .btn-print:hover { background: #1d4ed8; }
+        .btn-back { background: #e2e8f0; color: #334155; }
+        .btn-back:hover { background: #cbd5e1; }
+
+        /* Report Header */
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 24px;
+            margin-bottom: 28px;
+        }
+
+        .clinic-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .clinic-logo {
+            width: 48px;
+            height: 48px;
+            background: #2563eb;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .clinic-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .clinic-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .doc-meta {
+            text-align: right;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .doc-meta strong {
+            color: var(--dark);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Patient Info Grid */
+        .patient-summary {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 28px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .summary-item label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-item span {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* Vitals Table */
+        .section-heading {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 6px;
+        }
+
+        .vitals-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .vital-cell {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 14px;
+            background: white;
+        }
+
+        .vital-cell .lbl {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .vital-cell .val {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-top: 2px;
+        }
+
+        /* Risk Cards */
+        .risk-eval-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .eval-box {
+            border: 2px solid;
+            border-radius: 10px;
+            padding: 16px;
+            background: #ffffff;
+        }
+
+        .eval-high { border-color: #fca5a5; background: #fff5f5; }
+        .eval-med { border-color: #fde68a; background: #fffbeb; }
+        .eval-low { border-color: #a7f3d0; background: #f0fdf4; }
+
+        .eval-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .eval-badge {
+            display: inline-block;
+            margin: 6px 0;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .badge-high { background: #fee2e2; color: #b91c1c; }
+        .badge-med { background: #fef3c7; color: #b45309; }
+        .badge-low { background: #dcfce7; color: #15803d; }
+
+        .eval-score {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 4px 0;
+            color: var(--dark);
+        }
+
+        .eval-desc {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.5;
+            margin-top: 6px;
+        }
+
+        /* Explanations */
+        .xai-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 28px;
+        }
+
+        .xai-factors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .factor-tag {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .factor-tag strong {
+            color: #2563eb;
+        }
+
+        /* Clinical Recommendations */
+        .recommendations {
+            margin-bottom: 35px;
+        }
+
+        .recs-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .recs-list li {
+            font-size: 13.5px;
+            color: #334155;
+            line-height: 1.5;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .recs-list li::before {
+            content: "✓";
+            color: #2563eb;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Sign-off */
+        .report-footer {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .disclaimer {
+            font-size: 11px;
+            color: #94a3b8;
+            max-width: 500px;
+            line-height: 1.5;
+        }
+
+        .signature-box {
+            text-align: center;
+        }
+
+        .sig-line {
+            width: 180px;
+            border-bottom: 1px dashed #64748b;
+            margin-bottom: 6px;
+        }
+
+        .sig-text {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .sig-sub {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Print Media Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .report-page {
+                box-shadow: none;
+                padding: 20px;
+                max-width: 100%;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Ambient Background & Glassmorphic Elevation */
+        body {
+            background-color: #f8fafc !important;
+            background-image: 
+                radial-gradient(rgba(37, 99, 235, 0.07) 1.5px, transparent 1.5px), 
+                radial-gradient(rgba(6, 182, 212, 0.05) 1.5px, #f8fafc 1.5px) !important;
+            background-size: 28px 28px !important;
+            background-position: 0 0, 14px 14px !important;
+        }
+        .ambient-glow-wrapper {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.45;
+            animation: floatGlow 18s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.22), rgba(6, 182, 212, 0.15));
+            top: -80px;
+            right: -60px;
+        }
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.12));
+            bottom: -120px;
+            left: 120px;
+            animation-delay: -6s;
+        }
+        .orb-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+            top: 35%;
+            right: 20%;
+            animation-delay: -12s;
+        }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 30px) scale(1.08); }
+            100% { transform: translate(-30px, 50px) scale(0.95); }
+        }
+        .card, .panel-card, .table-card, .risk-card, .stat-card, .vital-box {
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(18px) !important;
+            -webkit-backdrop-filter: blur(18px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.85) !important;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.07), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- DYNAMIC AMBIENT GLOW BACKGROUND -->
+    <div class="ambient-glow-wrapper">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+
+
+    <div class="report-page">
+        <!-- Action Buttons (Hidden when printing) -->
+        <div class="no-print">
+            <a href="javascript:history.back()" class="btn btn-back">
+                ← Back
+            </a>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="window.print()" class="btn btn-print">
+                    🖨️ Print / Save as PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Official Header -->
+        <header class="report-header">
+            <div class="clinic-brand">
+                <div class="clinic-logo">🏥</div>
+                <div>
+                    <div class="clinic-name">Smart Healthcare System</div>
+                    <div class="clinic-sub">Clinical AI Diagnostic & Risk Stratification Division</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <div>Report Ref: <strong>SHRP-{{ pred.id }}-{{ patient.id }}</strong></div>
+                <div>Assessment Date: <strong>{{ pred.created_at.strftime('%d %B %Y, %H:%M') if pred.created_at else 'Recent' }}</strong></div>
+                <div>AI Engine: <strong>Scikit-Learn Ensemble v1.9</strong></div>
+            </div>
+        </header>
+
+        <!-- Patient Demographics Grid -->
+        <div class="patient-summary">
+            <div class="summary-item">
+                <label>Patient Full Name</label>
+                <span>{{ patient.name }}</span>
+            </div>
+            <div class="summary-item">
+                <label>Patient ID / File #</label>
+                <span>PID-{{ patient.id }}</span>
+            </div>
+            <div class="summary-item">
+                <label>Age & Biological Gender</label>
+                <span>{{ patient.age }} yrs / {{ patient.gender }}</span>
+            </div>
+            <div class="summary-item">
+                <label>Tobacco & Lifestyle</label>
+                <span>Smoking: {{ patient.smoking }} | Act: {{ patient.physical_activity }}</span>
+            </div>
+        </div>
+
+        <!-- Clinical Vitals -->
+        <div class="section-heading">
+            <span>🩺</span> Baseline Clinical Biomarkers
+        </div>
+        <div class="vitals-grid">
+            <div class="vital-cell">
+                <div class="lbl">Fasting Blood Glucose</div>
+                <div class="val">{{ patient.glucose }} <span style="font-size: 12px; font-weight: normal; color: var(--text-muted);">mg/dL</span></div>
+            </div>
+            <div class="vital-cell">
+                <div class="lbl">Blood Pressure (Sys / Dia)</div>
+                <div class="val">{{ patient.systolic_bp }} / {{ patient.diastolic_bp }} <span style="font-size: 12px; font-weight: normal; color: var(--text-muted);">mmHg</span></div>
+            </div>
+            <div class="vital-cell">
+                <div class="lbl">Body Mass Index (BMI)</div>
+                <div class="val">{{ patient.bmi }} <span style="font-size: 12px; font-weight: normal; color: var(--text-muted);">kg/m²</span></div>
+            </div>
+            <div class="vital-cell">
+                <div class="lbl">Serum Cholesterol</div>
+                <div class="val">{{ patient.cholesterol }} <span style="font-size: 12px; font-weight: normal; color: var(--text-muted);">mg/dL</span></div>
+            </div>
+        </div>
+
+        <!-- Multi-Disease Risk Evaluation -->
+        <div class="section-heading">
+            <span>⚡</span> Machine Learning Risk Prognosis
+        </div>
+        <div class="risk-eval-grid">
+            <!-- Diabetes Box -->
+            <div class="eval-box {% if pred.diabetes_risk == 'High' %}eval-high{% elif pred.diabetes_risk == 'Medium' %}eval-med{% else %}eval-low{% endif %}">
+                <div class="eval-title">Type 2 Diabetes Risk</div>
+                <div class="eval-score">{{ pred.diabetes_probability|int }}%</div>
+                <span class="eval-badge {% if pred.diabetes_risk == 'High' %}badge-high{% elif pred.diabetes_risk == 'Medium' %}badge-med{% else %}badge-low{% endif %}">
+                    {{ pred.diabetes_risk }} Risk
+                </span>
+                <div class="eval-desc">
+                    {% if pred.diabetes_risk == 'High' %}
+                        Glycemic markers exceed safe pre-diabetic thresholds. Urgent HbA1c test and diet regulation indicated.
+                    {% elif pred.diabetes_risk == 'Medium' %}
+                        Borderline insulin resistance indications. Routine blood sugar checks recommended.
+                    {% else %}
+                        Normal glycemic regulation. Maintain healthy diet and active routine.
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Cardiac Box -->
+            <div class="eval-box {% if pred.heart_risk == 'High' %}eval-high{% elif pred.heart_risk == 'Medium' %}eval-med{% else %}eval-low{% endif %}">
+                <div class="eval-title">Cardiovascular Risk</div>
+                <div class="eval-score">{{ pred.heart_probability|int }}%</div>
+                <span class="eval-badge {% if pred.heart_risk == 'High' %}badge-high{% elif pred.heart_risk == 'Medium' %}badge-med{% else %}badge-low{% endif %}">
+                    {{ pred.heart_risk }} Risk
+                </span>
+                <div class="eval-desc">
+                    {% if pred.heart_risk == 'High' %}
+                        Elevated vascular strain detected based on lipid markers and BP. Cardiology review recommended.
+                    {% elif pred.heart_risk == 'Medium' %}
+                        Moderate cardiovascular risk profile. Lipid monitoring and aerobic exercise advised.
+                    {% else %}
+                        Optimal cardiac markers and healthy resting arterial parameters.
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Hypertension Box -->
+            <div class="eval-box {% if pred.hypertension_risk == 'High' %}eval-high{% elif pred.hypertension_risk == 'Medium' %}eval-med{% else %}eval-low{% endif %}">
+                <div class="eval-title">Hypertension Risk</div>
+                <div class="eval-score">{{ pred.hypertension_probability|int }}%</div>
+                <span class="eval-badge {% if pred.hypertension_risk == 'High' %}badge-high{% elif pred.hypertension_risk == 'Medium' %}badge-med{% else %}badge-low{% endif %}">
+                    {{ pred.hypertension_risk }} Risk
+                </span>
+                <div class="eval-desc">
+                    {% if pred.hypertension_risk == 'High' %}
+                        Stage-2 hypertensive readings. Sodium restriction and clinical prescription review advised.
+                    {% elif pred.hypertension_risk == 'Medium' %}
+                        Pre-hypertension stage readings. Ambulatory blood pressure tracking recommended.
+                    {% else %}
+                        Optimal arterial elasticity and normotensive pressure thresholds.
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Explainable AI Section -->
+        <div class="xai-section">
+            <div style="font-size: 13px; font-weight: 700; color: var(--dark); text-transform: uppercase;">
+                Explainable AI (XAI) Attribution: Key Contributing Biomarkers
+            </div>
+            <div class="xai-factors">
+                {% if patient.glucose >= 126 %}
+                    <div class="factor-tag">🔴 Glucose: <strong>{{ patient.glucose }} mg/dL (Elevated)</strong></div>
+                {% endif %}
+                {% if patient.systolic_bp >= 130 %}
+                    <div class="factor-tag">🔴 Systolic BP: <strong>{{ patient.systolic_bp }} mmHg (Stage 1/2 HTN)</strong></div>
+                {% endif %}
+                {% if patient.cholesterol >= 200 %}
+                    <div class="factor-tag">🔴 Cholesterol: <strong>{{ patient.cholesterol }} mg/dL (Hyperlipidemia)</strong></div>
+                {% endif %}
+                {% if patient.bmi >= 30 %}
+                    <div class="factor-tag">🟠 BMI: <strong>{{ patient.bmi }} (Obese range)</strong></div>
+                {% elif patient.bmi >= 25 %}
+                    <div class="factor-tag">🟡 BMI: <strong>{{ patient.bmi }} (Overweight)</strong></div>
+                {% endif %}
+                {% if patient.smoking == 'Yes' %}
+                    <div class="factor-tag">🔴 Lifestyle: <strong>Active Tobacco Smoker</strong></div>
+                {% endif %}
+                {% if patient.family_history == 'Yes' %}
+                    <div class="factor-tag">🟠 Genetics: <strong>Positive Family History</strong></div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Clinical Recommendations -->
+        <div class="recommendations">
+            <div class="section-heading">
+                <span>📋</span> Prescribed Care Plan & Interventions
+            </div>
+            <ul class="recs-list">
+                {% if pred.diabetes_risk == 'High' or pred.heart_risk == 'High' or pred.hypertension_risk == 'High' %}
+                    <li><strong>Urgent Specialist Consultation:</strong> Schedule follow-up with attending physician or relevant specialist within 7-14 days.</li>
+                    <li><strong>Laboratory Work:</strong> Comprehensive Metabolic Panel (CMP), Fasting Lipid Profile, and HbA1c test.</li>
+                {% else %}
+                    <li><strong>Preventative Wellness:</strong> Routine bi-annual clinical checkups to monitor biomarker stability.</li>
+                {% endif %}
+                <li><strong>Nutritional Protocol:</strong> Adopt DASH or Mediterranean dietary framework. Limit dietary sodium to &lt;2,000 mg/day.</li>
+                <li><strong>Physical Conditioning:</strong> 150 minutes per week of moderate-intensity cardiovascular exercise (brisk walking, swimming).</li>
+                {% if patient.smoking == 'Yes' %}
+                    <li><strong>Smoking Cessation:</strong> Highly recommended to lower vascular endothelial damage and stroke risk.</li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Footer Sign-off Block -->
+        <div class="report-footer">
+            <div class="disclaimer">
+                <strong>Medical Decision Support Notice:</strong><br>
+                This report is generated by the Smart Healthcare Risk Prediction System for clinical decision assistance. Final diagnostic confirmation and therapeutic regimens must be validated by a licensed physician.
+            </div>
+            <div class="signature-box">
+                <div class="sig-line"></div>
+                <div class="sig-text">Attending Physician / Reviewer</div>
+                <div class="sig-sub">Smart Healthcare Clinical Division</div>
+            </div>
+        </div>
+    </div>
+
+<script src="/static/js/3d_engine.js"></script>
+<script src="/static/js/3d_bg_animation.js"></script>
+</body>
+</html>

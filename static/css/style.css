@@ -1,0 +1,152 @@
+/* ==========================================================================
+   SMARTHEALTH AI — ULTRA-MODERN CLINICAL SUITE DESIGN SYSTEM
+   ========================================================================== */
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #eff6ff;
+    --primary-glow: rgba(37, 99, 235, 0.25);
+    --cyan-glow: rgba(6, 182, 212, 0.2);
+    --emerald-glow: rgba(16, 185, 129, 0.2);
+    
+    --sidebar-bg: linear-gradient(180deg, #090e1a 0%, #0f172a 100%);
+    --bg-base: #f1f5f9;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    
+    --card-bg: rgba(255, 255, 255, 0.88);
+    --card-border: rgba(226, 232, 240, 0.8);
+    --card-border-glow: rgba(37, 99, 235, 0.3);
+    
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.07), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 20px 35px -8px rgba(15, 23, 42, 0.12), 0 0 2px rgba(37, 99, 235, 0.15);
+    
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-pill: 9999px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   DYNAMIC AMBIENT MEDICAL BACKGROUND WITH GLOWING AURORA MESH
+   ========================================================================== */
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f8fafc;
+    background-image: 
+        radial-gradient(rgba(37, 99, 235, 0.07) 1.5px, transparent 1.5px), 
+        radial-gradient(rgba(6, 182, 212, 0.05) 1.5px, #f8fafc 1.5px);
+    background-size: 28px 28px;
+    background-position: 0 0, 14px 14px;
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Floating Ambient Glowing Spheres */
+.ambient-glow-wrapper {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.ambient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.5;
+    animation: floatGlow 18s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.22), rgba(6, 182, 212, 0.15));
+    top: -100px;
+    right: -50px;
+}
+
+.orb-2 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.12));
+    bottom: -150px;
+    left: 150px;
+    animation-delay: -6s;
+}
+
+.orb-3 {
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+    top: 40%;
+    right: 25%;
+    animation-delay: -12s;
+}
+
+@keyframes floatGlow {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, 30px) scale(1.08); }
+    100% { transform: translate(-30px, 50px) scale(0.95); }
+}
+
+/* ==========================================================================
+   GLASSMORPHISM CARDS & PANELS
+   ========================================================================== */
+.card, .panel-card, .table-card, .risk-card, .stat-card, .intel-card, .vital-box {
+    background: var(--card-bg) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md) !important;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s;
+}
+
+.card:hover, .panel-card:hover, .table-card:hover, .stat-card:hover {
+    box-shadow: var(--shadow-lg) !important;
+    border-color: rgba(37, 99, 235, 0.28) !important;
+}
+
+/* Polished Sidebar */
+.sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    color: white;
+    padding: 28px 18px;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.main-content {
+    margin-left: 260px;
+    flex: 1;
+    padding: 32px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Badges & Pill Styling */
+.badge, .panel-badge, .risk-level-badge, .tag-badge {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}

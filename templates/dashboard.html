@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Admin Dashboard | Smart Health AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --sidebar-bg: #0f172a;
+            --dark: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --danger-border: #fecaca;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --success-border: #a7f3d0;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 10px 30px -4px rgba(15, 23, 42, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 28px 18px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 35px;
+            padding-left: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .logo-sub {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        nav a.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        }
+
+        nav a svg {
+            width: 18px;
+            height: 18px;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 30px 40px;
+            min-width: 0;
+        }
+
+        /* Topbar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .topbar-left h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+        }
+
+        .system-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            margin-left: 8px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-ring 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .admin-profile-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border: 1px solid var(--border);
+            padding: 6px 14px 6px 8px;
+            border-radius: 9999px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .admin-avatar {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .admin-meta {
+            line-height: 1.2;
+        }
+
+        .admin-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .admin-role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 9px 14px 9px 36px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            background: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* KPI Scorecards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .kpi-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-val {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 2px;
+            line-height: 1.1;
+        }
+
+        .kpi-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .icon-blue { background: #dbeafe; color: #2563eb; }
+        .icon-purple { background: #ede9fe; color: #7c3aed; }
+        .icon-red { background: #fee2e2; color: #ef4444; }
+        .icon-amber { background: #fef3c7; color: #d97706; }
+        .icon-green { background: #dcfce7; color: #10b981; }
+
+        /* Grid Layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 22px;
+            margin-bottom: 25px;
+        }
+
+        .col-8 { grid-column: span 8; }
+        .col-4 { grid-column: span 4; }
+        .col-6 { grid-column: span 6; }
+        .col-12 { grid-column: span 12; }
+
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 22px 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-box {
+            position: relative;
+            height: 260px;
+            width: 100%;
+        }
+
+        /* Critical Alerts Box */
+        .alert-banner {
+            background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+            border: 1px solid #fecaca;
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            margin-bottom: 25px;
+        }
+
+        .alert-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #b91c1c;
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .alert-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .alert-chip {
+            background: white;
+            border: 1px solid #fca5a5;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .alert-chip strong {
+            font-size: 14px;
+            color: #991b1b;
+        }
+
+        .alert-chip span {
+            font-size: 12px;
+            color: #7f1d1d;
+        }
+
+        /* Table */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--text-main);
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-high { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+        .badge-medium { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+        .badge-low { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+        .badge-info { background: #f1f5f9; color: var(--text-muted); }
+
+        /* Activity Feed */
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .dot-high { background: var(--danger); }
+        .dot-medium { background: var(--warning); }
+        .dot-low { background: var(--success); }
+        .dot-info { background: var(--primary); }
+
+        .activity-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .activity-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .activity-time {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        /* Quick Tools Panel */
+        .tool-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.15s;
+        }
+
+        .tool-link:hover {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: var(--primary);
+        }
+
+        @media (max-width: 1024px) {
+            .col-8, .col-4, .col-6 { grid-column: span 12; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 20px; }
+            .topbar { flex-direction: column; align-items: flex-start; }
+            .search-container { width: 100%; }
+        }
+    </style>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Ambient Background & Glassmorphic Elevation */
+        body {
+            background-color: #f8fafc !important;
+            background-image: 
+                radial-gradient(rgba(37, 99, 235, 0.07) 1.5px, transparent 1.5px), 
+                radial-gradient(rgba(6, 182, 212, 0.05) 1.5px, #f8fafc 1.5px) !important;
+            background-size: 28px 28px !important;
+            background-position: 0 0, 14px 14px !important;
+        }
+        .ambient-glow-wrapper {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.45;
+            animation: floatGlow 18s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.22), rgba(6, 182, 212, 0.15));
+            top: -80px;
+            right: -60px;
+        }
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.12));
+            bottom: -120px;
+            left: 120px;
+            animation-delay: -6s;
+        }
+        .orb-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+            top: 35%;
+            right: 20%;
+            animation-delay: -12s;
+        }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 30px) scale(1.08); }
+            100% { transform: translate(-30px, 50px) scale(0.95); }
+        }
+        .card, .panel-card, .table-card, .risk-card, .stat-card, .vital-box {
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(18px) !important;
+            -webkit-backdrop-filter: blur(18px) !important;
+            border: 1px solid rgba(226, 232, 240, 0.85) !important;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.07), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- DYNAMIC AMBIENT GLOW BACKGROUND -->
+    <div class="ambient-glow-wrapper">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">SH</div>
+            <div>
+                Smart Health
+                <span class="logo-sub">Executive Admin</span>
+            </div>
+        </div>
+
+        <nav>
+            <a href="/" class="active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Admin Dashboard
+            </a>
+            <a href="/patients">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Patient Management
+            </a>
+            <a href="/prediction">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+                Risk Prediction
+            </a>
+            <a href="/analytics">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Analytics & Insights
+            </a>
+            <a href="/model_metrics">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+                AI Model Metrics
+            </a>
+            <a href="/history">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Prediction History
+            </a>
+            <a href="/settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Settings
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1>
+                    Executive Healthcare Administration
+                    <span class="system-status-pill">
+                        <span class="pulse-dot"></span>
+                        System Online
+                    </span>
+                </h1>
+                <p style="color:var(--text-muted); font-size:14px; margin-top:4px;">
+                    Comprehensive patient oversight, AI diagnostic models, and clinical audit records.
+                </p>
+            </div>
+
+            <div class="topbar-right">
+                <!-- Search Box -->
+                <div class="search-container">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="patientSearchInput" class="search-input" placeholder="Search patients by name or ID..." onkeyup="filterPatientTable()">
+                </div>
+
+                <a href="/patients/add" class="btn btn-primary">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Patient
+                </a>
+
+                <a href="/prediction" class="btn btn-outline">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    Assess Risk
+                </a>
+
+                <div class="admin-profile-chip">
+                    <div class="admin-avatar">SK</div>
+                    <div class="admin-meta">
+                        <div class="admin-name">Satyam K. Singh</div>
+                        <div class="admin-role">Chief Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI Summary Scorecards -->
+        <section class="kpi-grid">
+            <a href="/patients" class="kpi-card">
+                <div class="kpi-icon icon-blue">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div>
+                    <div class="kpi-title">Total Patients</div>
+                    <div class="kpi-val">{{ total_patients }}</div>
+                    <div class="kpi-sub">Registered in cohort</div>
+                </div>
+            </a>
+
+            <a href="/history" class="kpi-card">
+                <div class="kpi-icon icon-purple">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="kpi-title">Assessments Run</div>
+                    <div class="kpi-val">{{ total_predictions }}</div>
+                    <div class="kpi-sub">Total evaluations</div>
+                </div>
+            </a>
+
+            <div class="kpi-card">
+                <div class="kpi-icon icon-red">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div>
+                    <div class="kpi-title">Critical High Risk</div>
+                    <div class="kpi-val" style="color:var(--danger);">{{ high_risk_count }}</div>
+                    <div class="kpi-sub">Require immediate attention</div>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon icon-amber">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <div>
+                    <div class="kpi-title">Moderate Risk</div>
+                    <div class="kpi-val" style="color:var(--warning);">{{ medium_risk_count }}</div>
+                    <div class="kpi-sub">Pre-diabetic / Borderline</div>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon icon-green">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <div>
+                    <div class="kpi-title">Low / Stable</div>
+                    <div class="kpi-val" style="color:var(--success);">{{ low_risk_count }}</div>
+                    <div class="kpi-sub">Healthy profiles</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Urgent Critical High Risk Alerts Banner -->
+        {% if high_risk_alerts %}
+        <div class="alert-banner">
+            <div class="alert-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                Clinical Action Alerts: {{ high_risk_alerts|length }} High-Risk Patient(s) Identified
+            </div>
+            <div class="alert-items">
+                {% for alert in high_risk_alerts %}
+                <div class="alert-chip">
+                    <div>
+                        <strong>{{ alert.patient_name }} (Age {{ alert.age }}, {{ alert.gender }})</strong>
+                        <div style="font-size:12px; margin-top:2px;">
+                            High Risk in:
+                            {% if alert.diabetes_risk == 'High' %}<span style="color:#b91c1c; font-weight:700;">Diabetes </span>{% endif %}
+                            {% if alert.heart_risk == 'High' %}<span style="color:#b91c1c; font-weight:700;">Heart </span>{% endif %}
+                            {% if alert.hypertension_risk == 'High' %}<span style="color:#b91c1c; font-weight:700;">Hypertension </span>{% endif %}
+                        </div>
+                    </div>
+                    <a href="/prediction" class="btn btn-outline" style="font-size:12px; padding:6px 12px; border-color:#fca5a5; color:#991b1b;">
+                        Re-evaluate
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Analytics Visualizations -->
+        <section class="content-grid">
+            <div class="card col-8">
+                <div class="card-header">
+                    <h2>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                        Multi-Condition Risk Breakdown
+                    </h2>
+                    <a href="/analytics" style="text-decoration:none; color:var(--primary); font-size:12px; font-weight:700;">Full Analytics &rarr;</a>
+                </div>
+                <div class="chart-box">
+                    <canvas id="adminConditionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card col-4">
+                <div class="card-header">
+                    <h2>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        Cohort Risk Severity
+                    </h2>
+                    <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Distribution</span>
+                </div>
+                <div class="chart-box">
+                    <canvas id="adminRiskDoughnut"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Patient Management Table -->
+        <section class="card" style="margin-bottom: 25px;">
+            <div class="card-header">
+                <h2>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                    </svg>
+                    Registered Patients Quick Management
+                </h2>
+                <div>
+                    <a href="/patients" class="btn btn-outline" style="font-size:12px; padding:6px 12px;">View All {{ all_patients_count }} Patients</a>
+                    <a href="/patients/add" class="btn btn-primary" style="font-size:12px; padding:6px 12px; margin-left:6px;">+ Register Patient</a>
+                </div>
+            </div>
+
+            {% if patients %}
+            <div class="table-responsive">
+                <table id="patientTable">
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Patient Name</th>
+                            <th>Age & Gender</th>
+                            <th>Vitals (BP / Glucose / BMI)</th>
+                            <th>Latest Risk Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pt in patients %}
+                        {% set latest = patient_latest_pred.get(pt.id) %}
+                        <tr>
+                            <td><strong>#{{ pt.id }}</strong></td>
+                            <td class="patient-name-cell">
+                                <span style="font-weight:700; color:var(--text-main);">{{ pt.name }}</span>
+                            </td>
+                            <td>{{ pt.age }} yrs • {{ pt.gender }}</td>
+                            <td>
+                                {{ pt.systolic_bp|int }}/{{ pt.diastolic_bp|int }} mmHg &bull;
+                                {{ pt.glucose }} mg/dL &bull;
+                                BMI {{ pt.bmi }}
+                            </td>
+                            <td>
+                                {% if latest %}
+                                    {% if latest.diabetes_risk == 'High' or latest.heart_risk == 'High' or latest.hypertension_risk == 'High' %}
+                                        <span class="badge badge-high">High Risk Alert</span>
+                                    {% elif latest.diabetes_risk == 'Medium' or latest.heart_risk == 'Medium' or latest.hypertension_risk == 'Medium' %}
+                                        <span class="badge badge-medium">Moderate Risk</span>
+                                    {% else %}
+                                        <span class="badge badge-low">Optimal / Low</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge badge-info">Pending Assessment</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/prediction" style="color:var(--primary); font-weight:700; text-decoration:none; margin-right:12px;">Assess Risk</a>
+                                <a href="/patients/delete/{{ pt.id }}" onclick="return confirm('Delete record for {{ pt.name }}?');" style="color:var(--danger); font-weight:600; text-decoration:none;">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div style="text-align:center; padding:35px; color:var(--text-muted);">
+                <p>No patients registered in the database yet.</p>
+                <a href="/patients/add" class="btn btn-primary" style="margin-top:10px;">Register First Patient</a>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Administrative Audit Feed & Quick Tools -->
+        <section class="content-grid">
+            <!-- Audit Feed -->
+            <div class="card col-7">
+                <div class="card-header">
+                    <h2>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                        Recent Administrative Activity Log
+                    </h2>
+                    <span style="font-size:12px; color:var(--text-muted); font-weight:600;">System Audit</span>
+                </div>
+
+                {% if activities %}
+                <ul class="activity-list">
+                    {% for act in activities %}
+                    <li class="activity-item">
+                        <span class="activity-dot {% if act.risk == 'High' %}dot-high{% elif act.risk == 'Medium' %}dot-medium{% elif act.risk == 'Low' %}dot-low{% else %}dot-info{% endif %}"></span>
+                        <div>
+                            <div class="activity-title">{{ act.title }}</div>
+                            <div class="activity-sub">{{ act.subtitle }}</div>
+                        </div>
+                        <span class="activity-time">{{ act.time }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p style="color:var(--text-muted); font-size:13px; text-align:center; padding:20px;">No administrative events recorded yet.</p>
+                {% endif %}
+            </div>
+
+            <!-- Quick Admin Export & Tools -->
+            <div class="card col-5">
+                <div class="card-header">
+                    <h2>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                        </svg>
+                        Administrative Utilities & Export
+                    </h2>
+                    <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Data Control</span>
+                </div>
+
+                <a href="/export/patients" class="tool-link">
+                    <div>
+                        <div style="font-weight:700;">Export Patient Registry</div>
+                        <div style="font-size:11px; color:var(--text-muted);">Download full patient records as CSV</div>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </a>
+
+                <a href="/export/predictions" class="tool-link">
+                    <div>
+                        <div style="font-weight:700;">Export Risk Assessments</div>
+                        <div style="font-size:11px; color:var(--text-muted);">Download prediction scores & classifications</div>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </a>
+
+                <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; margin-top:14px;">
+                    <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px;">System Engine Diagnostics</div>
+                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                        <span>Database Engine:</span>
+                        <strong style="color:var(--text-main);">SQLite 3 (healthcare.db)</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                        <span>Risk Models:</span>
+                        <strong style="color:var(--success);">3 Active Classifiers</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>Admin Access:</span>
+                        <strong style="color:var(--primary);">Full Authority</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript Interactive Filtering & Charts -->
+    <script>
+        // Real-time Patient Table Filter
+        function filterPatientTable() {
+            const input = document.getElementById('patientSearchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('patientTable');
+            if (!table) return;
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const text = tr[i].textContent || tr[i].innerText;
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
+        // Charts
+        document.addEventListener("DOMContentLoaded", function () {
+            const red = '#ef4444';
+            const amber = '#f59e0b';
+            const green = '#10b981';
+
+            // Multi-Condition Risk Chart
+            const ctxCond = document.getElementById('adminConditionChart').getContext('2d');
+            new Chart(ctxCond, {
+                type: 'bar',
+                data: {
+                    labels: ['Diabetes', 'Cardiovascular', 'Hypertension'],
+                    datasets: [
+                        {
+                            label: 'High Risk',
+                            data: [{{ diabetes_stats.high }}, {{ heart_stats.high }}, {{ hypertension_stats.high }}],
+                            backgroundColor: red,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Medium Risk',
+                            data: [{{ diabetes_stats.medium }}, {{ heart_stats.medium }}, {{ hypertension_stats.medium }}],
+                            backgroundColor: amber,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Low Risk',
+                            data: [{{ diabetes_stats.low }}, {{ heart_stats.low }}, {{ hypertension_stats.low }}],
+                            backgroundColor: green,
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top' }
+                    }
+                }
+            });
+
+            // Overall Risk Doughnut
+            const ctxDoughnut = document.getElementById('adminRiskDoughnut').getContext('2d');
+            const total = {{ total_predictions }};
+            new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+                    datasets: [{
+                        data: total > 0 ? [{{ high_risk_count }}, {{ medium_risk_count }}, {{ low_risk_count }}] : [0, 0, 1],
+                        backgroundColor: [red, amber, green],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        });
+    </script>
+<script src="/static/js/3d_engine.js"></script>
+<script src="/static/js/3d_bg_animation.js"></script>
+</body>
+</html>

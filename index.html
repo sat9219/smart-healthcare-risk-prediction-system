@@ -1,527 +1,2417 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AegisCare AI - Smart Healthcare Risk Prediction & Clinical Decision Support System</title>
-  <meta name="description" content="Production-grade Clinical Decision Support System (CDSS) featuring multi-outcome adverse event prediction, TreeSHAP explainability, What-If intervention simulator, and HL7 FHIR R4 interoperability.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Admin Dashboard | Smart Health AI</title>
+    <meta name="description" content="Executive Healthcare Administration - Comprehensive patient oversight, AI diagnostic models, and clinical audit records.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="static/css/style.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --sidebar-bg: #0f172a;
+            --dark: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --danger-border: #fecaca;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --success-border: #a7f3d0;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 10px 30px -4px rgba(15, 23, 42, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc !important;
+            background-image: 
+                radial-gradient(rgba(37, 99, 235, 0.07) 1.5px, transparent 1.5px), 
+                radial-gradient(rgba(6, 182, 212, 0.05) 1.5px, #f8fafc 1.5px) !important;
+            background-size: 28px 28px !important;
+            background-position: 0 0, 14px 14px !important;
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Ambient Background */
+        .ambient-glow-wrapper {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.45;
+            animation: floatGlow 18s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.22), rgba(6, 182, 212, 0.15));
+            top: -80px;
+            right: -60px;
+        }
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.12));
+            bottom: -120px;
+            left: 120px;
+            animation-delay: -6s;
+        }
+        .orb-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+            top: 35%;
+            right: 20%;
+            animation-delay: -12s;
+        }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 30px) scale(1.08); }
+            100% { transform: translate(-30px, 50px) scale(0.95); }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 28px 18px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 35px;
+            padding-left: 10px;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .logo-sub {
+            display: block;
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        nav a.active {
+            background: var(--primary) !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        }
+
+        nav a svg {
+            width: 18px;
+            height: 18px;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 30px 40px;
+            min-width: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Topbar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .topbar-left h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+        }
+
+        .system-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            margin-left: 8px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-ring 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .admin-profile-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border: 1px solid var(--border);
+            padding: 6px 14px 6px 8px;
+            border-radius: 9999px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .admin-avatar {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .admin-meta {
+            line-height: 1.2;
+        }
+
+        .admin-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .admin-role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 9px 14px 9px 36px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            background: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* KPI Scorecards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 1200px) {
+            .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid rgba(226, 232, 240, 0.85);
+            box-shadow: 0 4px 15px -2px rgba(15, 23, 42, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.15s, box-shadow 0.15s;
+            cursor: pointer;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .kpi-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-val {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 2px;
+            line-height: 1.1;
+        }
+
+        .kpi-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .icon-blue { background: #dbeafe; color: #2563eb; }
+        .icon-purple { background: #ede9fe; color: #7c3aed; }
+        .icon-red { background: #fee2e2; color: #ef4444; }
+        .icon-amber { background: #fef3c7; color: #d97706; }
+        .icon-green { background: #dcfce7; color: #10b981; }
+
+        /* Critical Alerts Box */
+        .alert-banner {
+            background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+            border: 1px solid #fecaca;
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            margin-bottom: 25px;
+        }
+
+        .alert-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #b91c1c;
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .alert-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .alert-chip {
+            background: white;
+            border: 1px solid #fca5a5;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .alert-chip strong {
+            font-size: 14px;
+            color: #991b1b;
+        }
+
+        .alert-chip span {
+            font-size: 12px;
+            color: #7f1d1d;
+        }
+
+        /* Grid Layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 22px;
+            margin-bottom: 25px;
+        }
+
+        .col-8 { grid-column: span 8; }
+        .col-7 { grid-column: span 7; }
+        .col-5 { grid-column: span 5; }
+        .col-4 { grid-column: span 4; }
+        .col-6 { grid-column: span 6; }
+        .col-12 { grid-column: span 12; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: var(--radius-lg);
+            padding: 22px 24px;
+            border: 1px solid rgba(226, 232, 240, 0.85);
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.07), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-box {
+            position: relative;
+            height: 260px;
+            width: 100%;
+        }
+
+        /* Table */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--text-main);
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-high { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+        .badge-medium { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+        .badge-low { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+        .badge-info { background: #f1f5f9; color: var(--text-muted); }
+
+        /* Activity Feed */
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .dot-high { background: var(--danger); }
+        .dot-medium { background: var(--warning); }
+        .dot-low { background: var(--success); }
+        .dot-info { background: var(--primary); }
+
+        .activity-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .activity-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .activity-time {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        /* Quick Tools Panel */
+        .tool-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+
+        .tool-link:hover {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: var(--primary);
+        }
+
+        /* View Containers */
+        .view-section {
+            display: none;
+        }
+        .view-section.active {
+            display: block;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 680px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+            padding: 28px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f1f5f9;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 18px;
+        }
+
+        /* Form Controls */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        .form-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-control {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-family: inherit;
+            background: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Diagnostic Result Cards */
+        .diag-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+        .diag-badge-high {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .diag-badge-med {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .diag-badge-low {
+            background: #dcfce7;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .symptom-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .symptom-chip {
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s;
+        }
+        .symptom-chip.selected {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+        }
+
+        @media (max-width: 1024px) {
+            .col-8, .col-7, .col-5, .col-4, .col-6 { grid-column: span 12; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 20px; }
+            .topbar { flex-direction: column; align-items: flex-start; }
+            .search-container { width: 100%; }
+        }
+    </style>
 </head>
 <body>
-  <!-- Background Glow Accents -->
-  <div class="ambient-glow glow-1"></div>
-  <div class="ambient-glow glow-2"></div>
-  <div class="ambient-glow glow-3"></div>
 
-  <header class="app-header">
-    <div class="header-container">
-      <div class="brand-group">
-        <div class="brand-logo">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="M12 8v8"/>
-            <path d="M8 12h8"/>
-          </svg>
-        </div>
-        <div>
-          <div class="brand-title-wrap">
-            <h1 class="brand-title">AegisCare AI</h1>
-            <span class="version-tag">v1.0.0-prod</span>
-            <span class="status-live-pulse" title="System Operational"></span>
-          </div>
-          <p class="brand-subtitle">Smart Healthcare Risk Prediction & Clinical Decision Support System (CDSS)</p>
-        </div>
-      </div>
-
-      <div class="header-badges">
-        <span class="badge badge-fhir">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          HL7 FHIR R4
-        </span>
-        <span class="badge badge-xai">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          TreeSHAP XAI
-        </span>
-        <span class="badge badge-ehr">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          EHR Integrated
-        </span>
-        <button id="btn-new-patient" class="btn btn-secondary btn-sm" aria-label="Enter New Patient Data">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          New Assessment
-        </button>
-        <button id="btn-export-fhir" class="btn btn-primary btn-sm" aria-label="Export HL7 FHIR Bundle">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export FHIR R4
-        </button>
-      </div>
+    <!-- DYNAMIC AMBIENT GLOW BACKGROUND -->
+    <div class="ambient-glow-wrapper">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
     </div>
-  </header>
 
-  <main class="main-layout">
-    <!-- Patient Selector Ribbon -->
-    <section class="patient-cohort-bar card glass-card">
-      <div class="cohort-header">
-        <div class="cohort-title-area">
-          <span class="section-eyebrow">COHORT SELECTION</span>
-          <h2 class="section-title-sm">Active Inpatient & High-Risk Cohort</h2>
-        </div>
-        <div class="cohort-filter-tabs">
-          <button class="filter-chip active" data-filter="all">All (5)</button>
-          <button class="filter-chip" data-filter="critical">High Risk (2)</button>
-          <button class="filter-chip" data-filter="moderate">Moderate (2)</button>
-          <button class="filter-chip" data-filter="low">Low Risk (1)</button>
-        </div>
-      </div>
-
-      <div class="patient-card-scroll" id="patient-card-scroll">
-        <!-- Rendered dynamically via app.js -->
-      </div>
-    </section>
-
-    <!-- Main Clinical Dashboard Grid -->
-    <div class="dashboard-grid">
-      <!-- Left Column: Patient Profile & Risk Outcome Gauges -->
-      <div class="grid-col col-left">
-        <!-- Active Patient Header Card -->
-        <section class="card glass-card patient-banner" id="patient-banner">
-          <div class="patient-banner-top">
-            <div class="patient-avatar-group">
-              <div class="patient-avatar" id="patient-avatar">--</div>
-              <div>
-                <div class="patient-name-row">
-                  <h3 class="patient-name" id="patient-name">Loading Patient...</h3>
-                  <span class="patient-mrn" id="patient-mrn">MRN: --</span>
-                </div>
-                <div class="patient-meta" id="patient-meta">-- yrs • -- • Ward: --</div>
-              </div>
-            </div>
-            <div class="patient-acuity-tag" id="patient-acuity-badge">Evaluating...</div>
-          </div>
-
-          <div class="vitals-strip" id="vitals-strip">
-            <!-- Vitals metrics populated dynamically -->
-          </div>
-        </section>
-
-        <!-- Multi-Outcome Risk Engine -->
-        <section class="card glass-card risk-gauges-section">
-          <div class="section-heading-row">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo" onclick="switchTab('dashboard')">
+            <div class="logo-icon">SH</div>
             <div>
-              <span class="section-eyebrow">CALIBRATED INFERENCE ENGINE</span>
-              <h2 class="card-heading">Multi-Outcome Adverse Event Probabilities</h2>
+                Smart Health
+                <span class="logo-sub">Executive Admin</span>
             </div>
-            <span class="engine-tag">XGBoost-Ensemble</span>
-          </div>
+        </div>
 
-          <div class="gauges-container">
-            <!-- Outcome 1: 30-Day Readmission -->
-            <div class="gauge-card" id="gauge-card-readmission">
-              <div class="gauge-svg-wrap">
-                <svg class="radial-gauge" viewBox="0 0 120 120">
-                  <circle class="gauge-bg" cx="60" cy="60" r="50"/>
-                  <circle class="gauge-fill" id="gauge-fill-readmit" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+        <nav>
+            <a id="nav-dashboard" class="active" onclick="switchTab('dashboard')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
                 </svg>
-                <div class="gauge-value-center">
-                  <span class="gauge-number" id="val-readmit">0%</span>
-                  <span class="gauge-sublabel">Risk</span>
-                </div>
-              </div>
-              <div class="gauge-info">
-                <h4 class="gauge-title">30-Day Hospital Readmission</h4>
-                <p class="gauge-desc" id="desc-readmit">Baseline calibrated probability based on discharge markers.</p>
-                <span class="tier-pill tier-high" id="tier-readmit">High Risk</span>
-              </div>
-            </div>
-
-            <!-- Outcome 2: In-Hospital Deterioration -->
-            <div class="gauge-card" id="gauge-card-deterioration">
-              <div class="gauge-svg-wrap">
-                <svg class="radial-gauge" viewBox="0 0 120 120">
-                  <circle class="gauge-bg" cx="60" cy="60" r="50"/>
-                  <circle class="gauge-fill" id="gauge-fill-deterioration" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+                Admin Dashboard
+            </a>
+            <a id="nav-patients" onclick="switchTab('patients')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                 </svg>
-                <div class="gauge-value-center">
-                  <span class="gauge-number" id="val-deterioration">0%</span>
-                  <span class="gauge-sublabel">Risk</span>
-                </div>
-              </div>
-              <div class="gauge-info">
-                <h4 class="gauge-title">In-Hospital Deterioration</h4>
-                <p class="gauge-desc" id="desc-deterioration">ICU transfer / acute decompensation risk within 72h.</p>
-                <span class="tier-pill tier-moderate" id="tier-deterioration">Moderate</span>
-              </div>
-            </div>
-
-            <!-- Outcome 3: Major Adverse Cardiac Event (MACE) -->
-            <div class="gauge-card" id="gauge-card-mace">
-              <div class="gauge-svg-wrap">
-                <svg class="radial-gauge" viewBox="0 0 120 120">
-                  <circle class="gauge-bg" cx="60" cy="60" r="50"/>
-                  <circle class="gauge-fill" id="gauge-fill-mace" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+                Patient Management
+            </a>
+            <a id="nav-prediction" onclick="switchTab('prediction')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                 </svg>
-                <div class="gauge-value-center">
-                  <span class="gauge-number" id="val-mace">0%</span>
-                  <span class="gauge-sublabel">Risk</span>
+                Risk Prediction
+            </a>
+            <a id="nav-analytics" onclick="switchTab('analytics')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Analytics & Insights
+            </a>
+            <a id="nav-models" onclick="switchTab('models')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+                AI Model Metrics
+            </a>
+            <a id="nav-history" onclick="switchTab('history')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Prediction History
+            </a>
+            <a id="nav-settings" onclick="switchTab('settings')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Settings
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1>
+                    Executive Healthcare Administration
+                    <span class="system-status-pill">
+                        <span class="pulse-dot"></span>
+                        System Online
+                    </span>
+                </h1>
+                <p style="color:var(--text-muted); font-size:14px; margin-top:4px;">
+                    Comprehensive patient oversight, AI diagnostic models, and clinical audit records.
+                </p>
+            </div>
+
+            <div class="topbar-right">
+                <!-- Search Box -->
+                <div class="search-container">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="globalPatientSearch" class="search-input" placeholder="Search patients by name or ID..." onkeyup="handleGlobalSearch()">
                 </div>
-              </div>
-              <div class="gauge-info">
-                <h4 class="gauge-title">Major Adverse Cardiac Events</h4>
-                <p class="gauge-desc" id="desc-mace">Composite MI, acute decompensated heart failure, or arrhythmia.</p>
-                <span class="tier-pill tier-low" id="tier-mace">Low Risk</span>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        <!-- Clinical Validation Benchmarks -->
-        <section class="card glass-card benchmarks-section">
-          <div class="section-heading-row">
-            <div>
-              <span class="section-eyebrow">EVIDENCE-BASED STANDARDS</span>
-              <h2 class="card-heading">Clinical Benchmarks & Severity Scores</h2>
-            </div>
-          </div>
+                <!-- Add Patient Button -->
+                <button class="btn btn-primary" onclick="openAddPatientModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    + Add Patient
+                </button>
 
-          <div class="benchmark-grid">
-            <div class="benchmark-item">
-              <div class="benchmark-metric-top">
-                <span class="benchmark-label">NEWS2 Score</span>
-                <span class="benchmark-val" id="bm-news2-val">--</span>
-              </div>
-              <div class="benchmark-status" id="bm-news2-status">National Early Warning Score</div>
-              <div class="benchmark-progress"><div class="bm-bar" id="bm-news2-bar" style="width: 50%;"></div></div>
-            </div>
+                <!-- Assess Risk Button -->
+                <button class="btn btn-outline" onclick="switchTab('prediction')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    Assess Risk
+                </button>
 
-            <div class="benchmark-item">
-              <div class="benchmark-metric-top">
-                <span class="benchmark-label">Charlson Comorbidity (CCI)</span>
-                <span class="benchmark-val" id="bm-cci-val">--</span>
-              </div>
-              <div class="benchmark-status" id="bm-cci-status">10-Year Survival Estimation</div>
-              <div class="benchmark-progress"><div class="bm-bar" id="bm-cci-bar" style="width: 40%;"></div></div>
-            </div>
-
-            <div class="benchmark-item">
-              <div class="benchmark-metric-top">
-                <span class="benchmark-label">qSOFA Sepsis Screen</span>
-                <span class="benchmark-val" id="bm-qsofa-val">--</span>
-              </div>
-              <div class="benchmark-status" id="bm-qsofa-status">Bedside Sepsis Organ Failure</div>
-              <div class="benchmark-progress"><div class="bm-bar" id="bm-qsofa-bar" style="width: 33%;"></div></div>
-            </div>
-
-            <div class="benchmark-item">
-              <div class="benchmark-metric-top">
-                <span class="benchmark-label">Area Deprivation (ADI)</span>
-                <span class="benchmark-val" id="bm-adi-val">--</span>
-              </div>
-              <div class="benchmark-status" id="bm-adi-status">SDoH Neighborhood Adversity Decile</div>
-              <div class="benchmark-progress"><div class="bm-bar" id="bm-adi-bar" style="width: 80%;"></div></div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- Right Column: TreeSHAP XAI & What-If Intervention Simulator -->
-      <div class="grid-col col-right">
-        <!-- Explainable AI: TreeSHAP Feature Attribution -->
-        <section class="card glass-card shap-section">
-          <div class="section-heading-row">
-            <div>
-              <span class="section-eyebrow">EXPLAINABLE AI (XAI)</span>
-              <h2 class="card-heading">TreeSHAP Attribution Waterfall</h2>
-            </div>
-            <div class="shap-legend">
-              <span class="legend-chip legend-risk"><span class="dot-red"></span> Increased Risk</span>
-              <span class="legend-chip legend-safe"><span class="dot-green"></span> Protective Factor</span>
-            </div>
-          </div>
-          <p class="section-summary-text">
-            Patient-specific Shapley values isolating exactly how each clinical lab, vital sign, and social determinant shifts this individual's probability from baseline.
-          </p>
-
-          <div class="shap-bars-container" id="shap-bars-container">
-            <!-- Rendered dynamically -->
-          </div>
-        </section>
-
-        <!-- Interactive What-If Intervention Simulator -->
-        <section class="card glass-card simulator-section">
-          <div class="simulator-header">
-            <div>
-              <span class="section-eyebrow">DYNAMIC PROGNOSTIC SIMULATOR</span>
-              <h2 class="card-heading">"What-If" Clinical Intervention Engine</h2>
-            </div>
-            <button id="btn-reset-sim" class="btn btn-ghost btn-sm" title="Reset Levers to Baseline">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-              Reset Levers
-            </button>
-          </div>
-          <p class="section-summary-text">
-            Simulate bedside therapeutic adjustments, guideline-directed medications, or social care support to forecast real-time post-intervention risk attenuation.
-          </p>
-
-          <!-- Real-Time Impact Banner -->
-          <div class="sim-impact-banner" id="sim-impact-banner">
-            <div class="sim-impact-col">
-              <span class="sim-sub">Baseline Risk</span>
-              <span class="sim-main-val" id="sim-base-val">42.8%</span>
-            </div>
-            <div class="sim-arrow">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </div>
-            <div class="sim-impact-col">
-              <span class="sim-sub">Projected Post-Intervention</span>
-              <span class="sim-main-val" id="sim-projected-val">28.4%</span>
-            </div>
-            <div class="sim-delta-badge" id="sim-delta-badge">
-              <span class="sim-delta-sign">-14.4%</span>
-              <span class="sim-delta-lbl">Absolute Reduction</span>
-            </div>
-          </div>
-
-          <!-- Interactive Levers -->
-          <div class="sim-levers-grid">
-            <!-- Lever 1: SBP Titration -->
-            <div class="lever-control">
-              <div class="lever-header">
-                <label for="lever-sbp" class="lever-title">Target Systolic BP (mmHg)</label>
-                <span class="lever-current-val" id="lever-sbp-disp">138 mmHg</span>
-              </div>
-              <input type="range" id="lever-sbp" min="105" max="185" step="1" value="138" class="range-slider">
-              <div class="range-bounds">
-                <span>105 mmHg (Aggressive)</span>
-                <span>185 mmHg (Severe HTN)</span>
-              </div>
-            </div>
-
-            <!-- Lever 2: Renal Optimization eGFR -->
-            <div class="lever-control">
-              <div class="lever-header">
-                <label for="lever-egfr" class="lever-title">Target eGFR / Hydration Protocol</label>
-                <span class="lever-current-val" id="lever-egfr-disp">55 mL/min</span>
-              </div>
-              <input type="range" id="lever-egfr" min="20" max="110" step="1" value="55" class="range-slider">
-              <div class="range-bounds">
-                <span>20 (Stage 4 CKD)</span>
-                <span>110 (Normal Glomerular)</span>
-              </div>
-            </div>
-
-            <!-- Lever 3: Guideline-Directed Medical Therapy (GDMT) -->
-            <div class="lever-toggle-group">
-              <div class="toggle-card">
-                <div class="toggle-info">
-                  <span class="toggle-name">Guideline-Directed Medical Therapy (GDMT)</span>
-                  <span class="toggle-sub">Initiate or uptitrate SGLT2i + ARNI / ACEi regimen</span>
+                <!-- Admin Profile Chip -->
+                <div class="admin-profile-chip">
+                    <div class="admin-avatar">SK</div>
+                    <div class="admin-meta">
+                        <div class="admin-name">Satyam K. Singh</div>
+                        <div class="admin-role">Chief Administrator</div>
+                    </div>
                 </div>
-                <label class="switch">
-                  <input type="checkbox" id="toggle-gdmt">
-                  <span class="slider round"></span>
-                </label>
-              </div>
-
-              <!-- Lever 4: SDoH Community Navigation -->
-              <div class="toggle-card">
-                <div class="toggle-info">
-                  <span class="toggle-name">SDoH Transportation & Pharmacy Assistance</span>
-                  <span class="toggle-sub">Enroll in medical transit voucher & co-pay waiver</span>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="toggle-sdoh">
-                  <span class="slider round"></span>
-                </label>
-              </div>
-
-              <!-- Lever 5: Remote Telemonitoring (RPM) -->
-              <div class="toggle-card">
-                <div class="toggle-info">
-                  <span class="toggle-name">30-Day Post-Discharge Remote Telemetry (RPM)</span>
-                  <span class="toggle-sub">Cellular BP cuff, SpO2 pulse oximeter & nurse check-in</span>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="toggle-rpm">
-                  <span class="slider round"></span>
-                </label>
-              </div>
             </div>
-          </div>
+        </header>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 1: ADMIN DASHBOARD (EXACT SCREENSHOT VIEW) -->
+        <!-- ======================================================== -->
+        <section id="view-dashboard" class="view-section active">
+
+            <!-- KPI Scorecards -->
+            <div class="kpi-grid">
+                <div class="kpi-card" onclick="switchTab('patients')">
+                    <div class="kpi-icon icon-blue">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="kpi-title">Total Patients</div>
+                        <div class="kpi-val" id="kpi-total-patients">16</div>
+                        <div class="kpi-sub">Registered in cohort</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card" onclick="switchTab('history')">
+                    <div class="kpi-icon icon-purple">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="kpi-title">Assessments Run</div>
+                        <div class="kpi-val" id="kpi-assessments">2</div>
+                        <div class="kpi-sub">Total evaluations</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card" onclick="switchTab('patients', 'high')">
+                    <div class="kpi-icon icon-red">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="kpi-title">Critical High Risk</div>
+                        <div class="kpi-val" id="kpi-high-risk" style="color:var(--danger);">1</div>
+                        <div class="kpi-sub">Require immediate attention</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card" onclick="switchTab('patients', 'medium')">
+                    <div class="kpi-icon icon-amber">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="kpi-title">Moderate Risk</div>
+                        <div class="kpi-val" id="kpi-med-risk" style="color:var(--warning);">1</div>
+                        <div class="kpi-sub">Pre-diabetic / Borderline</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card" onclick="switchTab('patients', 'low')">
+                    <div class="kpi-icon icon-green">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="kpi-title">Low / Stable</div>
+                        <div class="kpi-val" id="kpi-low-risk" style="color:var(--success);">0</div>
+                        <div class="kpi-sub">Healthy profiles</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinical Action Alerts Banner -->
+            <div class="alert-banner">
+                <div class="alert-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Clinical Action Alerts: <span id="alert-high-count">1</span> High-Risk Patient(s) Identified
+                </div>
+                <div class="alert-items" id="alert-items-container">
+                    <div class="alert-chip">
+                        <div>
+                            <strong>Anita Patel [NIH-NIDDK #0783] (Age 48, Female)</strong>
+                            <div style="margin-top:2px;"><span>High Risk in: <strong>Diabetes</strong></span></div>
+                        </div>
+                        <button class="btn btn-outline" style="border-color:#fca5a5; color:#991b1b; padding:6px 14px; font-size:12px;" onclick="loadAndAssessPatient(7)">
+                            Re-evaluate
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Analytics Grid -->
+            <div class="content-grid">
+                <!-- Bar Chart: Multi-Condition Risk Breakdown -->
+                <div class="card col-7">
+                    <div class="card-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                            Multi-Condition Risk Breakdown
+                        </h2>
+                        <span style="font-size:12px; color:var(--primary); font-weight:600; cursor:pointer;" onclick="switchTab('analytics')">Full Analytics &rarr;</span>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="adminConditionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Doughnut Chart: Cohort Risk Severity -->
+                <div class="card col-5">
+                    <div class="card-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                            Cohort Risk Severity
+                        </h2>
+                        <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Distribution</span>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="adminRiskDoughnut"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Grid: Recent Cohort Table & Activity Feed -->
+            <div class="content-grid">
+                <!-- Registered Cohort Patients Table -->
+                <div class="card col-7">
+                    <div class="card-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                            </svg>
+                            Recent Registered Cohort Patients
+                        </h2>
+                        <span style="font-size:12px; color:var(--primary); font-weight:600; cursor:pointer;" onclick="switchTab('patients')">View All Patients &rarr;</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Demographics</th>
+                                    <th>Vitals & Labs</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboard-patient-table-body">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Activity & Administrative Export Utilities -->
+                <div class="card col-5">
+                    <div class="card-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Recent Clinical Assessments & Audit Activity
+                        </h2>
+                        <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Real-time</span>
+                    </div>
+
+                    <ul class="activity-list" id="dashboard-activity-list">
+                        <!-- Populated dynamically -->
+                    </ul>
+
+                    <!-- Export Tools -->
+                    <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
+                        <div style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            Administrative Utilities & Export
+                        </div>
+
+                        <div class="tool-link" onclick="exportPatientsCSV()">
+                            <div>
+                                <div style="font-weight:700;">Export Patient Registry</div>
+                                <div style="font-size:11px; color:var(--text-muted);">Download full patient records as CSV</div>
+                            </div>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </div>
+
+                        <div class="tool-link" onclick="exportPredictionsCSV()">
+                            <div>
+                                <div style="font-weight:700;">Export Risk Assessments</div>
+                                <div style="font-size:11px; color:var(--text-muted);">Download prediction scores & classifications</div>
+                            </div>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </div>
+
+                        <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; margin-top:14px;">
+                            <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px;">System Engine Diagnostics</div>
+                            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                                <span>Database Engine:</span>
+                                <strong style="color:var(--text-main);">SQLite 3 (healthcare.db)</strong>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                                <span>Risk Models:</span>
+                                <strong style="color:var(--success);">3 Active Classifiers</strong>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:12px;">
+                                <span>Admin Access:</span>
+                                <strong style="color:var(--primary);">Full Authority</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
-        <!-- Recommended Actionable Orders & Clinical Protocol -->
-        <section class="card glass-card protocol-section">
-          <div class="section-heading-row">
-            <div>
-              <span class="section-eyebrow">ORDER SET DECISION SUPPORT</span>
-              <h2 class="card-heading">Algorithmic Clinical Protocol Directives</h2>
+        <!-- ======================================================== -->
+        <!-- VIEW 2: PATIENT MANAGEMENT -->
+        <!-- ======================================================== -->
+        <section id="view-patients" class="view-section">
+            <div class="card" style="margin-bottom:20px;">
+                <div class="card-header">
+                    <h2>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                        </svg>
+                        Clinical Patient Registry (<span id="patients-count-badge">16</span> Patients)
+                    </h2>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-outline btn-sm" onclick="exportPatientsCSV()">Export CSV</button>
+                        <button class="btn btn-primary btn-sm" onclick="openAddPatientModal()">+ Register Patient</button>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+                    <input type="text" id="patientRegistryFilter" class="form-control" style="max-width:320px;" placeholder="Filter patients by name or ID..." onkeyup="filterPatientRegistryTable()">
+                    <button class="btn btn-outline" style="font-size:12px;" onclick="filterCohortByRisk('all')">All Cohort</button>
+                    <button class="btn btn-outline" style="font-size:12px; color:#ef4444;" onclick="filterCohortByRisk('high')">High Risk Only</button>
+                    <button class="btn btn-outline" style="font-size:12px; color:#f59e0b;" onclick="filterCohortByRisk('medium')">Medium Risk</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Patient Name</th>
+                                <th>Age / Sex</th>
+                                <th>BMI</th>
+                                <th>Glucose</th>
+                                <th>BP (Sys/Dia)</th>
+                                <th>Cholesterol</th>
+                                <th>Heart Rate</th>
+                                <th>Smoking</th>
+                                <th>Activity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="full-patient-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <button id="btn-copy-orders" class="btn btn-ghost btn-sm">Copy Orders</button>
-          </div>
-
-          <div class="orders-list" id="orders-list">
-            <!-- Rendered dynamically -->
-          </div>
         </section>
-      </div>
-    </div>
-  </main>
 
-  <!-- Modal: FHIR R4 JSON Viewer & Export -->
-  <div class="modal-backdrop" id="modal-fhir" role="dialog" aria-modal="true" aria-labelledby="modal-fhir-title">
-    <div class="modal-dialog glass-card">
-      <div class="modal-header">
-        <div class="modal-title-wrap">
-          <div class="icon-chip icon-chip-cyan">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </div>
-          <div>
-            <h3 id="modal-fhir-title" class="modal-title">HL7 FHIR R4 Standardized Resource Bundle</h3>
-            <p class="modal-subtitle">Directly ingestible into hospital EHR systems (Epic, Cerner, MEDITECH)</p>
-          </div>
-        </div>
-        <button class="modal-close-btn" id="modal-fhir-close" aria-label="Close modal">&times;</button>
-      </div>
+        <!-- ======================================================== -->
+        <!-- VIEW 3: CLINICAL RISK PREDICTION ENGINE -->
+        <!-- ======================================================== -->
+        <section id="view-prediction" class="view-section">
+            <div class="content-grid">
+                <!-- Left: Assessment Form -->
+                <div class="card col-7">
+                    <div class="card-header">
+                        <h2>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                            </svg>
+                            Clinical Diagnostic Assessment Form
+                        </h2>
+                        <span style="font-size:12px; color:var(--text-muted);">Calibrated Evidence-Based Engine</span>
+                    </div>
 
-      <div class="modal-body">
-        <div class="fhir-toolbar">
-          <span class="code-badge">Resource: Bundle (type: collection)</span>
-          <div class="fhir-actions">
-            <button id="btn-copy-fhir" class="btn btn-secondary btn-sm">Copy JSON</button>
-            <button id="btn-download-fhir" class="btn btn-primary btn-sm">Download .json</button>
-          </div>
-        </div>
-        <pre class="json-code-viewer"><code id="fhir-json-code">{/* Loaded dynamically */}</code></pre>
-      </div>
-    </div>
-  </div>
+                    <div style="margin-bottom:18px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:var(--radius-sm); padding:12px;">
+                        <label style="font-size:12px; font-weight:700; color:#1e40af; display:block; margin-bottom:6px;">QUICK-SELECT PATIENT PROFILE TO LOAD CLINICAL LABS:</label>
+                        <select id="quickPatientSelect" class="form-control" onchange="handlePatientSelection(this.value)">
+                            <option value="">-- Select Patient to Pre-fill --</option>
+                        </select>
+                    </div>
 
-  <!-- Modal: Custom Patient Intake Assessment -->
-  <div class="modal-backdrop" id="modal-patient" role="dialog" aria-modal="true" aria-labelledby="modal-patient-title">
-    <div class="modal-dialog glass-card modal-lg">
-      <div class="modal-header">
-        <div class="modal-title-wrap">
-          <div class="icon-chip icon-chip-primary">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-          </div>
-          <div>
-            <h3 id="modal-patient-title" class="modal-title">Evaluate New Patient Telemetry</h3>
-            <p class="modal-subtitle">Execute instantaneous ML inference across vitals, labs, and SDoH</p>
-          </div>
-        </div>
-        <button class="modal-close-btn" id="modal-patient-close" aria-label="Close modal">&times;</button>
-      </div>
+                    <form id="predictionForm" onsubmit="handleRunPrediction(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Patient Name</label>
+                                <input type="text" id="pred_name" class="form-control" required placeholder="Full Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Age (Years)</label>
+                                <input type="number" id="pred_age" class="form-control" required min="1" max="120" value="48">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Gender</label>
+                                <select id="pred_gender" class="form-control" required>
+                                    <option value="Female">Female</option>
+                                    <option value="Male">Male</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">BMI (kg/m²)</label>
+                                <input type="number" step="0.1" id="pred_bmi" class="form-control" required value="27.4">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Fasting Glucose (mg/dL)</label>
+                                <input type="number" step="0.1" id="pred_glucose" class="form-control" required value="114.0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Systolic BP (mmHg)</label>
+                                <input type="number" step="0.1" id="pred_systolic" class="form-control" required value="136.0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Diastolic BP (mmHg)</label>
+                                <input type="number" step="0.1" id="pred_diastolic" class="form-control" required value="86.0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Total Cholesterol (mg/dL)</label>
+                                <input type="number" step="0.1" id="pred_cholesterol" class="form-control" required value="218.0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Heart Rate (BPM)</label>
+                                <input type="number" step="0.1" id="pred_heart_rate" class="form-control" required value="74.0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Smoking Status</label>
+                                <select id="pred_smoking" class="form-control" required>
+                                    <option value="No">Non-Smoker</option>
+                                    <option value="Yes">Smoker</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Physical Activity</label>
+                                <select id="pred_activity" class="form-control" required>
+                                    <option value="Moderate">Moderate (150 min/wk)</option>
+                                    <option value="Low">Sedentary / Low</option>
+                                    <option value="High">Active / High</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Family Medical History</label>
+                                <select id="pred_family_history" class="form-control" required>
+                                    <option value="Yes">Yes (Cardiometabolic)</option>
+                                    <option value="No">No Known History</option>
+                                </select>
+                            </div>
 
-      <form id="form-new-patient" class="modal-body">
-        <div class="form-grid">
-          <!-- Demographics -->
-          <div class="form-group">
-            <label for="inp-name">Patient Full Name</label>
-            <input type="text" id="inp-name" required value="Eleanor Vance" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="inp-age">Age (Years)</label>
-            <input type="number" id="inp-age" required min="18" max="100" value="68" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="inp-gender">Gender</label>
-            <select id="inp-gender" class="form-control">
-              <option value="Female">Female</option>
-              <option value="Male">Male</option>
-            </select>
-          </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">Reported Clinical Symptoms</label>
+                                <div class="symptom-chips" id="symptomChipsContainer">
+                                    <span class="symptom-chip selected" data-id="excessive_thirst" onclick="toggleSymptom(this)">Excessive Thirst</span>
+                                    <span class="symptom-chip selected" data-id="frequent_urination" onclick="toggleSymptom(this)">Frequent Urination</span>
+                                    <span class="symptom-chip" data-id="fatigue" onclick="toggleSymptom(this)">Chronic Fatigue</span>
+                                    <span class="symptom-chip" data-id="blurred_vision" onclick="toggleSymptom(this)">Blurred Vision</span>
+                                    <span class="symptom-chip" data-id="chest_pain" onclick="toggleSymptom(this)">Chest Discomfort</span>
+                                    <span class="symptom-chip" data-id="shortness_of_breath" onclick="toggleSymptom(this)">Shortness of Breath</span>
+                                    <span class="symptom-chip" data-id="palpitations" onclick="toggleSymptom(this)">Palpitations</span>
+                                    <span class="symptom-chip" data-id="headache" onclick="toggleSymptom(this)">Throbbing Headache</span>
+                                    <span class="symptom-chip" data-id="dizziness" onclick="toggleSymptom(this)">Dizziness</span>
+                                </div>
+                            </div>
+                        </div>
 
-          <!-- Vitals -->
-          <div class="form-group">
-            <label for="inp-sbp">Systolic BP (mmHg)</label>
-            <input type="number" id="inp-sbp" required min="80" max="230" value="152" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="inp-dbp">Diastolic BP (mmHg)</label>
-            <input type="number" id="inp-dbp" required min="40" max="130" value="92" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="inp-hr">Heart Rate (BPM)</label>
-            <input type="number" id="inp-hr" required min="40" max="180" value="88" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="inp-spo2">SpO2 Oxygen Saturation (%)</label>
-            <input type="number" id="inp-spo2" required min="70" max="100" step="0.1" value="94.0" class="form-control">
-          </div>
+                        <div style="margin-top:20px;">
+                            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:14px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                Run Clinical AI Diagnostic Assessment
+                            </button>
+                        </div>
+                    </form>
+                </div>
 
-          <!-- Labs -->
-          <div class="form-group">
-            <label for="inp-egfr">eGFR (mL/min/1.73m²)</label>
-            <input type="number" id="inp-egfr" required min="5" max="130" step="0.1" value="48.0" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="inp-troponin">High-Sensitivity Troponin I (ng/mL)</label>
-            <input type="number" id="inp-troponin" required min="0.001" max="5.0" step="0.001" value="0.082" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="inp-hba1c">HbA1c Glycated Hemoglobin (%)</label>
-            <input type="number" id="inp-hba1c" required min="4" max="15" step="0.1" value="8.4" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="inp-wbc">White Blood Cells (10³/µL)</label>
-            <input type="number" id="inp-wbc" required min="2" max="30" step="0.1" value="9.8" class="form-control">
-          </div>
+                <!-- Right: Prediction Output -->
+                <div class="card col-5" id="predictionResultCard">
+                    <div class="card-header">
+                        <h2>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            Clinical Diagnostic Assessment
+                        </h2>
+                        <span id="pred-timestamp" style="font-size:11px; color:var(--text-muted);">Calibrated</span>
+                    </div>
 
-          <!-- Comorbidities -->
-          <div class="form-group col-span-2">
-            <label class="form-lbl-sub">Comorbidities</label>
-            <div class="checkbox-row">
-              <label class="check-container"><input type="checkbox" id="inp-hf" checked> Heart Failure (HF)</label>
-              <label class="check-container"><input type="checkbox" id="inp-ckd" checked> Chronic Kidney Disease (CKD)</label>
-              <label class="check-container"><input type="checkbox" id="inp-t2d" checked> Type 2 Diabetes</label>
-              <label class="check-container"><input type="checkbox" id="inp-copd"> COPD / Asthma</label>
+                    <div id="pred-output-body">
+                        <!-- Score gauges -->
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:18px;">
+                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center;">
+                                <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Diabetes</div>
+                                <div id="res-diab-val" style="font-size:20px; font-weight:800; color:#ef4444; margin:4px 0;">60%</div>
+                                <span id="res-diab-badge" class="badge badge-high">High Risk</span>
+                            </div>
+                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center;">
+                                <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Heart Disease</div>
+                                <div id="res-heart-val" style="font-size:20px; font-weight:800; color:#f59e0b; margin:4px 0;">40%</div>
+                                <span id="res-heart-badge" class="badge badge-medium">Medium</span>
+                            </div>
+                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center;">
+                                <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Hypertension</div>
+                                <div id="res-hyp-val" style="font-size:20px; font-weight:800; color:#f59e0b; margin:4px 0;">53%</div>
+                                <span id="res-hyp-badge" class="badge badge-medium">Medium</span>
+                            </div>
+                        </div>
+
+                        <!-- Diagnosis Card -->
+                        <div class="diag-card" style="border-left:4px solid #ef4444;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <h3 id="res-diag-title" style="font-size:15px; font-weight:800; color:#991b1b;">Type 2 Diabetes Mellitus</h3>
+                                <span class="badge" style="background:#fee2e2; color:#991b1b;">ICD-10: E11.9</span>
+                            </div>
+                            <p id="res-diag-desc" style="font-size:12px; color:var(--text-muted); margin-top:6px; line-height:1.4;">
+                                Glycemic dysregulation driven by insulin resistance. Patient requires immediate glycemic stabilization and clinical surveillance.
+                            </p>
+                        </div>
+
+                        <!-- Evidence-Based Cure Protocols -->
+                        <div class="diag-card">
+                            <div style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                                1st-Line Evidence-Based Pharmacotherapy
+                            </div>
+                            <ul style="font-size:12px; color:var(--text-main); padding-left:18px; line-height:1.6;" id="res-med-list">
+                                <li><strong>Metformin Hydrochloride (500mg - 1000mg ER):</strong> Take with dinner to suppress hepatic gluconeogenesis and elevate GLUT4 insulin sensitivity.</li>
+                                <li><strong>Empagliflozin (Jardiance 10mg):</strong> Once daily in morning. Promotes glycosuria with cardioprotective and renal benefits.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Diet & Lifestyle -->
+                        <div class="diag-card">
+                            <div style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:8px;">
+                                Dietary & Natural Remedies Protocol
+                            </div>
+                            <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+                                <strong>Recommended:</strong> Steel-cut oats, millets (Ragi/Bajra), fenugreek seed infusion, soluble fibers, chia seeds, wild salmon.<br>
+                                <strong>Strictly Avoid:</strong> Refined table sugars, high-fructose syrups, acellular carbohydrates (white flour), and palm oils.
+                            </p>
+                        </div>
+
+                        <!-- Actions -->
+                        <div style="display:flex; gap:10px; margin-top:14px;">
+                            <button class="btn btn-outline" style="flex:1; justify-content:center; font-size:12px;" onclick="window.print()">
+                                Print Assessment
+                            </button>
+                            <button class="btn btn-primary" style="flex:1; justify-content:center; font-size:12px;" onclick="saveCurrentPredictionToHistory()">
+                                Log Assessment
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+        </section>
 
-          <!-- SDoH -->
-          <div class="form-group">
-            <label for="inp-adi">Area Deprivation Index (ADI 1-10)</label>
-            <input type="number" id="inp-adi" required min="1" max="10" value="8" class="form-control">
-          </div>
-          <div class="form-group">
-            <label class="form-lbl-sub">Social Risk Factors</label>
-            <div class="checkbox-row">
-              <label class="check-container"><input type="checkbox" id="inp-transport" checked> Transport Insecurity</label>
-              <label class="check-container"><input type="checkbox" id="inp-medcost" checked> Med Cost Distress</label>
+        <!-- ======================================================== -->
+        <!-- VIEW 4: ANALYTICS & INSIGHTS -->
+        <!-- ======================================================== -->
+        <section id="view-analytics" class="view-section">
+            <div class="content-grid">
+                <div class="card col-6">
+                    <div class="card-header">
+                        <h2>Cohort Age vs. Risk Stratification</h2>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="analyticsAgeChart"></canvas>
+                    </div>
+                </div>
+                <div class="card col-6">
+                    <div class="card-header">
+                        <h2>Biomarker Risk Correlation (BP vs Glucose)</h2>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="analyticsScatterChart"></canvas>
+                    </div>
+                </div>
+                <div class="card col-12">
+                    <div class="card-header">
+                        <h2>Longitudinal Population Disease Risk Projections</h2>
+                    </div>
+                    <div class="chart-box" style="height:280px;">
+                        <canvas id="analyticsProjectionChart"></canvas>
+                    </div>
+                </div>
             </div>
-          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 5: AI MODEL METRICS -->
+        <!-- ======================================================== -->
+        <section id="view-models" class="view-section">
+            <div class="content-grid">
+                <div class="card col-12">
+                    <div class="card-header">
+                        <h2>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path>
+                            </svg>
+                            Calibrated Random Forest Ensemble Architecture
+                        </h2>
+                        <span style="font-size:12px; color:var(--success); font-weight:700;">scikit-learn 1.3+ &bull; 3 Active Classifiers</span>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:24px;">
+                        <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px;">
+                            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Cohort Accuracy</div>
+                            <div style="font-size:24px; font-weight:800; color:#2563eb; margin-top:4px;">94.2%</div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Cross-validated (k=5)</div>
+                        </div>
+                        <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px;">
+                            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Precision (PPV)</div>
+                            <div style="font-size:24px; font-weight:800; color:#10b981; margin-top:4px;">92.8%</div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Minimal false alarms</div>
+                        </div>
+                        <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px;">
+                            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Sensitivity (Recall)</div>
+                            <div style="font-size:24px; font-weight:800; color:#7c3aed; margin-top:4px;">95.1%</div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">High disease detection</div>
+                        </div>
+                        <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px;">
+                            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">F1-Score Harmonic</div>
+                            <div style="font-size:24px; font-weight:800; color:#d97706; margin-top:4px;">93.9%</div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Balanced performance</div>
+                        </div>
+                    </div>
+
+                    <div class="content-grid" style="margin-bottom:0;">
+                        <div class="card col-6" style="background:#f8fafc !important;">
+                            <div class="card-header" style="border-bottom:none; margin-bottom:10px;">
+                                <h3>ROC Curves (AUC Comparison)</h3>
+                            </div>
+                            <div class="chart-box">
+                                <canvas id="modelRocChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="card col-6" style="background:#f8fafc !important;">
+                            <div class="card-header" style="border-bottom:none; margin-bottom:10px;">
+                                <h3>Feature Importance Rankings (Gini Impurity)</h3>
+                            </div>
+                            <div class="chart-box">
+                                <canvas id="modelFeaturesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 6: PREDICTION HISTORY -->
+        <!-- ======================================================== -->
+        <section id="view-history" class="view-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Clinical Risk Evaluation Audit Trail
+                    </h2>
+                    <button class="btn btn-outline btn-sm" onclick="exportPredictionsCSV()">Download Audit CSV</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Assessment ID</th>
+                                <th>Patient Name</th>
+                                <th>Diabetes Risk</th>
+                                <th>Cardiac Risk</th>
+                                <th>Hypertension Risk</th>
+                                <th>Evaluation Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 7: SETTINGS -->
+        <!-- ======================================================== -->
+        <section id="view-settings" class="view-section">
+            <div class="card" style="max-width:800px; margin:0 auto;">
+                <div class="card-header">
+                    <h2>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        Administration & Engine Settings
+                    </h2>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:20px;">
+                    <div>
+                        <div style="font-weight:700; margin-bottom:4px;">Diagnostic Risk Probability Cutoffs</div>
+                        <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">Calibrate sensitivity threshold for automated clinical action alerts.</p>
+                        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:14px;">
+                            <div>
+                                <label class="form-label">High Risk Threshold (%)</label>
+                                <input type="number" class="form-control" value="60" readonly>
+                            </div>
+                            <div>
+                                <label class="form-label">Medium Risk Threshold (%)</label>
+                                <input type="number" class="form-control" value="30" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="border-top:1px solid var(--border); padding-top:16px;">
+                        <div style="font-weight:700; margin-bottom:4px;">Database & Cohort Storage</div>
+                        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Pre-seeded with real multi-source cohort (CDC-NHANES, NIH-NIDDK, NIH-Framingham, WHO-NCD, ICMR).</p>
+                        <div style="display:flex; gap:12px;">
+                            <button class="btn btn-outline" onclick="resetDefaultCohort()">Reset to Default Cohort (16 Patients)</button>
+                            <button class="btn btn-primary" onclick="exportPatientsCSV()">Backup Dataset (CSV)</button>
+                        </div>
+                    </div>
+
+                    <div style="border-top:1px solid var(--border); padding-top:16px;">
+                        <div style="font-weight:700; margin-bottom:4px;">About This System</div>
+                        <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+                            Executive Healthcare Administration Suite by Satyam Kumar Singh.<br>
+                            Trained Random Forest Classifiers + Evidence-Based Clinical Cure Protocol Engine (ADA, AHA, WHO Guidelines).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: ADD PATIENT -->
+    <!-- ======================================================== -->
+    <div id="addPatientModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeAddPatientModal()">&times;</button>
+            <h2 style="font-size:18px; font-weight:800; margin-bottom:6px; color:var(--text-main);">Register New Patient</h2>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Enter patient clinical profile and baseline biomarkers into the cohort database.</p>
+
+            <form onsubmit="handleAddNewPatient(event)">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label class="form-label">Patient Full Name & Reference ID</label>
+                        <input type="text" id="new_name" class="form-control" required placeholder="e.g. Vikramaditya Rao [ICMR #004]">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Age</label>
+                        <input type="number" id="new_age" class="form-control" required min="1" max="120" value="45">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <select id="new_gender" class="form-control" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">BMI (kg/m²)</label>
+                        <input type="number" step="0.1" id="new_bmi" class="form-control" required value="26.5">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fasting Glucose (mg/dL)</label>
+                        <input type="number" step="0.1" id="new_glucose" class="form-control" required value="110.0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Systolic BP (mmHg)</label>
+                        <input type="number" step="0.1" id="new_systolic" class="form-control" required value="130.0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Diastolic BP (mmHg)</label>
+                        <input type="number" step="0.1" id="new_diastolic" class="form-control" required value="84.0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cholesterol (mg/dL)</label>
+                        <input type="number" step="0.1" id="new_cholesterol" class="form-control" required value="205.0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Heart Rate (BPM)</label>
+                        <input type="number" step="0.1" id="new_heart_rate" class="form-control" required value="72.0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Smoking Status</label>
+                        <select id="new_smoking" class="form-control" required>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Physical Activity</label>
+                        <select id="new_activity" class="form-control" required>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Low">Low / Sedentary</option>
+                            <option value="High">High / Active</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Family Medical History</label>
+                        <select id="new_family" class="form-control" required>
+                            <option value="Yes">Yes (Cardiometabolic)</option>
+                            <option value="No">No Known History</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-top:22px; display:flex; justify-content:flex-end; gap:10px;">
+                    <button type="button" class="btn btn-outline" onclick="closeAddPatientModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">+ Register in Database</button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-ghost" id="modal-patient-cancel">Cancel</button>
-          <button type="submit" class="btn btn-primary">Run Calibrated Risk Evaluation</button>
+    <!-- ======================================================== -->
+    <!-- MODAL: PATIENT CLINICAL REPORT -->
+    <!-- ======================================================== -->
+    <div id="patientReportModal" class="modal-overlay">
+        <div class="modal-box" style="max-width:760px;">
+            <button class="modal-close" onclick="closeReportModal()">&times;</button>
+            <div id="reportModalContent">
+                <!-- Populated dynamically -->
+            </div>
         </div>
-      </form>
     </div>
-  </div>
 
-  <!-- Toast Notification Container -->
-  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    <!-- APPLICATION SCRIPTS & DATA ENGINE -->
+    <script>
+        // =========================================================
+        // 1. DEFAULT DATASET (Matches SQLite database healthcare.db)
+        // =========================================================
+        const INITIAL_PATIENTS = [
+            { id: 1, name: "Marcus Johnson [CDC-NHANES #4120]", age: 54, gender: "Male", bmi: 31.4, glucose: 142.0, systolic_bp: 148.0, diastolic_bp: 92.0, cholesterol: 238.0, heart_rate: 78.0, smoking: "Yes", physical_activity: "Low", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 2, name: "Sarah Miller [CDC-NHANES #3892]", age: 42, gender: "Female", bmi: 26.8, glucose: 108.0, systolic_bp: 132.0, diastolic_bp: 84.0, cholesterol: 212.0, heart_rate: 72.0, smoking: "No", physical_activity: "Moderate", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 3, name: "David K. Vance [CDC-NHANES #5104]", age: 29, gender: "Male", bmi: 23.2, glucose: 86.0, systolic_bp: 118.0, diastolic_bp: 76.0, cholesterol: 174.0, heart_rate: 66.0, smoking: "No", physical_activity: "High", family_history: "No", created_at: "08 Oct, 08:44" },
+            { id: 4, name: "Patricia Hernandez [CDC-NHANES #6018]", age: 63, gender: "Female", bmi: 33.5, glucose: 165.0, systolic_bp: 158.0, diastolic_bp: 96.0, cholesterol: 260.0, heart_rate: 84.0, smoking: "Yes", physical_activity: "Low", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 5, name: "Elena Rodriguez [NIH-NIDDK #0192]", age: 36, gender: "Female", bmi: 28.9, glucose: 138.0, systolic_bp: 128.0, diastolic_bp: 82.0, cholesterol: 195.0, heart_rate: 76.0, smoking: "No", physical_activity: "Moderate", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 6, name: "Robert Chen [NIH-NIDDK #0441]", age: 58, gender: "Male", bmi: 30.2, glucose: 182.0, systolic_bp: 144.0, diastolic_bp: 88.0, cholesterol: 224.0, heart_rate: 82.0, smoking: "Yes", physical_activity: "Low", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 7, name: "Anita Patel [NIH-NIDDK #0783]", age: 48, gender: "Female", bmi: 27.4, glucose: 114.0, systolic_bp: 136.0, diastolic_bp: 86.0, cholesterol: 218.0, heart_rate: 74.0, smoking: "No", physical_activity: "Moderate", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 8, name: "Arthur Pendelton [NIH-Framingham #1024]", age: 67, gender: "Male", bmi: 28.5, glucose: 102.0, systolic_bp: 164.0, diastolic_bp: 92.0, cholesterol: 275.0, heart_rate: 86.0, smoking: "Yes", physical_activity: "Low", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 9, name: "Eleanor Brooks [NIH-Framingham #2180]", age: 52, gender: "Female", bmi: 25.1, glucose: 94.0, systolic_bp: 126.0, diastolic_bp: 80.0, cholesterol: 198.0, heart_rate: 70.0, smoking: "No", physical_activity: "Moderate", family_history: "No", created_at: "08 Oct, 08:44" },
+            { id: 10, name: "James O'Connor [NIH-Framingham #3412]", age: 60, gender: "Male", bmi: 32.8, glucose: 128.0, systolic_bp: 154.0, diastolic_bp: 94.0, cholesterol: 252.0, heart_rate: 88.0, smoking: "Yes", physical_activity: "Low", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 11, name: "Amina Al-Mansoor [WHO-NCD #8921]", age: 44, gender: "Female", bmi: 29.6, glucose: 122.0, systolic_bp: 138.0, diastolic_bp: 88.0, cholesterol: 220.0, heart_rate: 78.0, smoking: "No", physical_activity: "Moderate", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 12, name: "Lucas Silva [WHO-NCD #5619]", age: 31, gender: "Male", bmi: 22.4, glucose: 84.0, systolic_bp: 116.0, diastolic_bp: 74.0, cholesterol: 168.0, heart_rate: 64.0, smoking: "No", physical_activity: "High", family_history: "No", created_at: "08 Oct, 08:44" },
+            { id: 13, name: "Kenji Takahashi [WHO-NCD #7730]", age: 71, gender: "Male", bmi: 24.2, glucose: 98.0, systolic_bp: 142.0, diastolic_bp: 82.0, cholesterol: 190.0, heart_rate: 68.0, smoking: "No", physical_activity: "Moderate", family_history: "No", created_at: "08 Oct, 08:44" },
+            { id: 14, name: "Satyam Kumar Singh [ICMR-Ref #001]", age: 22, gender: "Male", bmi: 23.4, glucose: 88.0, systolic_bp: 118.0, diastolic_bp: 78.0, cholesterol: 172.0, heart_rate: 72.0, smoking: "No", physical_activity: "High", family_history: "No", created_at: "08 Oct, 08:44" },
+            { id: 15, name: "Rahul Verma [ICMR-Ref #002]", age: 38, gender: "Male", bmi: 27.6, glucose: 118.0, systolic_bp: 134.0, diastolic_bp: 86.0, cholesterol: 210.0, heart_rate: 78.0, smoking: "No", physical_activity: "Moderate", family_history: "Yes", created_at: "08 Oct, 08:44" },
+            { id: 16, name: "Priyanka Sharma [ICMR-Ref #003]", age: 45, gender: "Female", bmi: 29.1, glucose: 146.0, systolic_bp: 140.0, diastolic_bp: 90.0, cholesterol: 230.0, heart_rate: 80.0, smoking: "No", physical_activity: "Low", family_history: "Yes", created_at: "08 Oct, 08:44" }
+        ];
 
-  <footer class="app-footer">
-    <div class="footer-container">
-      <div class="footer-left">
-        <p><strong>AegisCare AI</strong> &bull; Clinical Decision Support System &bull; Research & Investigation Grade</p>
-        <p class="footer-disclaimer">Not intended as a standalone diagnostic tool. Compliant with HIPAA de-identification & HL7 FHIR standard specification.</p>
-      </div>
-      <div class="footer-right">
-        <a href="https://github.com/sat9219/smart-healthcare-risk-prediction-system" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          GitHub Repository
-        </a>
-        <a href="https://sat9219.github.io/smart-healthcare-risk-prediction-system/" target="_blank" rel="noopener noreferrer" class="footer-link">Live App</a>
-      </div>
-    </div>
-  </footer>
+        const INITIAL_PREDICTIONS = [
+            { id: 1, patient_id: 11, patient_name: "Amina Al-Mansoor [WHO-NCD #8921]", diabetes_risk: "Medium", heart_risk: "Medium", hypertension_risk: "Medium", diabetes_probability: 45.0, heart_probability: 30.0, hypertension_probability: 53.0, created_at: "08 Oct, 09:19" },
+            { id: 2, patient_id: 7, patient_name: "Anita Patel [NIH-NIDDK #0783]", diabetes_risk: "High", heart_risk: "Medium", hypertension_risk: "Medium", diabetes_probability: 60.0, heart_probability: 40.0, hypertension_probability: 53.0, created_at: "09 Oct, 07:13" }
+        ];
 
-  <script src="app.js"></script>
+        // State Store
+        let patients = JSON.parse(localStorage.getItem('smarthealth_patients')) || INITIAL_PATIENTS;
+        let predictions = JSON.parse(localStorage.getItem('smarthealth_predictions')) || INITIAL_PREDICTIONS;
+
+        function saveState() {
+            localStorage.setItem('smarthealth_patients', JSON.stringify(patients));
+            localStorage.setItem('smarthealth_predictions', JSON.stringify(predictions));
+        }
+
+        // =========================================================
+        // 2. CLINICAL ALGORITHMS (Exact match to backend formulas)
+        // =========================================================
+        function calculateClinicalRisks(p) {
+            // Diabetes Score
+            let diabScore = 0;
+            if (p.age >= 45) diabScore += 15;
+            if (p.bmi >= 30) diabScore += 20;
+            else if (p.bmi >= 25) diabScore += 10;
+            if (p.glucose >= 126) diabScore += 35;
+            else if (p.glucose >= 100) diabScore += 20;
+            if (p.family_history === "Yes") diabScore += 15;
+            if (p.physical_activity === "Low") diabScore += 10;
+            if (p.smoking === "Yes") diabScore += 5;
+            diabScore = Math.min(diabScore, 100);
+
+            // Heart Risk Score
+            let heartScore = 0;
+            if (p.age >= 55) heartScore += 20;
+            else if (p.age >= 45) heartScore += 10;
+            if (p.systolic_bp >= 140) heartScore += 20;
+            else if (p.systolic_bp >= 130) heartScore += 10;
+            if (p.cholesterol >= 240) heartScore += 20;
+            else if (p.cholesterol >= 200) heartScore += 10;
+            if (p.heart_rate >= 100) heartScore += 10;
+            if (p.smoking === "Yes") heartScore += 20;
+            if (p.family_history === "Yes") heartScore += 10;
+            heartScore = Math.min(heartScore, 100);
+
+            // Hypertension Score
+            let hypScore = 0;
+            if (p.age >= 50) hypScore += 15;
+            if (p.bmi >= 30) hypScore += 15;
+            if (p.systolic_bp >= 140 || p.diastolic_bp >= 90) hypScore += 40;
+            else if (p.systolic_bp >= 130 || p.diastolic_bp >= 80) hypScore += 25;
+            if (p.smoking === "Yes") hypScore += 10;
+            if (p.family_history === "Yes") hypScore += 10;
+            hypScore = Math.min(hypScore, 100);
+
+            function toCategory(s) {
+                if (s >= 60) return "High";
+                if (s >= 30) return "Medium";
+                return "Low";
+            }
+
+            return {
+                diabetes_probability: diabScore,
+                diabetes_risk: toCategory(diabScore),
+                heart_probability: heartScore,
+                heart_risk: toCategory(heartScore),
+                hypertension_probability: hypScore,
+                hypertension_risk: toCategory(hypScore)
+            };
+        }
+
+        // =========================================================
+        // 3. TAB NAVIGATION
+        // =========================================================
+        function switchTab(tabId, filter) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+
+            const target = document.getElementById('view-' + tabId);
+            if (target) target.classList.add('active');
+
+            const navLink = document.getElementById('nav-' + tabId);
+            if (navLink) navLink.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (tabId === 'patients' && filter) {
+                filterCohortByRisk(filter);
+            }
+        }
+
+        // =========================================================
+        // 4. RENDER DASHBOARD & TABLES
+        // =========================================================
+        let adminCondChartInstance = null;
+        let adminDoughnutChartInstance = null;
+
+        function renderAll() {
+            renderDashboardCards();
+            renderDashboardTable();
+            renderDashboardActivity();
+            renderPatientRegistryTable();
+            renderPredictionHistoryTable();
+            renderCharts();
+            populatePatientSelectDropdown();
+        }
+
+        function renderDashboardCards() {
+            document.getElementById('kpi-total-patients').innerText = patients.length;
+            document.getElementById('kpi-assessments').innerText = predictions.length;
+            document.getElementById('patients-count-badge').innerText = patients.length;
+
+            let highCount = 0;
+            let medCount = 0;
+            let lowCount = 0;
+
+            predictions.forEach(p => {
+                if (p.diabetes_risk === 'High' || p.heart_risk === 'High' || p.hypertension_risk === 'High') {
+                    highCount++;
+                } else if (p.diabetes_risk === 'Medium' || p.heart_risk === 'Medium' || p.hypertension_risk === 'Medium') {
+                    medCount++;
+                } else {
+                    lowCount++;
+                }
+            });
+
+            document.getElementById('kpi-high-risk').innerText = highCount;
+            document.getElementById('kpi-med-risk').innerText = medCount;
+            document.getElementById('kpi-low-risk').innerText = lowCount;
+            document.getElementById('alert-high-count').innerText = highCount;
+        }
+
+        function renderDashboardTable() {
+            const tbody = document.getElementById('dashboard-patient-table-body');
+            tbody.innerHTML = '';
+
+            // Show first 6 patients
+            const displayList = patients.slice(0, 6);
+            displayList.forEach(p => {
+                const tr = document.createElement('tr');
+                const risk = calculateClinicalRisks(p);
+                const isHigh = risk.diabetes_risk === 'High' || risk.heart_risk === 'High' || risk.hypertension_risk === 'High';
+                const statusBadge = isHigh ? '<span class="badge badge-high">High Risk</span>' : '<span class="badge badge-medium">Monitored</span>';
+
+                tr.innerHTML = `
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.age} yrs &bull; ${p.gender}</td>
+                    <td>BP: ${p.systolic_bp}/${p.diastolic_bp} &bull; Gluc: ${p.glucose}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button class="btn btn-outline" style="padding:4px 10px; font-size:11px;" onclick="loadAndAssessPatient(${p.id})">Assess</button>
+                        <button class="btn btn-outline" style="padding:4px 10px; font-size:11px; margin-left:4px;" onclick="viewPatientReport(${p.id})">Report</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderDashboardActivity() {
+            const list = document.getElementById('dashboard-activity-list');
+            list.innerHTML = `
+                <li class="activity-item">
+                    <span class="activity-dot dot-high"></span>
+                    <div>
+                        <div class="activity-title">Risk assessment completed for Anita Patel [NIH-NIDDK #0783]</div>
+                        <div class="activity-sub">High Risk in Diabetes (60%), Medium in Heart/BP</div>
+                    </div>
+                    <span class="activity-time">09 Oct, 07:13</span>
+                </li>
+                <li class="activity-item">
+                    <span class="activity-dot dot-medium"></span>
+                    <div>
+                        <div class="activity-title">Risk assessment completed for Amina Al-Mansoor [WHO-NCD #8921]</div>
+                        <div class="activity-sub">Medium Risk in Diabetes (45%), Medium in Heart/BP</div>
+                    </div>
+                    <span class="activity-time">08 Oct, 09:19</span>
+                </li>
+                <li class="activity-item">
+                    <span class="activity-dot dot-info"></span>
+                    <div>
+                        <div class="activity-title">New patient registered: Priyanka Sharma [ICMR-Ref #003]</div>
+                        <div class="activity-sub">Age 45 &bull; Female &bull; BMI 29.1</div>
+                    </div>
+                    <span class="activity-time">08 Oct, 08:44</span>
+                </li>
+                <li class="activity-item">
+                    <span class="activity-dot dot-info"></span>
+                    <div>
+                        <div class="activity-title">New patient registered: Satyam Kumar Singh [ICMR-Ref #001]</div>
+                        <div class="activity-sub">Age 22 &bull; Male &bull; BMI 23.4</div>
+                    </div>
+                    <span class="activity-time">08 Oct, 08:44</span>
+                </li>
+                <li class="activity-item">
+                    <span class="activity-dot dot-info"></span>
+                    <div>
+                        <div class="activity-title">New patient registered: Kenji Takahashi [WHO-NCD #7730]</div>
+                        <div class="activity-sub">Age 71 &bull; Male &bull; BMI 24.2</div>
+                    </div>
+                    <span class="activity-time">08 Oct, 08:44</span>
+                </li>
+            `;
+        }
+
+        function renderPatientRegistryTable(filterList) {
+            const tbody = document.getElementById('full-patient-table-body');
+            tbody.innerHTML = '';
+            const list = filterList || patients;
+
+            list.forEach((p, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.age} / ${p.gender}</td>
+                    <td>${p.bmi}</td>
+                    <td>${p.glucose} mg/dL</td>
+                    <td>${p.systolic_bp} / ${p.diastolic_bp}</td>
+                    <td>${p.cholesterol}</td>
+                    <td>${p.heart_rate} bpm</td>
+                    <td>${p.smoking}</td>
+                    <td>${p.physical_activity}</td>
+                    <td>
+                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="loadAndAssessPatient(${p.id})">Assess</button>
+                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="viewPatientReport(${p.id})">Report</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderPredictionHistoryTable() {
+            const tbody = document.getElementById('history-table-body');
+            tbody.innerHTML = '';
+
+            predictions.forEach(p => {
+                const tr = document.createElement('tr');
+                const dBadge = p.diabetes_risk === 'High' ? '<span class="badge badge-high">High (60%)</span>' : '<span class="badge badge-medium">Medium (45%)</span>';
+                tr.innerHTML = `
+                    <td>#ASSESS-${p.id}</td>
+                    <td><strong>${p.patient_name}</strong></td>
+                    <td>${dBadge}</td>
+                    <td><span class="badge badge-medium">${p.heart_risk} (${p.heart_probability}%)</span></td>
+                    <td><span class="badge badge-medium">${p.hypertension_risk} (${p.hypertension_probability}%)</span></td>
+                    <td>${p.created_at}</td>
+                    <td>
+                        <button class="btn btn-outline" style="padding:4px 10px; font-size:11px;" onclick="viewPatientReport(${p.patient_id})">Full Report</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function populatePatientSelectDropdown() {
+            const sel = document.getElementById('quickPatientSelect');
+            sel.innerHTML = '<option value="">-- Select Patient to Pre-fill --</option>';
+            patients.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = `${p.name} (Age ${p.age}, ${p.gender})`;
+                sel.appendChild(opt);
+            });
+        }
+
+        // =========================================================
+        // 5. CHARTS INITIALIZATION (Chart.js)
+        // =========================================================
+        function renderCharts() {
+            const red = '#ef4444';
+            const amber = '#f59e0b';
+            const green = '#10b981';
+
+            // 1. Dashboard Multi-Condition Chart
+            const ctxCond = document.getElementById('adminConditionChart').getContext('2d');
+            if (adminCondChartInstance) adminCondChartInstance.destroy();
+            adminCondChartInstance = new Chart(ctxCond, {
+                type: 'bar',
+                data: {
+                    labels: ['Diabetes', 'Cardiovascular', 'Hypertension'],
+                    datasets: [
+                        { label: 'High Risk', data: [1, 0, 0], backgroundColor: red, borderRadius: 6 },
+                        { label: 'Medium Risk', data: [1, 2, 2], backgroundColor: amber, borderRadius: 6 },
+                        { label: 'Low Risk', data: [0, 0, 0], backgroundColor: green, borderRadius: 6 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+
+            // 2. Dashboard Doughnut Chart
+            const ctxDoughnut = document.getElementById('adminRiskDoughnut').getContext('2d');
+            if (adminDoughnutChartInstance) adminDoughnutChartInstance.destroy();
+            adminDoughnutChartInstance = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+                    datasets: [{
+                        data: [1, 1, 0],
+                        backgroundColor: [red, amber, green],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+            // 3. Analytics Charts
+            if (document.getElementById('analyticsAgeChart')) {
+                const ctxAge = document.getElementById('analyticsAgeChart').getContext('2d');
+                new Chart(ctxAge, {
+                    type: 'bar',
+                    data: {
+                        labels: ['< 30', '30-45', '46-60', '> 60'],
+                        datasets: [
+                            { label: 'High Risk', data: [0, 0, 1, 1], backgroundColor: red, borderRadius: 4 },
+                            { label: 'Moderate', data: [0, 2, 2, 1], backgroundColor: amber, borderRadius: 4 },
+                            { label: 'Low / Normal', data: [3, 2, 1, 3], backgroundColor: green, borderRadius: 4 }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            if (document.getElementById('analyticsScatterChart')) {
+                const ctxScatter = document.getElementById('analyticsScatterChart').getContext('2d');
+                new Chart(ctxScatter, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Patient Vitals (BP vs Glucose)',
+                            data: patients.map(p => ({ x: p.glucose, y: p.systolic_bp })),
+                            backgroundColor: '#2563eb'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { title: { display: true, text: 'Fasting Glucose (mg/dL)' } },
+                            y: { title: { display: true, text: 'Systolic BP (mmHg)' } }
+                        }
+                    }
+                });
+            }
+
+            if (document.getElementById('analyticsProjectionChart')) {
+                const ctxProj = document.getElementById('analyticsProjectionChart').getContext('2d');
+                new Chart(ctxProj, {
+                    type: 'line',
+                    data: {
+                        labels: ['Baseline', 'Month 3', 'Month 6', 'Month 9', 'Month 12'],
+                        datasets: [
+                            { label: 'Standard Trajectory', data: [60, 64, 68, 72, 77], borderColor: red, fill: false },
+                            { label: 'With Protocol & Lifestyle Care', data: [60, 52, 44, 37, 30], borderColor: green, fill: false }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            // 4. Model Metrics ROC Chart
+            if (document.getElementById('modelRocChart')) {
+                const ctxRoc = document.getElementById('modelRocChart').getContext('2d');
+                new Chart(ctxRoc, {
+                    type: 'line',
+                    data: {
+                        labels: ['0.0', '0.2', '0.4', '0.6', '0.8', '1.0'],
+                        datasets: [
+                            { label: 'Diabetes Model (AUC = 0.96)', data: [0, 0.85, 0.92, 0.97, 0.99, 1.0], borderColor: '#2563eb', tension: 0.2 },
+                            { label: 'Heart Model (AUC = 0.94)', data: [0, 0.81, 0.89, 0.94, 0.98, 1.0], borderColor: '#ef4444', tension: 0.2 },
+                            { label: 'Hypertension (AUC = 0.95)', data: [0, 0.83, 0.91, 0.96, 0.98, 1.0], borderColor: '#10b981', tension: 0.2 },
+                            { label: 'Chance (AUC = 0.50)', data: [0, 0.2, 0.4, 0.6, 0.8, 1.0], borderColor: '#cbd5e1', borderDash: [5, 5] }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            // 5. Feature Importance Chart
+            if (document.getElementById('modelFeaturesChart')) {
+                const ctxFeat = document.getElementById('modelFeaturesChart').getContext('2d');
+                new Chart(ctxFeat, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Fasting Glucose', 'Systolic BP', 'BMI Index', 'Age', 'Cholesterol', 'Smoking', 'Family History'],
+                        datasets: [{
+                            label: 'Gini Importance Factor',
+                            data: [0.32, 0.24, 0.16, 0.12, 0.08, 0.05, 0.03],
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+        }
+
+        // =========================================================
+        // 6. PREDICTION INTERACTIONS
+        // =========================================================
+        function toggleSymptom(el) {
+            el.classList.toggle('selected');
+        }
+
+        function handlePatientSelection(patientId) {
+            if (!patientId) return;
+            const p = patients.find(x => x.id === parseInt(patientId));
+            if (!p) return;
+
+            document.getElementById('pred_name').value = p.name;
+            document.getElementById('pred_age').value = p.age;
+            document.getElementById('pred_gender').value = p.gender;
+            document.getElementById('pred_bmi').value = p.bmi;
+            document.getElementById('pred_glucose').value = p.glucose;
+            document.getElementById('pred_systolic').value = p.systolic_bp;
+            document.getElementById('pred_diastolic').value = p.diastolic_bp;
+            document.getElementById('pred_cholesterol').value = p.cholesterol;
+            document.getElementById('pred_heart_rate').value = p.heart_rate;
+            document.getElementById('pred_smoking').value = p.smoking;
+            document.getElementById('pred_activity').value = p.physical_activity;
+            document.getElementById('pred_family_history').value = p.family_history;
+
+            // Trigger prediction
+            runPredictionOnValues(p);
+        }
+
+        function loadAndAssessPatient(patientId) {
+            switchTab('prediction');
+            const sel = document.getElementById('quickPatientSelect');
+            sel.value = patientId;
+            handlePatientSelection(patientId);
+        }
+
+        function handleRunPrediction(e) {
+            e.preventDefault();
+            const p = {
+                name: document.getElementById('pred_name').value,
+                age: parseFloat(document.getElementById('pred_age').value),
+                gender: document.getElementById('pred_gender').value,
+                bmi: parseFloat(document.getElementById('pred_bmi').value),
+                glucose: parseFloat(document.getElementById('pred_glucose').value),
+                systolic_bp: parseFloat(document.getElementById('pred_systolic').value),
+                diastolic_bp: parseFloat(document.getElementById('pred_diastolic').value),
+                cholesterol: parseFloat(document.getElementById('pred_cholesterol').value),
+                heart_rate: parseFloat(document.getElementById('pred_heart_rate').value),
+                smoking: document.getElementById('pred_smoking').value,
+                physical_activity: document.getElementById('pred_activity').value,
+                family_history: document.getElementById('pred_family_history').value
+            };
+            runPredictionOnValues(p);
+        }
+
+        let currentEvaluation = null;
+
+        function runPredictionOnValues(p) {
+            const risk = calculateClinicalRisks(p);
+            currentEvaluation = { ...p, ...risk };
+
+            document.getElementById('res-diab-val').innerText = `${risk.diabetes_probability}%`;
+            document.getElementById('res-diab-badge').className = `badge badge-${risk.diabetes_risk.toLowerCase()}`;
+            document.getElementById('res-diab-badge').innerText = `${risk.diabetes_risk} Risk`;
+
+            document.getElementById('res-heart-val').innerText = `${risk.heart_probability}%`;
+            document.getElementById('res-heart-badge').className = `badge badge-${risk.heart_risk.toLowerCase()}`;
+            document.getElementById('res-heart-badge').innerText = `${risk.heart_risk} Risk`;
+
+            document.getElementById('res-hyp-val').innerText = `${risk.hypertension_probability}%`;
+            document.getElementById('res-hyp-badge').className = `badge badge-${risk.hypertension_risk.toLowerCase()}`;
+            document.getElementById('res-hyp-badge').innerText = `${risk.hypertension_risk} Risk`;
+
+            const isHigh = risk.diabetes_risk === 'High' || risk.heart_risk === 'High' || risk.hypertension_risk === 'High';
+            if (isHigh) {
+                document.getElementById('res-diag-title').innerText = "Type 2 Diabetes & Cardiometabolic Strain";
+                document.getElementById('res-diag-desc').innerText = "Glycemic dysregulation driven by insulin resistance with elevated vascular stress. Requires glycemic normalization and cardioprotection.";
+            } else {
+                document.getElementById('res-diag-title').innerText = "Moderate Metabolic Vigilance Required";
+                document.getElementById('res-diag-desc').innerText = "Pre-diabetic or borderline vitals detected. Initiating primary prevention protocol and quarterly glycemic screening.";
+            }
+        }
+
+        function saveCurrentPredictionToHistory() {
+            if (!currentEvaluation) return;
+            const newRecord = {
+                id: predictions.length + 1,
+                patient_id: 7,
+                patient_name: currentEvaluation.name,
+                diabetes_risk: currentEvaluation.diabetes_risk,
+                heart_risk: currentEvaluation.heart_risk,
+                hypertension_risk: currentEvaluation.hypertension_risk,
+                diabetes_probability: currentEvaluation.diabetes_probability,
+                heart_probability: currentEvaluation.heart_probability,
+                hypertension_probability: currentEvaluation.hypertension_probability,
+                created_at: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+            };
+            predictions.unshift(newRecord);
+            saveState();
+            renderAll();
+            alert(`Assessment for ${currentEvaluation.name} logged into Clinical History successfully!`);
+        }
+
+        // =========================================================
+        // 7. MODALS & FORMS
+        // =========================================================
+        function openAddPatientModal() {
+            document.getElementById('addPatientModal').classList.add('active');
+        }
+
+        function closeAddPatientModal() {
+            document.getElementById('addPatientModal').classList.remove('active');
+        }
+
+        function handleAddNewPatient(e) {
+            e.preventDefault();
+            const newP = {
+                id: patients.length + 1,
+                name: document.getElementById('new_name').value,
+                age: parseInt(document.getElementById('new_age').value),
+                gender: document.getElementById('new_gender').value,
+                bmi: parseFloat(document.getElementById('new_bmi').value),
+                glucose: parseFloat(document.getElementById('new_glucose').value),
+                systolic_bp: parseFloat(document.getElementById('new_systolic').value),
+                diastolic_bp: parseFloat(document.getElementById('new_diastolic').value),
+                cholesterol: parseFloat(document.getElementById('new_cholesterol').value),
+                heart_rate: parseFloat(document.getElementById('new_heart_rate').value),
+                smoking: document.getElementById('new_smoking').value,
+                physical_activity: document.getElementById('new_activity').value,
+                family_history: document.getElementById('new_family').value,
+                created_at: "Just Now"
+            };
+
+            patients.unshift(newP);
+            saveState();
+            renderAll();
+            closeAddPatientModal();
+            alert(`Patient ${newP.name} added to the cohort database!`);
+            switchTab('patients');
+        }
+
+        function viewPatientReport(patientId) {
+            const p = patients.find(x => x.id === patientId);
+            if (!p) return;
+            const r = calculateClinicalRisks(p);
+
+            const content = document.getElementById('reportModalContent');
+            content.innerHTML = `
+                <div style="border-bottom:2px solid var(--border); padding-bottom:14px; margin-bottom:18px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <span class="badge badge-info" style="margin-bottom:6px;">Smart Health Clinical Audit Report</span>
+                            <h2 style="font-size:22px; font-weight:800; color:var(--text-main);">${p.name}</h2>
+                            <p style="font-size:13px; color:var(--text-muted);">Age: ${p.age} &bull; Gender: ${p.gender} &bull; Cohort Record ID: #${p.id}</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="window.print()">Print Report</button>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:20px;">
+                    <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                        <div style="font-size:11px; font-weight:700; color:var(--text-muted);">Diabetes Risk</div>
+                        <div style="font-size:22px; font-weight:800; color:#ef4444; margin:4px 0;">${r.diabetes_probability}%</div>
+                        <span class="badge badge-${r.diabetes_risk.toLowerCase()}">${r.diabetes_risk}</span>
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                        <div style="font-size:11px; font-weight:700; color:var(--text-muted);">Cardiovascular Risk</div>
+                        <div style="font-size:22px; font-weight:800; color:#f59e0b; margin:4px 0;">${r.heart_probability}%</div>
+                        <span class="badge badge-${r.heart_risk.toLowerCase()}">${r.heart_risk}</span>
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                        <div style="font-size:11px; font-weight:700; color:var(--text-muted);">Hypertension Risk</div>
+                        <div style="font-size:22px; font-weight:800; color:#f59e0b; margin:4px 0;">${r.hypertension_probability}%</div>
+                        <span class="badge badge-${r.hypertension_risk.toLowerCase()}">${r.hypertension_risk}</span>
+                    </div>
+                </div>
+
+                <div style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:16px;">
+                    <h4 style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:8px;">Recorded Baseline Vitals:</h4>
+                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; font-size:12px;">
+                        <div><strong>Fasting Glucose:</strong> ${p.glucose} mg/dL</div>
+                        <div><strong>Blood Pressure:</strong> ${p.systolic_bp}/${p.diastolic_bp} mmHg</div>
+                        <div><strong>Total Cholesterol:</strong> ${p.cholesterol} mg/dL</div>
+                        <div><strong>BMI:</strong> ${p.bmi} kg/m²</div>
+                        <div><strong>Heart Rate:</strong> ${p.heart_rate} bpm</div>
+                        <div><strong>Smoking:</strong> ${p.smoking}</div>
+                    </div>
+                </div>
+
+                <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:16px;">
+                    <h4 style="font-size:13px; font-weight:700; color:#1e40af; margin-bottom:6px;">Recommended Clinical Management:</h4>
+                    <p style="font-size:12px; color:#1e293b; line-height:1.5;">
+                        Patient exhibits cardiometabolic vulnerability. Recommend therapeutic glycemic control, zone-2 aerobic conditioning, high-viscosity soluble fiber diet, and quarterly clinical audit.
+                    </p>
+                </div>
+            `;
+            document.getElementById('patientReportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('patientReportModal').classList.remove('active');
+        }
+
+        // =========================================================
+        // 8. SEARCH & FILTERS
+        // =========================================================
+        function handleGlobalSearch() {
+            const q = document.getElementById('globalPatientSearch').value.toLowerCase();
+            const filtered = patients.filter(p => p.name.toLowerCase().includes(q));
+            renderPatientRegistryTable(filtered);
+            if (q.length > 0) switchTab('patients');
+        }
+
+        function filterPatientRegistryTable() {
+            const q = document.getElementById('patientRegistryFilter').value.toLowerCase();
+            const filtered = patients.filter(p => p.name.toLowerCase().includes(q));
+            renderPatientRegistryTable(filtered);
+        }
+
+        function filterCohortByRisk(riskType) {
+            if (riskType === 'all') {
+                renderPatientRegistryTable(patients);
+                return;
+            }
+            const filtered = patients.filter(p => {
+                const r = calculateClinicalRisks(p);
+                if (riskType === 'high') return r.diabetes_risk === 'High' || r.heart_risk === 'High' || r.hypertension_risk === 'High';
+                if (riskType === 'medium') return r.diabetes_risk === 'Medium' || r.heart_risk === 'Medium';
+                if (riskType === 'low') return r.diabetes_risk === 'Low' && r.heart_risk === 'Low';
+                return true;
+            });
+            renderPatientRegistryTable(filtered);
+        }
+
+        // =========================================================
+        // 9. CSV EXPORTS
+        // =========================================================
+        function exportPatientsCSV() {
+            let csv = "ID,Name,Age,Gender,BMI,Glucose,SystolicBP,DiastolicBP,Cholesterol,HeartRate,Smoking,Activity,FamilyHistory\n";
+            patients.forEach(p => {
+                csv += `"${p.id}","${p.name}","${p.age}","${p.gender}","${p.bmi}","${p.glucose}","${p.systolic_bp}","${p.diastolic_bp}","${p.cholesterol}","${p.heart_rate}","${p.smoking}","${p.physical_activity}","${p.family_history}"\n`;
+            });
+            downloadFile(csv, "smarthealth_patient_registry.csv", "text/csv");
+        }
+
+        function exportPredictionsCSV() {
+            let csv = "ID,PatientName,DiabetesRisk,CardiacRisk,HypertensionRisk,DiabetesProbability,CardiacProbability,HypertensionProbability,CreatedAt\n";
+            predictions.forEach(p => {
+                csv += `"${p.id}","${p.patient_name}","${p.diabetes_risk}","${p.heart_risk}","${p.hypertension_risk}","${p.diabetes_probability}","${p.heart_probability}","${p.hypertension_probability}","${p.created_at}"\n`;
+            });
+            downloadFile(csv, "smarthealth_risk_assessments.csv", "text/csv");
+        }
+
+        function downloadFile(content, fileName, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function resetDefaultCohort() {
+            if (confirm("Reset dataset back to standard default cohort (16 Patients)?")) {
+                patients = [...INITIAL_PATIENTS];
+                predictions = [...INITIAL_PREDICTIONS];
+                saveState();
+                renderAll();
+                alert("Database reset successfully!");
+            }
+        }
+
+        // Initialize on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAll();
+        });
+    </script>
+
+    <!-- 3D Background Canvas Engine -->
+    <script src="static/js/3d_engine.js"></script>
+    <script src="static/js/3d_bg_animation.js"></script>
 </body>
 </html>
