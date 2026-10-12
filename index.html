@@ -875,6 +875,13 @@
                 </svg>
                 Settings
             </a>
+            <a id="nav-login" onclick="switchTab('login')" style="margin-top:12px; border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; color:#38bdf8;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                Clinical Portal Login
+            </a>
         </nav>
     </aside>
 
@@ -923,8 +930,18 @@
                     Assess Risk
                 </button>
 
+                <!-- Portal Login Button -->
+                <button class="btn btn-outline" style="border-color:#3b82f6; color:#2563eb;" onclick="switchTab('login')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                    Portal Login
+                </button>
+
                 <!-- Admin Profile Chip -->
-                <div class="admin-profile-chip">
+                <div class="admin-profile-chip" style="cursor:pointer;" onclick="switchTab('login')" title="Clinician Profile & Login Portal">
                     <div class="admin-avatar">SK</div>
                     <div class="admin-meta">
                         <div class="admin-name">Satyam K. Singh</div>
@@ -1596,6 +1613,64 @@
                             Executive Healthcare Administration Suite by Satyam Kumar Singh.<br>
                             Trained Random Forest Classifiers + Evidence-Based Clinical Cure Protocol Engine (ADA, AHA, WHO Guidelines).
                         </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 8: CLINICAL PORTAL LOGIN -->
+        <!-- ======================================================== -->
+        <section id="view-login" class="view-section">
+            <div style="display:flex; justify-content:center; align-items:center; min-height:75vh; padding:20px 0;">
+                <div style="width:100%; max-width:480px; background:linear-gradient(180deg, #0f172a 0%, #090e1a 100%); border:1px solid rgba(255,255,255,0.14); border-radius:24px; padding:38px 34px; box-shadow:0 30px 65px -15px rgba(0,0,0,0.6), 0 0 40px rgba(0,210,255,0.18); color:#fff; position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, #00d2ff, #3b82f6, #10b981);"></div>
+                    
+                    <div style="text-align:center; margin-bottom:28px;">
+                        <div style="width:58px; height:58px; margin:0 auto 14px; border-radius:18px; background:linear-gradient(135deg, #00d2ff, #2563eb); display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px; font-weight:800; box-shadow:0 10px 25px rgba(0,210,255,0.45);">
+                            SH
+                        </div>
+                        <h2 style="font-size:24px; font-weight:800; letter-spacing:-0.5px; margin-bottom:4px;">
+                            Clinical Portal <span style="background:linear-gradient(135deg, #00d2ff, #38bdf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Login</span>
+                        </h2>
+                        <p style="font-size:13px; color:#94a3b8;">SmartHealth AI Executive Suite & Clinical Audit</p>
+                    </div>
+
+                    <form onsubmit="handleDashboardLogin(event)">
+                        <div style="margin-bottom:18px;">
+                            <label style="display:block; font-size:11.5px; font-weight:700; color:#cbd5e1; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Clinician ID / Email</label>
+                            <input type="text" id="dash_login_email" style="width:100%; background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.15); color:#fff; padding:13px 16px; border-radius:12px; font-size:14px; outline:none;" value="dr.satyam@smarthealth.ai" required>
+                        </div>
+
+                        <div style="margin-bottom:18px;">
+                            <label style="display:block; font-size:11.5px; font-weight:700; color:#cbd5e1; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Security Password</label>
+                            <input type="password" id="dash_login_password" style="width:100%; background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.15); color:#fff; padding:13px 16px; border-radius:12px; font-size:14px; outline:none;" value="clinical2026" required>
+                        </div>
+
+                        <div style="margin-bottom:20px;">
+                            <label style="display:block; font-size:11.5px; font-weight:700; color:#cbd5e1; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Executive Role</label>
+                            <select id="dash_login_role" style="width:100%; background:#1e293b; border:1px solid rgba(255,255,255,0.15); color:#fff; padding:13px 16px; border-radius:12px; font-size:14px; outline:none;">
+                                <option value="Chief Administrator">Chief Administrator (Satyam K. Singh)</option>
+                                <option value="Chief Medical Officer">Chief Medical Officer (CMO)</option>
+                                <option value="Lead Clinical Data Scientist">Lead Clinical Data Scientist</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn" style="width:100%; background:linear-gradient(135deg, #00d2ff, #2563eb); color:#fff; font-size:15px; font-weight:800; padding:14px; border-radius:12px; border:none; justify-content:center; box-shadow:0 8px 25px rgba(0,210,255,0.35); cursor:pointer; margin-bottom:12px;">
+                            Authenticate & Enter Suite
+                        </button>
+
+                        <button type="button" class="btn" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.2); color:#38bdf8; font-size:13px; font-weight:700; padding:12px; border-radius:12px; justify-content:center; cursor:pointer; margin-bottom:14px;" onclick="quickAutofillDoctor()">
+                            ⚡ Instant 1-Click Doctor Sign-In
+                        </button>
+
+                        <div style="text-align:center; font-size:12px; margin-top:8px;">
+                            <a href="login.html" style="color:#94a3b8; text-decoration:none;">Open Standalone 3D Login Page &rarr;</a>
+                        </div>
+                    </form>
+
+                    <div style="text-align:center; margin-top:22px; font-size:11px; color:#64748b; border-top:1px solid rgba(255,255,255,0.08); padding-top:14px;">
+                        <span style="color:#10b981; font-weight:700;">🛡️ HIPAA Compliant</span> &bull; 256-Bit SSL Encrypted
                     </div>
                 </div>
             </div>
@@ -2402,6 +2477,29 @@
                 renderAll();
                 alert("Database reset successfully!");
             }
+        }
+
+        // =========================================================
+        // 10. CLINICAL PORTAL AUTHENTICATION
+        // =========================================================
+        function handleDashboardLogin(e) {
+            if (e) e.preventDefault();
+            const email = document.getElementById('dash_login_email').value;
+            const role = document.getElementById('dash_login_role').value;
+            localStorage.setItem('smarthealth_authenticated', 'true');
+            localStorage.setItem('smarthealth_user', JSON.stringify({
+                name: "Satyam K. Singh",
+                role: role,
+                email: email
+            }));
+            alert(`Authentication Successful! Logged in as Satyam K. Singh (${role}). Redirecting to Executive Dashboard...`);
+            switchTab('dashboard');
+        }
+
+        function quickAutofillDoctor() {
+            document.getElementById('dash_login_email').value = 'dr.satyam@smarthealth.ai';
+            document.getElementById('dash_login_password').value = 'clinical2026';
+            handleDashboardLogin();
         }
 
         // Initialize on Load

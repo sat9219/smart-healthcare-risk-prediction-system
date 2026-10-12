@@ -34,7 +34,7 @@
 - **Interactive Analytics & Insights:** Dynamic age group distributions, biomarker scatter correlations (BP vs. Glucose), and longitudinal risk trajectories.
 - **AI Model Performance Metrics:** Cross-validated accuracy (94.2%), precision (92.8%), recall (95.1%), F1-scores, ROC AUC curves, and feature importance rankings.
 - **Clinical Audit Trail:** Comprehensive evaluation history with timestamps and printable assessment summaries.
-- **Administrative CSV Utilities:** One-click download of patient registries and risk assessments.
+- **Clinical Portal Login:** Secure clinician authentication portal and session manager with instant 1-click doctor sign-in, role selector (Chief Administrator, CMO, Lead Data Scientist), accessible directly from the dashboard and via the standalone 3D login page ([login.html](https://sat9219.github.io/smart-healthcare-risk-prediction-system/login.html)).
 - **Universal 3D Engine & Ambient Aesthetics:** Custom 3D particle constellation canvas (`3d_bg_animation.js`), interactive 3D perspective tilt (`3d_engine.js`), and glassmorphism.
 
 ---
