@@ -696,6 +696,23 @@
             cursor: pointer;
             color: var(--text-muted);
             font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #e2e8f0;
+            color: var(--dark);
+        }
+
+        .cohort-filter-btn.active {
+            background: var(--primary) !important;
+            color: white !important;
+            border-color: var(--primary) !important;
+        }
+
+        @keyframes slideInToast {
+            from { opacity: 0; transform: translateX(35px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         /* Form Controls */
@@ -1211,11 +1228,12 @@
                         <button class="btn btn-primary btn-sm" onclick="openAddPatientModal()">+ Register Patient</button>
                     </div>
                 </div>
-                <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+                <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
                     <input type="text" id="patientRegistryFilter" class="form-control" style="max-width:320px;" placeholder="Filter patients by name or ID..." onkeyup="filterPatientRegistryTable()">
-                    <button class="btn btn-outline" style="font-size:12px;" onclick="filterCohortByRisk('all')">All Cohort</button>
-                    <button class="btn btn-outline" style="font-size:12px; color:#ef4444;" onclick="filterCohortByRisk('high')">High Risk Only</button>
-                    <button class="btn btn-outline" style="font-size:12px; color:#f59e0b;" onclick="filterCohortByRisk('medium')">Medium Risk</button>
+                    <button class="btn btn-outline cohort-filter-btn active" data-risk="all" style="font-size:12px;" onclick="filterCohortByRisk('all')">All Cohort</button>
+                    <button class="btn btn-outline cohort-filter-btn" data-risk="high" style="font-size:12px; color:#ef4444;" onclick="filterCohortByRisk('high')">High Risk Only</button>
+                    <button class="btn btn-outline cohort-filter-btn" data-risk="medium" style="font-size:12px; color:#f59e0b;" onclick="filterCohortByRisk('medium')">Medium Risk</button>
+                    <button class="btn btn-outline cohort-filter-btn" data-risk="low" style="font-size:12px; color:#10b981;" onclick="filterCohortByRisk('low')">Low / Stable</button>
                 </div>
                 <div class="table-responsive">
                     <table>
@@ -1681,13 +1699,13 @@
     <!-- ======================================================== -->
     <!-- MODAL: ADD PATIENT -->
     <!-- ======================================================== -->
-    <div id="addPatientModal" class="modal-overlay">
+    <div id="addPatientModal" class="modal-overlay" onclick="if(event.target === this) closeAddPatientModal()">
         <div class="modal-box">
             <button class="modal-close" onclick="closeAddPatientModal()">&times;</button>
             <h2 style="font-size:18px; font-weight:800; margin-bottom:6px; color:var(--text-main);">Register New Patient</h2>
             <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Enter patient clinical profile and baseline biomarkers into the cohort database.</p>
 
-            <form onsubmit="handleAddNewPatient(event)">
+            <form id="addPatientForm" onsubmit="handleAddNewPatient(event)">
                 <div class="form-grid">
                     <div class="form-group full-width">
                         <label class="form-label">Patient Full Name & Reference ID</label>
@@ -1754,7 +1772,7 @@
 
                 <div style="margin-top:22px; display:flex; justify-content:flex-end; gap:10px;">
                     <button type="button" class="btn btn-outline" onclick="closeAddPatientModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">+ Register in Database</button>
+                    <button type="submit" id="btn-modal-submit" class="btn btn-primary">+ Register in Database</button>
                 </div>
             </form>
         </div>
@@ -1763,7 +1781,7 @@
     <!-- ======================================================== -->
     <!-- MODAL: PATIENT CLINICAL REPORT -->
     <!-- ======================================================== -->
-    <div id="patientReportModal" class="modal-overlay">
+    <div id="patientReportModal" class="modal-overlay" onclick="if(event.target === this) closeReportModal()">
         <div class="modal-box" style="max-width:760px;">
             <button class="modal-close" onclick="closeReportModal()">&times;</button>
             <div id="reportModalContent">
@@ -1890,6 +1908,11 @@
         // =========================================================
         let adminCondChartInstance = null;
         let adminDoughnutChartInstance = null;
+        let analyticsAgeChartInstance = null;
+        let analyticsScatterChartInstance = null;
+        let analyticsProjectionChartInstance = null;
+        let modelRocChartInstance = null;
+        let modelFeaturesChartInstance = null;
 
         function renderAll() {
             renderDashboardCards();
@@ -2110,9 +2133,11 @@
             });
 
             // 3. Analytics Charts
-            if (document.getElementById('analyticsAgeChart')) {
-                const ctxAge = document.getElementById('analyticsAgeChart').getContext('2d');
-                new Chart(ctxAge, {
+            const elAge = document.getElementById('analyticsAgeChart');
+            if (elAge) {
+                const ctxAge = elAge.getContext('2d');
+                if (analyticsAgeChartInstance) analyticsAgeChartInstance.destroy();
+                analyticsAgeChartInstance = new Chart(ctxAge, {
                     type: 'bar',
                     data: {
                         labels: ['< 30', '30-45', '46-60', '> 60'],
@@ -2126,9 +2151,11 @@
                 });
             }
 
-            if (document.getElementById('analyticsScatterChart')) {
-                const ctxScatter = document.getElementById('analyticsScatterChart').getContext('2d');
-                new Chart(ctxScatter, {
+            const elScatter = document.getElementById('analyticsScatterChart');
+            if (elScatter) {
+                const ctxScatter = elScatter.getContext('2d');
+                if (analyticsScatterChartInstance) analyticsScatterChartInstance.destroy();
+                analyticsScatterChartInstance = new Chart(ctxScatter, {
                     type: 'scatter',
                     data: {
                         datasets: [{
@@ -2148,9 +2175,11 @@
                 });
             }
 
-            if (document.getElementById('analyticsProjectionChart')) {
-                const ctxProj = document.getElementById('analyticsProjectionChart').getContext('2d');
-                new Chart(ctxProj, {
+            const elProj = document.getElementById('analyticsProjectionChart');
+            if (elProj) {
+                const ctxProj = elProj.getContext('2d');
+                if (analyticsProjectionChartInstance) analyticsProjectionChartInstance.destroy();
+                analyticsProjectionChartInstance = new Chart(ctxProj, {
                     type: 'line',
                     data: {
                         labels: ['Baseline', 'Month 3', 'Month 6', 'Month 9', 'Month 12'],
@@ -2164,9 +2193,11 @@
             }
 
             // 4. Model Metrics ROC Chart
-            if (document.getElementById('modelRocChart')) {
-                const ctxRoc = document.getElementById('modelRocChart').getContext('2d');
-                new Chart(ctxRoc, {
+            const elRoc = document.getElementById('modelRocChart');
+            if (elRoc) {
+                const ctxRoc = elRoc.getContext('2d');
+                if (modelRocChartInstance) modelRocChartInstance.destroy();
+                modelRocChartInstance = new Chart(ctxRoc, {
                     type: 'line',
                     data: {
                         labels: ['0.0', '0.2', '0.4', '0.6', '0.8', '1.0'],
@@ -2182,9 +2213,11 @@
             }
 
             // 5. Feature Importance Chart
-            if (document.getElementById('modelFeaturesChart')) {
-                const ctxFeat = document.getElementById('modelFeaturesChart').getContext('2d');
-                new Chart(ctxFeat, {
+            const elFeat = document.getElementById('modelFeaturesChart');
+            if (elFeat) {
+                const ctxFeat = elFeat.getContext('2d');
+                if (modelFeaturesChartInstance) modelFeaturesChartInstance.destroy();
+                modelFeaturesChartInstance = new Chart(ctxFeat, {
                     type: 'bar',
                     data: {
                         labels: ['Fasting Glucose', 'Systolic BP', 'BMI Index', 'Age', 'Cholesterol', 'Smoking', 'Family History'],
@@ -2213,7 +2246,7 @@
 
         function handlePatientSelection(patientId) {
             if (!patientId) return;
-            const p = patients.find(x => x.id === parseInt(patientId));
+            const p = patients.find(x => String(x.id) === String(patientId));
             if (!p) return;
 
             document.getElementById('pred_name').value = p.name;
@@ -2236,27 +2269,28 @@
         function loadAndAssessPatient(patientId) {
             switchTab('prediction');
             const sel = document.getElementById('quickPatientSelect');
-            sel.value = patientId;
+            if (sel) sel.value = patientId;
             handlePatientSelection(patientId);
         }
 
         function handleRunPrediction(e) {
-            e.preventDefault();
+            if (e) e.preventDefault();
             const p = {
-                name: document.getElementById('pred_name').value,
-                age: parseFloat(document.getElementById('pred_age').value),
-                gender: document.getElementById('pred_gender').value,
-                bmi: parseFloat(document.getElementById('pred_bmi').value),
-                glucose: parseFloat(document.getElementById('pred_glucose').value),
-                systolic_bp: parseFloat(document.getElementById('pred_systolic').value),
-                diastolic_bp: parseFloat(document.getElementById('pred_diastolic').value),
-                cholesterol: parseFloat(document.getElementById('pred_cholesterol').value),
-                heart_rate: parseFloat(document.getElementById('pred_heart_rate').value),
-                smoking: document.getElementById('pred_smoking').value,
-                physical_activity: document.getElementById('pred_activity').value,
-                family_history: document.getElementById('pred_family_history').value
+                name: document.getElementById('pred_name').value || "Assessed Patient",
+                age: parseFloat(document.getElementById('pred_age').value) || 48,
+                gender: document.getElementById('pred_gender').value || "Female",
+                bmi: parseFloat(document.getElementById('pred_bmi').value) || 27.4,
+                glucose: parseFloat(document.getElementById('pred_glucose').value) || 114.0,
+                systolic_bp: parseFloat(document.getElementById('pred_systolic').value) || 136.0,
+                diastolic_bp: parseFloat(document.getElementById('pred_diastolic').value) || 86.0,
+                cholesterol: parseFloat(document.getElementById('pred_cholesterol').value) || 218.0,
+                heart_rate: parseFloat(document.getElementById('pred_heart_rate').value) || 74.0,
+                smoking: document.getElementById('pred_smoking').value || "No",
+                physical_activity: document.getElementById('pred_activity').value || "Moderate",
+                family_history: document.getElementById('pred_family_history').value || "Yes"
             };
             runPredictionOnValues(p);
+            showToast(`Diagnostic Assessment calculated for ${p.name}!`, "success");
         }
 
         let currentEvaluation = null;
@@ -2288,10 +2322,29 @@
         }
 
         function saveCurrentPredictionToHistory() {
-            if (!currentEvaluation) return;
+            if (!currentEvaluation) {
+                const nameVal = document.getElementById('pred_name').value;
+                const p = {
+                    name: nameVal || "Cohort Patient",
+                    age: parseFloat(document.getElementById('pred_age').value) || 48,
+                    gender: document.getElementById('pred_gender').value || "Female",
+                    bmi: parseFloat(document.getElementById('pred_bmi').value) || 27.4,
+                    glucose: parseFloat(document.getElementById('pred_glucose').value) || 114.0,
+                    systolic_bp: parseFloat(document.getElementById('pred_systolic').value) || 136.0,
+                    diastolic_bp: parseFloat(document.getElementById('pred_diastolic').value) || 86.0,
+                    cholesterol: parseFloat(document.getElementById('pred_cholesterol').value) || 218.0,
+                    heart_rate: parseFloat(document.getElementById('pred_heart_rate').value) || 74.0,
+                    smoking: document.getElementById('pred_smoking').value || "No",
+                    physical_activity: document.getElementById('pred_activity').value || "Moderate",
+                    family_history: document.getElementById('pred_family_history').value || "Yes"
+                };
+                runPredictionOnValues(p);
+            }
+
+            const maxId = predictions.reduce((max, pr) => Math.max(max, parseInt(pr.id) || 0), 0);
             const newRecord = {
-                id: predictions.length + 1,
-                patient_id: 7,
+                id: maxId + 1,
+                patient_id: currentEvaluation.id || (patients.length ? patients[0].id : 1),
                 patient_name: currentEvaluation.name,
                 diabetes_risk: currentEvaluation.diabetes_risk,
                 heart_risk: currentEvaluation.heart_risk,
@@ -2304,50 +2357,76 @@
             predictions.unshift(newRecord);
             saveState();
             renderAll();
-            alert(`Assessment for ${currentEvaluation.name} logged into Clinical History successfully!`);
+            showToast(`Assessment for ${currentEvaluation.name} logged into Clinical History!`, "success");
         }
 
         // =========================================================
         // 7. MODALS & FORMS
         // =========================================================
         function openAddPatientModal() {
-            document.getElementById('addPatientModal').classList.add('active');
+            const modal = document.getElementById('addPatientModal');
+            if (modal) {
+                modal.classList.add('active');
+                const firstInput = document.getElementById('new_name');
+                if (firstInput) setTimeout(() => firstInput.focus(), 100);
+            }
         }
 
         function closeAddPatientModal() {
-            document.getElementById('addPatientModal').classList.remove('active');
+            const modal = document.getElementById('addPatientModal');
+            if (modal) modal.classList.remove('active');
         }
 
         function handleAddNewPatient(e) {
-            e.preventDefault();
-            const newP = {
-                id: patients.length + 1,
-                name: document.getElementById('new_name').value,
-                age: parseInt(document.getElementById('new_age').value),
-                gender: document.getElementById('new_gender').value,
-                bmi: parseFloat(document.getElementById('new_bmi').value),
-                glucose: parseFloat(document.getElementById('new_glucose').value),
-                systolic_bp: parseFloat(document.getElementById('new_systolic').value),
-                diastolic_bp: parseFloat(document.getElementById('new_diastolic').value),
-                cholesterol: parseFloat(document.getElementById('new_cholesterol').value),
-                heart_rate: parseFloat(document.getElementById('new_heart_rate').value),
-                smoking: document.getElementById('new_smoking').value,
-                physical_activity: document.getElementById('new_activity').value,
-                family_history: document.getElementById('new_family').value,
-                created_at: "Just Now"
-            };
+            if (e) e.preventDefault();
+            try {
+                const nameInput = document.getElementById('new_name');
+                const nameVal = nameInput ? nameInput.value.trim() : '';
+                if (!nameVal) {
+                    showToast("Please enter patient full name.", "warning");
+                    return;
+                }
 
-            patients.unshift(newP);
-            saveState();
-            renderAll();
-            closeAddPatientModal();
-            alert(`Patient ${newP.name} added to the cohort database!`);
-            switchTab('patients');
+                const maxId = patients.reduce((max, p) => Math.max(max, parseInt(p.id) || 0), 0);
+                const newP = {
+                    id: maxId + 1,
+                    name: nameVal,
+                    age: parseInt(document.getElementById('new_age').value) || 45,
+                    gender: document.getElementById('new_gender').value || "Male",
+                    bmi: parseFloat(document.getElementById('new_bmi').value) || 26.5,
+                    glucose: parseFloat(document.getElementById('new_glucose').value) || 110.0,
+                    systolic_bp: parseFloat(document.getElementById('new_systolic').value) || 130.0,
+                    diastolic_bp: parseFloat(document.getElementById('new_diastolic').value) || 84.0,
+                    cholesterol: parseFloat(document.getElementById('new_cholesterol').value) || 205.0,
+                    heart_rate: parseFloat(document.getElementById('new_heart_rate').value) || 72.0,
+                    smoking: document.getElementById('new_smoking').value || "No",
+                    physical_activity: document.getElementById('new_activity').value || "Moderate",
+                    family_history: document.getElementById('new_family').value || "No",
+                    created_at: "Just Now"
+                };
+
+                patients.unshift(newP);
+                saveState();
+                renderAll();
+                closeAddPatientModal();
+
+                const form = document.getElementById('addPatientForm');
+                if (form) form.reset();
+
+                showToast(`✓ Patient ${newP.name} successfully registered in database!`, "success");
+                switchTab('patients');
+            } catch (err) {
+                console.error("Error adding patient:", err);
+                showToast("Error registering patient: " + err.message, "error");
+            }
         }
 
         function viewPatientReport(patientId) {
-            const p = patients.find(x => x.id === patientId);
-            if (!p) return;
+            const p = patients.find(x => String(x.id) === String(patientId));
+            if (!p) {
+                showToast("Patient record not found.", "warning");
+                return;
+            }
             const r = calculateClinicalRisks(p);
 
             const content = document.getElementById('reportModalContent');
@@ -2404,7 +2483,8 @@
         }
 
         function closeReportModal() {
-            document.getElementById('patientReportModal').classList.remove('active');
+            const modal = document.getElementById('patientReportModal');
+            if (modal) modal.classList.remove('active');
         }
 
         // =========================================================
@@ -2424,6 +2504,14 @@
         }
 
         function filterCohortByRisk(riskType) {
+            document.querySelectorAll('.cohort-filter-btn').forEach(btn => {
+                if (btn.dataset.risk === riskType) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
             if (riskType === 'all') {
                 renderPatientRegistryTable(patients);
                 return;
@@ -2447,6 +2535,7 @@
                 csv += `"${p.id}","${p.name}","${p.age}","${p.gender}","${p.bmi}","${p.glucose}","${p.systolic_bp}","${p.diastolic_bp}","${p.cholesterol}","${p.heart_rate}","${p.smoking}","${p.physical_activity}","${p.family_history}"\n`;
             });
             downloadFile(csv, "smarthealth_patient_registry.csv", "text/csv");
+            showToast("Exporting Patient Registry CSV...", "info");
         }
 
         function exportPredictionsCSV() {
@@ -2455,6 +2544,7 @@
                 csv += `"${p.id}","${p.patient_name}","${p.diabetes_risk}","${p.heart_risk}","${p.hypertension_risk}","${p.diabetes_probability}","${p.heart_probability}","${p.hypertension_probability}","${p.created_at}"\n`;
             });
             downloadFile(csv, "smarthealth_risk_assessments.csv", "text/csv");
+            showToast("Exporting Risk Assessments Audit CSV...", "info");
         }
 
         function downloadFile(content, fileName, mimeType) {
@@ -2475,32 +2565,65 @@
                 predictions = [...INITIAL_PREDICTIONS];
                 saveState();
                 renderAll();
-                alert("Database reset successfully!");
+                showToast("Database reset to default cohort successfully!", "success");
             }
         }
 
         // =========================================================
-        // 10. CLINICAL PORTAL AUTHENTICATION
+        // 10. CLINICAL PORTAL AUTHENTICATION & TOASTS
         // =========================================================
+        function showToast(message, type = 'info') {
+            let container = document.getElementById('toastContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toastContainer';
+                container.style.cssText = 'position:fixed; top:24px; right:24px; z-index:99999; display:flex; flex-direction:column; gap:10px; pointer-events:none;';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            const bg = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#2563eb';
+            const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : type === 'warning' ? '⚠' : 'ℹ';
+            toast.style.cssText = `background:${bg}; color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:700; box-shadow:0 10px 25px rgba(0,0,0,0.2); display:flex; align-items:center; gap:10px; pointer-events:auto; animation:slideInToast 0.3s cubic-bezier(0.16, 1, 0.3, 1); transition:all 0.3s ease;`;
+            toast.innerHTML = `<span style="font-size:16px;">${icon}</span> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(20px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
         function handleDashboardLogin(e) {
             if (e) e.preventDefault();
-            const email = document.getElementById('dash_login_email').value;
-            const role = document.getElementById('dash_login_role').value;
+            const emailInput = document.getElementById('dash_login_email');
+            const roleInput = document.getElementById('dash_login_role');
+            const email = emailInput ? emailInput.value : 'dr.satyam@smarthealth.ai';
+            const role = roleInput ? roleInput.value : 'Chief Administrator';
             localStorage.setItem('smarthealth_authenticated', 'true');
             localStorage.setItem('smarthealth_user', JSON.stringify({
                 name: "Satyam K. Singh",
                 role: role,
                 email: email
             }));
-            alert(`Authentication Successful! Logged in as Satyam K. Singh (${role}). Redirecting to Executive Dashboard...`);
-            switchTab('dashboard');
+            showToast(`Authentication Successful! Welcome, Satyam K. Singh (${role}).`, "success");
+            setTimeout(() => switchTab('dashboard'), 400);
         }
 
         function quickAutofillDoctor() {
-            document.getElementById('dash_login_email').value = 'dr.satyam@smarthealth.ai';
-            document.getElementById('dash_login_password').value = 'clinical2026';
+            const emailInput = document.getElementById('dash_login_email');
+            const passInput = document.getElementById('dash_login_password');
+            if (emailInput) emailInput.value = 'dr.satyam@smarthealth.ai';
+            if (passInput) passInput.value = 'clinical2026';
             handleDashboardLogin();
         }
+
+        // Close modal on Escape key press
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAddPatientModal();
+                closeReportModal();
+            }
+        });
 
         // Initialize on Load
         document.addEventListener('DOMContentLoaded', () => {
