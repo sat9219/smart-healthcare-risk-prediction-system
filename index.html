@@ -830,6 +830,352 @@
             color: #1d4ed8;
         }
 
+        /* Dark Theme Variables & System Styles */
+        [data-theme="dark"] {
+            --bg-page: #0b1120;
+            --card-bg: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --sidebar-bg: #020617;
+            --primary-light: rgba(37, 99, 235, 0.18);
+            --danger-bg: rgba(239, 68, 68, 0.16);
+            --danger-border: rgba(239, 68, 68, 0.35);
+            --warning-bg: rgba(245, 158, 11, 0.16);
+            --warning-border: rgba(245, 158, 11, 0.35);
+            --success-bg: rgba(16, 185, 129, 0.16);
+            --success-border: rgba(16, 185, 129, 0.35);
+        }
+        [data-theme="dark"] body {
+            background-color: #0b1120 !important;
+            background-image: 
+                radial-gradient(rgba(56, 189, 248, 0.08) 1.5px, transparent 1.5px), 
+                radial-gradient(rgba(99, 102, 241, 0.06) 1.5px, #0b1120 1.5px) !important;
+            color: #f8fafc;
+        }
+        [data-theme="dark"] .card {
+            background: #0f172a;
+            border-color: #1e293b;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+        }
+        [data-theme="dark"] .modal-box {
+            background: #0f172a;
+            color: #f8fafc;
+            border: 1px solid #1e293b;
+        }
+        [data-theme="dark"] .form-control {
+            background: #1e293b;
+            color: #f8fafc;
+            border-color: #334155;
+        }
+        [data-theme="dark"] .form-control:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+        }
+        [data-theme="dark"] th {
+            background: #0f172a;
+            color: #94a3b8;
+            border-color: #1e293b;
+        }
+        [data-theme="dark"] td {
+            border-color: #1e293b;
+            color: #f8fafc;
+        }
+        [data-theme="dark"] tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        [data-theme="dark"] .tool-link {
+            background: #131d31;
+            border-color: #1e293b;
+            color: #f8fafc;
+        }
+        [data-theme="dark"] .tool-link:hover {
+            background: #1e293b;
+            border-color: #38bdf8;
+            color: #38bdf8;
+        }
+        [data-theme="dark"] .diag-card {
+            background: #131d31;
+            border-color: #1e293b;
+        }
+        [data-theme="dark"] .symptom-chip {
+            background: #1e293b;
+            border-color: #334155;
+            color: #cbd5e1;
+        }
+        [data-theme="dark"] .symptom-chip.selected {
+            background: rgba(37, 99, 235, 0.25);
+            border-color: #38bdf8;
+            color: #38bdf8;
+        }
+        [data-theme="dark"] .modal-close {
+            background: #1e293b;
+            color: #94a3b8;
+        }
+        [data-theme="dark"] .modal-close:hover {
+            background: #334155;
+            color: #fff;
+        }
+        [data-theme="dark"] .modal-footer {
+            background: #0f172a;
+            border-color: #1e293b;
+        }
+
+        /* Lab Biomarker Micro-Pill Indicators */
+        .lab-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-left: 6px;
+            vertical-align: middle;
+            transition: all 0.2s ease;
+        }
+        .lab-pill.lab-normal {
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+        .lab-pill.lab-elevated {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+        .lab-pill.lab-warning {
+            background: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+        .lab-pill.lab-danger {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        [data-theme="dark"] .lab-pill.lab-normal {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.35);
+        }
+        [data-theme="dark"] .lab-pill.lab-elevated {
+            background: rgba(37, 99, 235, 0.18);
+            color: #60a5fa;
+            border-color: rgba(37, 99, 235, 0.35);
+        }
+        [data-theme="dark"] .lab-pill.lab-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border-color: rgba(245, 158, 11, 0.35);
+        }
+        [data-theme="dark"] .lab-pill.lab-danger {
+            background: rgba(239, 68, 68, 0.18);
+            color: #f87171;
+            border-color: rgba(239, 68, 68, 0.35);
+        }
+
+        /* Symptom Filter & Preset Buttons */
+        .symptom-category-pills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .symptom-cat-btn {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .symptom-cat-btn.active, .symptom-cat-btn:hover {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+        .preset-chips-wrapper {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding: 8px 10px;
+            background: #f1f5f9;
+            border-radius: var(--radius-sm);
+            border: 1px dashed #cbd5e1;
+            align-items: center;
+        }
+        [data-theme="dark"] .preset-chips-wrapper {
+            background: #131d31;
+            border-color: #334155;
+        }
+        .preset-chip {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 9px;
+            border-radius: 6px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            color: var(--text-main);
+            transition: all 0.15s;
+        }
+        [data-theme="dark"] .preset-chip {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-color: #334155;
+        }
+        .preset-chip:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        /* What-If Simulator Panel */
+        .sim-panel {
+            background: linear-gradient(145deg, #f8fafc 0%, #eff6ff 100%);
+            border: 1px solid #bfdbfe;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.05);
+        }
+        [data-theme="dark"] .sim-panel {
+            background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 100%);
+            border-color: #334155;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+        }
+        .sim-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 14px;
+        }
+        .sim-slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sim-slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .sim-slider-row input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+        .sim-delta-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: 9999px;
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+        [data-theme="dark"] .sim-delta-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        /* EHR Prescription Modal Styles */
+        .rx-header-banner {
+            border-bottom: 2px dashed #cbd5e1;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .rx-symbol {
+            font-family: serif;
+            font-size: 42px;
+            font-weight: 800;
+            color: #2563eb;
+            line-height: 1;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .rx-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 12.5px;
+        }
+        .rx-table th {
+            background: #f1f5f9;
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .rx-table td {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        [data-theme="dark"] .rx-table th {
+            background: #1e293b;
+            border-color: #334155;
+            color: #94a3b8;
+        }
+        [data-theme="dark"] .rx-table td {
+            border-color: #334155;
+            color: #f1f5f9;
+        }
+        .rx-sig-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .rx-stamp {
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+            padding: 8px 14px;
+            text-align: center;
+            color: #2563eb;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transform: rotate(-3deg);
+            display: inline-block;
+        }
+        .red-flag-alert-box {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 14px 0;
+            font-size: 12px;
+            color: #991b1b;
+        }
+        [data-theme="dark"] .red-flag-alert-box {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border-color: #ef4444;
+        }
+
         @media (max-width: 1024px) {
             .col-8, .col-7, .col-5, .col-4, .col-6 { grid-column: span 12; }
         }
@@ -980,6 +1326,12 @@
                         <line x1="15" y1="12" x2="3" y2="12"></line>
                     </svg>
                     Portal Login
+                </button>
+
+                <!-- Theme Toggle Button -->
+                <button class="btn btn-outline" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Clinical Dark / Light Mode" style="display:flex; align-items:center; gap:6px; padding:8px 12px;">
+                    <span id="themeToggleIcon" style="font-size:14px;">🌙</span>
+                    <span id="themeToggleText" style="font-size:12px; font-weight:700;">Night</span>
                 </button>
 
                 <!-- Admin Profile Chip -->
@@ -1250,6 +1602,7 @@
                     </h2>
                     <div style="display:flex; gap:10px;">
                         <button class="btn btn-outline btn-sm" onclick="exportPatientsCSV()">Export CSV</button>
+                        <button class="btn btn-outline btn-sm" onclick="seedSyntheticCohort()" style="border-color:#10b981; color:#059669; font-weight:700;" title="Instantly populate 5 diverse clinical benchmark patients">⚡ + Seed 5 Patients</button>
                         <button class="btn btn-primary btn-sm" onclick="openAddPatientModal()">+ Register Patient</button>
                     </div>
                 </div>
@@ -1317,49 +1670,49 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Age (Years)</label>
-                                <input type="number" id="pred_age" class="form-control" required min="1" max="120" value="48">
+                                <input type="number" id="pred_age" class="form-control" required min="1" max="120" value="48" oninput="updateLabRangePills()">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Gender</label>
-                                <select id="pred_gender" class="form-control" required>
+                                <select id="pred_gender" class="form-control" required onchange="updateLabRangePills()">
                                     <option value="Female">Female</option>
                                     <option value="Male">Male</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">BMI (kg/m²)</label>
-                                <input type="number" step="0.1" id="pred_bmi" class="form-control" required value="27.4">
+                                <label class="form-label">BMI (kg/m²) <span id="pill_bmi" class="lab-pill lab-warning">27.4 Overweight</span></label>
+                                <input type="number" step="0.1" id="pred_bmi" class="form-control" required value="27.4" oninput="updateLabRangePills()">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Fasting Glucose (mg/dL)</label>
-                                <input type="number" step="0.1" id="pred_glucose" class="form-control" required value="114.0">
+                                <label class="form-label">Fasting Glucose (mg/dL) <span id="pill_glucose" class="lab-pill lab-elevated">114.0 Pre-Diabetic</span></label>
+                                <input type="number" step="0.1" id="pred_glucose" class="form-control" required value="114.0" oninput="updateLabRangePills()">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Systolic BP (mmHg)</label>
-                                <input type="number" step="0.1" id="pred_systolic" class="form-control" required value="136.0">
+                                <label class="form-label">Systolic BP (mmHg) <span id="pill_systolic" class="lab-pill lab-elevated">136.0 Stage 1 HTN</span></label>
+                                <input type="number" step="0.1" id="pred_systolic" class="form-control" required value="136.0" oninput="updateLabRangePills()">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Diastolic BP (mmHg)</label>
-                                <input type="number" step="0.1" id="pred_diastolic" class="form-control" required value="86.0">
+                                <label class="form-label">Diastolic BP (mmHg) <span id="pill_diastolic" class="lab-pill lab-elevated">86.0 Stage 1</span></label>
+                                <input type="number" step="0.1" id="pred_diastolic" class="form-control" required value="86.0" oninput="updateLabRangePills()">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Total Cholesterol (mg/dL)</label>
-                                <input type="number" step="0.1" id="pred_cholesterol" class="form-control" required value="218.0">
+                                <label class="form-label">Total Cholesterol (mg/dL) <span id="pill_cholesterol" class="lab-pill lab-warning">218.0 Borderline</span></label>
+                                <input type="number" step="0.1" id="pred_cholesterol" class="form-control" required value="218.0" oninput="updateLabRangePills()">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Heart Rate (BPM)</label>
-                                <input type="number" step="0.1" id="pred_heart_rate" class="form-control" required value="74.0">
+                                <label class="form-label">Heart Rate (BPM) <span id="pill_heart_rate" class="lab-pill lab-normal">74.0 Normal</span></label>
+                                <input type="number" step="0.1" id="pred_heart_rate" class="form-control" required value="74.0" oninput="updateLabRangePills()">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Smoking Status</label>
-                                <select id="pred_smoking" class="form-control" required>
+                                <select id="pred_smoking" class="form-control" required onchange="updateLabRangePills()">
                                     <option value="No">Non-Smoker</option>
                                     <option value="Yes">Smoker</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Physical Activity</label>
-                                <select id="pred_activity" class="form-control" required>
+                                <select id="pred_activity" class="form-control" required onchange="updateLabRangePills()">
                                     <option value="Moderate">Moderate (150 min/wk)</option>
                                     <option value="Low">Sedentary / Low</option>
                                     <option value="High">Active / High</option>
@@ -1367,34 +1720,54 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Family Medical History</label>
-                                <select id="pred_family_history" class="form-control" required>
+                                <select id="pred_family_history" class="form-control" required onchange="updateLabRangePills()">
                                     <option value="Yes">Yes (Cardiometabolic)</option>
                                     <option value="No">No Known History</option>
                                 </select>
                             </div>
 
                             <div class="form-group full-width">
-                                <label class="form-label">Reported Clinical Symptoms</label>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                    <label class="form-label" style="margin-bottom:0;">Reported Clinical Symptoms (<span id="symptom-count-badge">2</span> Selected)</label>
+                                    <span style="font-size:11px; color:var(--text-muted);">Calibrated Clinical Guideline Biomarkers</span>
+                                </div>
+
+                                <!-- Category Filter Pills -->
+                                <div class="symptom-category-pills">
+                                    <button type="button" class="symptom-cat-btn active" onclick="filterSymptomsByCategory('all', this)">All (25)</button>
+                                    <button type="button" class="symptom-cat-btn" onclick="filterSymptomsByCategory('Cardio-Respiratory', this)">❤️ Cardio-Resp</button>
+                                    <button type="button" class="symptom-cat-btn" onclick="filterSymptomsByCategory('Endocrine & Metabolic', this)">💧 Endocrine</button>
+                                    <button type="button" class="symptom-cat-btn" onclick="filterSymptomsByCategory('Systemic', this)">⚡ Systemic</button>
+                                    <button type="button" class="symptom-cat-btn" onclick="filterSymptomsByCategory('Neurological', this)">🧠 Neuro</button>
+                                    <button type="button" class="symptom-cat-btn" onclick="filterSymptomsByCategory('Gastrointestinal', this)">🤢 GI</button>
+                                    <button type="button" class="symptom-cat-btn" onclick="filterSymptomsByCategory('Musculoskeletal', this)">🦴 Musculoskeletal</button>
+                                </div>
+
+                                <!-- 1-Click Clinical Syndromic Presets -->
+                                <div class="preset-chips-wrapper">
+                                    <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-right:4px;">1-CLICK PRESETS:</span>
+                                    <button type="button" class="preset-chip" onclick="applySymptomPreset('cad')">🚨 CAD / Angina</button>
+                                    <button type="button" class="preset-chip" onclick="applySymptomPreset('diabetes')">💧 DKA / Glycemic</button>
+                                    <button type="button" class="preset-chip" onclick="applySymptomPreset('htn')">⚠️ HTN Urgency</button>
+                                    <button type="button" class="preset-chip" onclick="applySymptomPreset('flu')">🌡️ Viral Syndrome</button>
+                                    <button type="button" class="preset-chip" onclick="applySymptomPreset('gerd')">🔥 Acid Reflux</button>
+                                    <button type="button" class="preset-chip" onclick="applySymptomPreset('migraine')">🧠 Migraine Cephalea</button>
+                                    <button type="button" class="preset-chip" onclick="applySymptomPreset('clear')" style="color:#ef4444;">🧹 Clear</button>
+                                </div>
+
+                                <!-- 25 Symptoms Matrix -->
                                 <div class="symptom-chips" id="symptomChipsContainer">
-                                    <span class="symptom-chip selected" data-id="excessive_thirst" onclick="toggleSymptom(this)">Excessive Thirst</span>
-                                    <span class="symptom-chip selected" data-id="frequent_urination" onclick="toggleSymptom(this)">Frequent Urination</span>
-                                    <span class="symptom-chip" data-id="fatigue" onclick="toggleSymptom(this)">Chronic Fatigue</span>
-                                    <span class="symptom-chip" data-id="blurred_vision" onclick="toggleSymptom(this)">Blurred Vision</span>
-                                    <span class="symptom-chip" data-id="chest_pain" onclick="toggleSymptom(this)">Chest Discomfort</span>
-                                    <span class="symptom-chip" data-id="shortness_of_breath" onclick="toggleSymptom(this)">Shortness of Breath</span>
-                                    <span class="symptom-chip" data-id="palpitations" onclick="toggleSymptom(this)">Palpitations</span>
-                                    <span class="symptom-chip" data-id="headache" onclick="toggleSymptom(this)">Throbbing Headache</span>
-                                    <span class="symptom-chip" data-id="dizziness" onclick="toggleSymptom(this)">Dizziness</span>
+                                    <!-- Populated dynamically via JS -->
                                 </div>
                             </div>
                         </div>
 
                         <div style="margin-top:20px;">
-                            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:14px;">
+                            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:13px; font-size:14px; font-weight:800; box-shadow:0 4px 15px rgba(37, 99, 235, 0.25);">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                                 </svg>
-                                Run Clinical AI Diagnostic Assessment
+                                Run Clinical AI Diagnostic & Multimodal Assessment
                             </button>
                         </div>
                     </form>
@@ -1410,74 +1783,183 @@
                             </svg>
                             Clinical Diagnostic Assessment
                         </h2>
-                        <span id="pred-timestamp" style="font-size:11px; color:var(--text-muted);">Calibrated</span>
+                        <span id="pred-timestamp" style="font-size:11px; color:var(--text-muted);">Calibrated Bayesian Engine</span>
                     </div>
 
                     <div id="pred-output-body">
                         <!-- Score gauges -->
-                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:18px;">
-                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center;">
-                                <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Diabetes</div>
-                                <div id="res-diab-val" style="font-size:20px; font-weight:800; color:#ef4444; margin:4px 0;">60%</div>
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:14px;">
+                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px; text-align:center;">
+                                <div style="font-size:10.5px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Diabetes</div>
+                                <div id="res-diab-val" style="font-size:20px; font-weight:800; color:#ef4444; margin:3px 0;">60%</div>
                                 <span id="res-diab-badge" class="badge badge-high">High Risk</span>
                             </div>
-                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center;">
-                                <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Heart Disease</div>
-                                <div id="res-heart-val" style="font-size:20px; font-weight:800; color:#f59e0b; margin:4px 0;">40%</div>
+                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px; text-align:center;">
+                                <div style="font-size:10.5px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Heart Disease</div>
+                                <div id="res-heart-val" style="font-size:20px; font-weight:800; color:#f59e0b; margin:3px 0;">40%</div>
                                 <span id="res-heart-badge" class="badge badge-medium">Medium</span>
                             </div>
-                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center;">
-                                <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Hypertension</div>
-                                <div id="res-hyp-val" style="font-size:20px; font-weight:800; color:#f59e0b; margin:4px 0;">53%</div>
+                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px; text-align:center;">
+                                <div style="font-size:10.5px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Hypertension</div>
+                                <div id="res-hyp-val" style="font-size:20px; font-weight:800; color:#f59e0b; margin:3px 0;">53%</div>
                                 <span id="res-hyp-badge" class="badge badge-medium">Medium</span>
                             </div>
                         </div>
 
+                        <!-- ASCVD 10-Year Hard Risk & Hemodynamics Metrics -->
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:14px;">
+                            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:var(--radius-sm); padding:10px;">
+                                <div style="font-size:10.5px; font-weight:700; color:#1e40af; text-transform:uppercase;">ACC/AHA 10-Yr ASCVD Risk</div>
+                                <div id="res-ascvd-val" style="font-size:18px; font-weight:800; color:#2563eb; margin:2px 0;">18.4%</div>
+                                <span id="res-ascvd-badge" class="badge badge-medium" style="font-size:10px;">Intermediate Risk</span>
+                            </div>
+                            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px;">
+                                <div style="font-size:10.5px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Hemodynamics (MAP / PP)</div>
+                                <div id="res-hemo-val" style="font-size:15px; font-weight:800; color:var(--text-main); margin:2px 0;">MAP: 102 &bull; PP: 50</div>
+                                <span id="res-hemo-sub" style="font-size:11px; color:var(--text-muted);">Normal Elasticity</span>
+                            </div>
+                        </div>
+
                         <!-- Diagnosis Card -->
-                        <div class="diag-card" style="border-left:4px solid #ef4444;">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <h3 id="res-diag-title" style="font-size:15px; font-weight:800; color:#991b1b;">Type 2 Diabetes Mellitus</h3>
-                                <span class="badge" style="background:#fee2e2; color:#991b1b;">ICD-10: E11.9</span>
+                        <div class="diag-card" id="res-diag-card" style="border-left:4px solid #ef4444;">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+                                <div>
+                                    <span id="res-urgency-badge" class="badge" style="background:#fee2e2; color:#991b1b; margin-bottom:4px;">Emergency Triage / Consult</span>
+                                    <h3 id="res-diag-title" style="font-size:15px; font-weight:800; color:#991b1b;">Type 2 Diabetes Mellitus</h3>
+                                </div>
+                                <span id="res-icd-code" class="badge" style="background:#f1f5f9; color:var(--text-main); font-weight:800;">ICD-10: E11.9</span>
                             </div>
                             <p id="res-diag-desc" style="font-size:12px; color:var(--text-muted); margin-top:6px; line-height:1.4;">
-                                Glycemic dysregulation driven by insulin resistance. Patient requires immediate glycemic stabilization and clinical surveillance.
+                                Progressive metabolic endocrine disorder driven by peripheral insulin resistance and beta-cell fatigue. Requires glycemic normalization and cardioprotection.
                             </p>
+                        </div>
+
+                        <!-- Differential Diagnoses Matrix -->
+                        <div class="diag-card" style="padding:12px;">
+                            <div style="font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:6px; display:flex; justify-content:space-between;">
+                                <span>Differential Diagnoses & Comorbidity Suspicions:</span>
+                                <span style="font-size:11px; color:var(--primary); font-weight:600;">Bayesian Ranked</span>
+                            </div>
+                            <div id="res-differential-list" style="display:flex; flex-direction:column; gap:6px;">
+                                <!-- Populated dynamically -->
+                            </div>
                         </div>
 
                         <!-- Evidence-Based Cure Protocols -->
                         <div class="diag-card">
-                            <div style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                            <div style="font-size:12.5px; font-weight:700; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
                                 1st-Line Evidence-Based Pharmacotherapy
                             </div>
                             <ul style="font-size:12px; color:var(--text-main); padding-left:18px; line-height:1.6;" id="res-med-list">
-                                <li><strong>Metformin Hydrochloride (500mg - 1000mg ER):</strong> Take with dinner to suppress hepatic gluconeogenesis and elevate GLUT4 insulin sensitivity.</li>
+                                <li><strong>Metformin Hydrochloride (500mg - 1000mg ER):</strong> Take with dinner. Suppresses hepatic gluconeogenesis and elevates peripheral GLUT4 sensitivity.</li>
                                 <li><strong>Empagliflozin (Jardiance 10mg):</strong> Once daily in morning. Promotes glycosuria with cardioprotective and renal benefits.</li>
                             </ul>
                         </div>
 
                         <!-- Diet & Lifestyle -->
                         <div class="diag-card">
-                            <div style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:8px;">
+                            <div style="font-size:12.5px; font-weight:700; color:var(--text-main); margin-bottom:8px;">
                                 Dietary & Natural Remedies Protocol
                             </div>
-                            <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+                            <p id="res-diet-desc" style="font-size:12px; color:var(--text-muted); line-height:1.5;">
                                 <strong>Recommended:</strong> Steel-cut oats, millets (Ragi/Bajra), fenugreek seed infusion, soluble fibers, chia seeds, wild salmon.<br>
                                 <strong>Strictly Avoid:</strong> Refined table sugars, high-fructose syrups, acellular carbohydrates (white flour), and palm oils.
                             </p>
                         </div>
 
+                        <!-- Red Flag Alerts -->
+                        <div class="red-flag-alert-box" id="res-redflags-box">
+                            <strong>⚠️ Clinical Red Flags (Immediate ER Criteria):</strong>
+                            <div id="res-redflags-text" style="margin-top:4px; font-size:11.5px; line-height:1.4;">
+                                Blood glucose &gt; 250 mg/dL with nausea/Kussmaul breathing (DKA), crushing substernal chest pressure, or sudden focal weakness.
+                            </div>
+                        </div>
+
                         <!-- Actions -->
-                        <div style="display:flex; gap:10px; margin-top:14px;">
+                        <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
                             <button class="btn btn-outline" style="flex:1; justify-content:center; font-size:12px;" onclick="window.print()">
-                                Print Assessment
+                                🖨️ Print Summary
                             </button>
-                            <button class="btn btn-primary" style="flex:1; justify-content:center; font-size:12px;" onclick="saveCurrentPredictionToHistory()">
-                                Log Assessment
+                            <button class="btn btn-primary" style="flex:1.2; justify-content:center; font-size:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="openPrescriptionModal()">
+                                📋 Generate Official Rx (EHR)
+                            </button>
+                            <button class="btn btn-outline" style="flex:1; justify-content:center; font-size:12px;" onclick="saveCurrentPredictionToHistory()">
+                                💾 Log Audit
                             </button>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- What-If Biomarker Risk Intervention Simulator -->
+            <div class="sim-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:20px;">⚡</span>
+                            <h3 style="font-size:16px; font-weight:800; color:var(--text-main);">Interactive Biomarker Risk Intervention Simulator</h3>
+                        </div>
+                        <p style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
+                            Simulate lifestyle, diet, and therapeutic interventions in real time to project patient cardiovascular & metabolic risk reduction.
+                        </p>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span class="sim-delta-badge" id="sim-overall-delta">
+                            ▼ -34% Projected Risk Reduction
+                        </span>
+                        <button class="btn btn-outline btn-sm" onclick="applySimulatedVitalsToForm()">
+                            Apply Values to Form
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sim-grid">
+                    <div class="sim-slider-row">
+                        <div class="sim-slider-label">
+                            <span>Target Fasting Glucose: <strong id="sim-val-glucose" style="color:#2563eb;">95 mg/dL</strong></span>
+                            <span style="font-size:11px; color:#10b981;">Optimal &lt; 100</span>
+                        </div>
+                        <input type="range" id="sim-slider-glucose" min="70" max="240" value="95" oninput="handleSimSliderChange()">
+                    </div>
+
+                    <div class="sim-slider-row">
+                        <div class="sim-slider-label">
+                            <span>Target Systolic Blood Pressure: <strong id="sim-val-systolic" style="color:#2563eb;">120 mmHg</strong></span>
+                            <span style="font-size:11px; color:#10b981;">AHA Target &lt; 120</span>
+                        </div>
+                        <input type="range" id="sim-slider-systolic" min="90" max="200" value="120" oninput="handleSimSliderChange()">
+                    </div>
+
+                    <div class="sim-slider-row">
+                        <div class="sim-slider-label">
+                            <span>Target BMI Weight Management: <strong id="sim-val-bmi" style="color:#2563eb;">23.5 kg/m²</strong></span>
+                            <span style="font-size:11px; color:#10b981;">Normal Range 18.5 - 24.9</span>
+                        </div>
+                        <input type="range" id="sim-slider-bmi" min="18.5" max="42.0" step="0.1" value="23.5" oninput="handleSimSliderChange()">
+                    </div>
+
+                    <div class="sim-slider-row">
+                        <div class="sim-slider-label">
+                            <span>Intervention Adherence: <strong id="sim-val-adherence" style="color:#2563eb;">Exercise & Smoking Cessation</strong></span>
+                        </div>
+                        <div style="display:flex; gap:10px; margin-top:4px;">
+                            <label style="font-size:12px; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                                <input type="checkbox" id="sim-toggle-smoking" onchange="handleSimSliderChange()"> Stop Smoking
+                            </label>
+                            <label style="font-size:12px; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                                <input type="checkbox" id="sim-toggle-exercise" checked onchange="handleSimSliderChange()"> 150m Exercise/Wk
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px; padding-top:12px; border-top:1px dashed var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <div style="font-size:12px; color:var(--text-muted);" id="sim-projection-summary">
+                        Projected 12-Month Outcome: Diabetes risk drops from <strong>60% &rarr; 22% (Low)</strong>; Cardiac risk drops from <strong>40% &rarr; 14% (Low)</strong>.
+                    </div>
+                </div>
+            </div>
             </div>
         </section>
 
@@ -1807,10 +2289,115 @@
     <!-- MODAL: PATIENT CLINICAL REPORT -->
     <!-- ======================================================== -->
     <div id="patientReportModal" class="modal-overlay" onclick="if(event.target === this) closeReportModal()">
-        <div class="modal-box" style="max-width:760px;">
+        <div class="modal-box" style="max-width:780px;">
             <button class="modal-close" onclick="closeReportModal()">&times;</button>
             <div id="reportModalContent">
                 <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: EDIT PATIENT CLINICAL RECORD (FULL CRUD) -->
+    <!-- ======================================================== -->
+    <div id="editPatientModal" class="modal-overlay" onclick="if(event.target === this) closeEditPatientModal()">
+        <div class="modal-box" style="max-width:680px;">
+            <button class="modal-close" onclick="closeEditPatientModal()">&times;</button>
+            <h2 style="font-size:18px; font-weight:800; margin-bottom:6px; color:var(--text-main);">Update Patient Clinical Record</h2>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Modify patient vitals, follow-up lab biomarkers, or lifestyle factors.</p>
+
+            <form id="editPatientForm" onsubmit="handleSaveEditPatient(event)">
+                <input type="hidden" id="edit_patient_id">
+                <div class="form-grid-3">
+                    <div class="form-group full-width">
+                        <label class="form-label">Patient Full Name & Reference ID</label>
+                        <input type="text" id="edit_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Age</label>
+                        <input type="number" id="edit_age" class="form-control" required min="1" max="120">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <select id="edit_gender" class="form-control" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">BMI (kg/m²)</label>
+                        <input type="number" step="0.1" id="edit_bmi" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fasting Glucose (mg/dL)</label>
+                        <input type="number" step="0.1" id="edit_glucose" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Systolic BP (mmHg)</label>
+                        <input type="number" step="0.1" id="edit_systolic" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Diastolic BP (mmHg)</label>
+                        <input type="number" step="0.1" id="edit_diastolic" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cholesterol (mg/dL)</label>
+                        <input type="number" step="0.1" id="edit_cholesterol" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Heart Rate (BPM)</label>
+                        <input type="number" step="0.1" id="edit_heart_rate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Smoking Status</label>
+                        <select id="edit_smoking" class="form-control" required>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Physical Activity</label>
+                        <select id="edit_activity" class="form-control" required>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Low">Low / Sedentary</option>
+                            <option value="High">High / Active</option>
+                        </select>
+                    </div>
+                    <div class="form-group span-2">
+                        <label class="form-label">Family Medical History</label>
+                        <select id="edit_family" class="form-control" required>
+                            <option value="Yes">Yes (Cardiometabolic)</option>
+                            <option value="No">No Known History</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeEditPatientModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Updated Vitals</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: OFFICIAL CLINICAL EHR PRESCRIPTION (Rx) -->
+    <!-- ======================================================== -->
+    <div id="prescriptionModal" class="modal-overlay" onclick="if(event.target === this) closePrescriptionModal()">
+        <div class="modal-box" style="max-width:820px; font-family:'Plus Jakarta Sans', sans-serif;">
+            <button class="modal-close" onclick="closePrescriptionModal()">&times;</button>
+            <div id="prescriptionContent">
+                <!-- Populated dynamically -->
+            </div>
+            <div class="modal-footer" style="justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                <div style="font-size:11.5px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+                    <span>🛡️ HIPAA-Compliant Electronic Health Record &bull; Verified Protocol</span>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button type="button" class="btn btn-outline" onclick="closePrescriptionModal()">Close</button>
+                    <button type="button" class="btn btn-outline" onclick="copyPrescriptionSummary()">📋 Copy Rx Summary</button>
+                    <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Print Official Rx (PDF)</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1854,10 +2441,227 @@
         }
 
         // =========================================================
-        // 2. CLINICAL ALGORITHMS (Exact match to backend formulas)
+        // 2. CLINICAL KNOWLEDGE BASE & EVIDENCE-BASED ENGINE
         // =========================================================
-        function calculateClinicalRisks(p) {
-            // Diabetes Score
+        const CLINICAL_SYMPTOMS = [
+            { id: "chest_pain", name: "Chest Pain / Retrosternal Pressure", category: "Cardio-Respiratory", icon: "❤️" },
+            { id: "shortness_of_breath", name: "Shortness of Breath (Dyspnea)", category: "Cardio-Respiratory", icon: "🫁" },
+            { id: "palpitations", name: "Rapid / Irregular Palpitations", category: "Cardio-Respiratory", icon: "💓" },
+            { id: "wheezing", name: "Wheezing / Stridor", category: "Cardio-Respiratory", icon: "🌬️" },
+            { id: "cough_dry", name: "Persistent Dry Cough", category: "Cardio-Respiratory", icon: "😷" },
+            { id: "cough_mucus", name: "Productive Cough with Phlegm", category: "Cardio-Respiratory", icon: "🧪" },
+            { id: "excessive_thirst", name: "Excessive Thirst (Polydipsia)", category: "Endocrine & Metabolic", icon: "💧" },
+            { id: "frequent_urination", name: "Frequent Urination (Polyuria)", category: "Endocrine & Metabolic", icon: "🚽" },
+            { id: "unexplained_weight_loss", name: "Sudden Unexplained Weight Loss", category: "Endocrine & Metabolic", icon: "⚖️" },
+            { id: "blurred_vision", name: "Blurred / Distorted Vision", category: "Endocrine & Metabolic", icon: "👁️" },
+            { id: "fatigue", name: "Profound Chronic Fatigue", category: "Systemic", icon: "🔋" },
+            { id: "fever", name: "Spiking Fever (>100.4°F / 38°C)", category: "Systemic", icon: "🌡️" },
+            { id: "chills_shivering", name: "Chills & Rigors", category: "Systemic", icon: "🥶" },
+            { id: "headache", name: "Severe Throbbing Headache", category: "Neurological", icon: "🤕" },
+            { id: "dizziness", name: "Dizziness / Lightheadedness / Vertigo", category: "Neurological", icon: "🌀" },
+            { id: "sensitivity_to_light", name: "Photophobia / Light Sensitivity", category: "Neurological", icon: "☀️" },
+            { id: "heartburn_acid_reflux", name: "Heartburn & Acid Regurgitation", category: "Gastrointestinal", icon: "🔥" },
+            { id: "abdominal_pain_upper", name: "Epigastric / Upper Stomach Pain", category: "Gastrointestinal", icon: "🤢" },
+            { id: "abdominal_pain_lower", name: "Lower Abdominal Cramping", category: "Gastrointestinal", icon: "⚡" },
+            { id: "nausea_vomiting", name: "Persistent Nausea / Vomiting", category: "Gastrointestinal", icon: "🤮" },
+            { id: "diarrhea", name: "Watery Diarrhea", category: "Gastrointestinal", icon: "🌊" },
+            { id: "jaundice", name: "Icteric Sclera / Jaundice (Yellow Skin)", category: "Gastrointestinal", icon: "🟡" },
+            { id: "joint_pain", name: "Joint Arthralgia & Morning Stiffness", category: "Musculoskeletal", icon: "🦴" },
+            { id: "muscle_aches", name: "Diffuse Muscle Aches (Myalgia)", category: "Musculoskeletal", icon: "💪" },
+            { id: "skin_rash", name: "Erythematous Skin Rash / Itching", category: "Musculoskeletal", icon: "🩹" }
+        ];
+
+        const DISEASES_DB = {
+            "type_2_diabetes": {
+                name: "Type 2 Diabetes Mellitus (Glycemic Dysregulation)",
+                category: "Endocrine & Metabolic",
+                icd_code: "E11.9",
+                severity: "High",
+                urgency: "Urgent Medical Therapy & Glycemic Normalization",
+                urgency_class: "badge-high",
+                description: "Progressive metabolic endocrine disorder driven by peripheral insulin resistance and pancreatic beta-cell fatigue, causing microvascular and macrovascular complications.",
+                primary_symptoms: ["excessive_thirst", "frequent_urination", "fatigue", "unexplained_weight_loss", "blurred_vision"],
+                lab_triggers: { fasting_glucose: 126, bmi: 27.5 },
+                medications: [
+                    { name: "Metformin Hydrochloride (500mg - 1000mg ER)", class: "Biguanide (1st-Line)", instruction: "Take with dinner. Suppresses hepatic gluconeogenesis and elevates GLUT4 insulin sensitivity. Max 2000mg/day." },
+                    { name: "Empagliflozin (Jardiance 10mg/25mg)", class: "SGLT-2 Inhibitor", instruction: "Once daily in morning. Promotes glycosuria; proven cardioprotective and nephroprotective benefits." },
+                    { name: "Semaglutide (Ozempic 0.5mg - 1.0mg)", class: "GLP-1 Receptor Agonist", instruction: "Weekly subcutaneous dose to enhance glucose-dependent insulin secretion and promote satiety." }
+                ],
+                home_remedies: [
+                    "Fenugreek (Trigonella foenum-graecum) seed infusion: Soak 15g seeds overnight; drink on empty stomach.",
+                    "Ceylon Cinnamon extract (Cinnamomum verum): 1g daily in warm water to upregulate insulin receptor kinase.",
+                    "Post-prandial pacing: 15-20 min moderate walk starting 20 minutes after main meals to blunt glucose spikes."
+                ],
+                diet_recommended: "Steel-cut oats, millets (Ragi/Bajra), soluble fibers (chia, flaxseeds), Greek yogurt, wild salmon, and high polyphenol extra-virgin olive oil.",
+                diet_avoid: "Refined table sugars, high-fructose corn syrups, acellular carbohydrates (white flour), and industrial trans fats.",
+                red_flags: "Severe neuroglycopenia (< 54 mg/dL: confusion/tremors), DKA signs (fruity breath, Kussmaul breathing, glucose > 250 mg/dL), or non-healing foot ulcers."
+            },
+            "coronary_artery_disease": {
+                name: "Coronary Artery Disease & Myocardial Ischemia",
+                category: "Cardiovascular",
+                icd_code: "I25.10",
+                severity: "Critical",
+                urgency: "Emergency Triage / Immediate Cardiology Consult",
+                urgency_class: "badge-high",
+                description: "Atherosclerotic fibrous plaque progression causing luminal stenosis of epicardial coronary arteries, producing demand-supply mismatch and myocardial hypoxia.",
+                primary_symptoms: ["chest_pain", "shortness_of_breath", "palpitations", "fatigue", "dizziness"],
+                lab_triggers: { cholesterol: 200, systolic_bp: 130 },
+                medications: [
+                    { name: "Aspirin (75mg - 100mg) + Clopidogrel (75mg)", class: "Dual Antiplatelet Therapy (DAPT)", instruction: "Daily oral dosing with meals to inhibit COX-1 and P2Y12 platelet activation pathways." },
+                    { name: "Atorvastatin (40mg - 80mg) / Rosuvastatin (20mg)", class: "High-Intensity Statin", instruction: "Nightly administration. Stabilizes fibrous caps and drives target LDL-C < 55 mg/dL." },
+                    { name: "Metoprolol Succinate (25mg - 50mg ER)", class: "Cardioselective Beta-1 Blocker", instruction: "Blunts sympathetic tachycardia, prolonging diastolic coronary perfusion time." }
+                ],
+                home_remedies: [
+                    "Immediate Fowler posture: Sit upright with legs dependent to reduce venous return and preload during angina.",
+                    "Terminalia arjuna bark extract (standardized for arjunic acid): Cardioprotective inotropic support.",
+                    "Vagal resonant slow breathing (5-6 breaths/min with prolonged exhalation) to suppress acute adrenergic surge."
+                ],
+                diet_recommended: "Cardioprotective Mediterranean diet: Rich in Extra Virgin Olive Oil, wild mackerel, dietary nitrates (beetroot juice, arugula), and soluble beta-glucans.",
+                diet_avoid: "Hydrogenated trans-fats, processed high-sodium cured meats (bacon, sausages), and excessive saturated butter fats.",
+                red_flags: "Crushing retrosternal chest pressure radiating to left arm/jaw, rest angina > 10 min non-responsive to sublingual Nitroglycerin, or diaphoresis with dyspnea."
+            },
+            "essential_hypertension": {
+                name: "Essential Hypertension (Stage 1 / 2 Hemodynamic Load)",
+                category: "Cardiovascular & Hemodynamics",
+                icd_code: "I10",
+                severity: "High",
+                urgency: "High (Vascular protection & stroke prevention)",
+                urgency_class: "badge-medium",
+                description: "Chronic sustained elevation of systemic vascular resistance and peripheral arterial stiffness, placing pathological afterload on left ventricle and cerebral vasculature.",
+                primary_symptoms: ["headache", "dizziness", "palpitations", "shortness_of_breath"],
+                lab_triggers: { systolic_bp: 130, diastolic_bp: 85 },
+                medications: [
+                    { name: "Telmisartan (40mg - 80mg) / Losartan (50mg)", class: "Angiotensin II Receptor Blocker (ARB)", instruction: "Once daily in morning. Blocks AT1 receptors, promotes vasodilation and retards glomerulosclerosis." },
+                    { name: "Amlodipine Besylate (5mg - 10mg)", class: "Calcium Channel Blocker (DHP)", instruction: "Direct arteriolar smooth muscle relaxant. Eases systemic peripheral resistance." },
+                    { name: "Chlorthalidone (12.5mg - 25mg)", class: "Thiazide-like Diuretic", instruction: "Promotes distal tubule natriuresis, lowering intravascular volume." }
+                ],
+                home_remedies: [
+                    "Hibiscus sabdariffa flower infusion (2 cups daily): Proven natural ACE-inhibitory anthocyanins.",
+                    "Daily 15-20 min mindfulness meditation / autogenic relaxation to downregulate sympathetic outflow.",
+                    "Warm Epsom salt foot baths before sleep to induce peripheral vascular pooling."
+                ],
+                diet_recommended: "DASH Nutritional Protocol: High Potassium & Magnesium foods (spinach, avocados, coconut water, pumpkin seeds) and raw crushed garlic (Allicin).",
+                diet_avoid: "Added dietary sodium > 1,500 mg/day (table salt, pickles, salted papads, commercial sauces) and excessive caffeine/alcohol.",
+                red_flags: "Hypertensive Crisis (SBP > 180 mmHg or DBP > 120 mmHg), severe occipital headache with visual disturbances, or focal neurological deficits (FAST criteria)."
+            },
+            "influenza_viral": {
+                name: "Influenza & Acute Viral Respiratory Syndrome",
+                category: "Infectious Respiratory",
+                icd_code: "J11.1",
+                severity: "Medium",
+                urgency: "Moderate (Symptomatic & Antiviral triage)",
+                urgency_class: "badge-medium",
+                description: "Acute orthomyxovirus infection causing extensive airway mucosal inflammation, cytokine induction, and systemic febrile manifestations.",
+                primary_symptoms: ["fever", "cough_dry", "muscle_aches", "fatigue", "chills_shivering", "headache"],
+                lab_triggers: {},
+                medications: [
+                    { name: "Paracetamol / Acetaminophen (650mg)", class: "Antipyretic / Central Analgesic", instruction: "Every 6 hours PRN for fever > 100.4°F and body aches. Max 3000mg/day." },
+                    { name: "Oseltamivir (Tamiflu 75mg)", class: "Neuraminidase Inhibitor (Antiviral)", instruction: "Twice daily for 5 days. Must initiate within 48 hours of initial symptom onset." },
+                    { name: "Guaifenesin + Dextromethorphan Syrup", class: "Mucolytic & Antitussive", instruction: "10ml q8h for soothing paroxysmal dry nighttime cough." }
+                ],
+                home_remedies: [
+                    "Eucalyptus-infused steam inhalation 2-3 times daily for bronchial mucosal moisturization.",
+                    "Warm saline gargling (1/2 tsp sodium chloride in 250ml warm water) every 3 hours for pharyngeal pain.",
+                    "Golden Turmeric & Ginger Milk (Curcumin + Piperine + Raw Honey) before bedtime."
+                ],
+                diet_recommended: "Warm fortified broths with garlic, citrus fruits rich in bioflavonoids (Vitamin C, sweet limes, amla), and oral electrolyte rehydration (minimum 3L daily).",
+                diet_avoid: "Refrigerated iced beverages, cold dairy milk, and greasy heavy deep-fried fast foods.",
+                red_flags: "Oxygen saturation (SpO2) dropping below 93% on room air, productive rust-colored sputum, or inability to tolerate oral fluids."
+            },
+            "gerd_hyperacidity": {
+                name: "GERD & Gastric Mucosal Hyperacidity",
+                category: "Gastrointestinal",
+                icd_code: "K21.9",
+                severity: "Medium",
+                urgency: "Moderate (Acid suppression & mucosal healing)",
+                urgency_class: "badge-info",
+                description: "Incompetence of the lower esophageal sphincter (LES) causing retrograde acid-peptic reflux and mucosal erosive esophagitis.",
+                primary_symptoms: ["heartburn_acid_reflux", "abdominal_pain_upper", "chest_pain", "nausea_vomiting"],
+                lab_triggers: {},
+                medications: [
+                    { name: "Pantoprazole / Esomeprazole (40mg)", class: "Proton Pump Inhibitor (PPI)", instruction: "Take 1 tablet daily 30 minutes before breakfast on an empty stomach for 4-8 weeks." },
+                    { name: "Sodium Alginate + Potassium Bicarbonate (Gaviscon)", class: "Mechanical Raft Barrier", instruction: "10-15ml taken 20 minutes post-meals and immediately before bedtime." },
+                    { name: "Famotidine (20mg)", class: "H2 Receptor Blocker", instruction: "At bedtime for refractory nocturnal acid breakthrough." }
+                ],
+                home_remedies: [
+                    "Deglycyrrhizinated Licorice (DGL) chewables 15 minutes before meals to stimulate mucosal secretin.",
+                    "Elevate head-of-bed by 6 inches using a wedge pillow (gravity-assisted acid clearance).",
+                    "Chamomile and Slippery Elm bark infusion to coat the esophageal lining."
+                ],
+                diet_recommended: "Non-citrus soothing fruits (ripe papayas, bananas, melons), steamed cruciferous greens, rolled oats, and lean boiled lentils.",
+                diet_avoid: "Coffee, black tea, carbonated colas, dark chocolates, citrus juices, vinegar, and late-night heavy dinners.",
+                red_flags: "Progressive difficulty swallowing (Dysphagia/Odynophagia), coffee-ground emesis (hematemesis), or jet black tarry stools (Melena)."
+            },
+            "migraine_neurovascular": {
+                name: "Migraine with / without Aura (Neurovascular Cephalea)",
+                category: "Neurological",
+                icd_code: "G43.909",
+                severity: "Medium",
+                urgency: "Moderate (Acute abortive & preventive protocol)",
+                urgency_class: "badge-info",
+                description: "Primary neurovascular cephalic disorder characterized by trigeminovascular activation, cortical spreading depression, and sensory hyper-reactivity.",
+                primary_symptoms: ["headache", "sensitivity_to_light", "nausea_vomiting", "dizziness"],
+                lab_triggers: {},
+                medications: [
+                    { name: "Sumatriptan (50mg - 100mg) / Rizatriptan (10mg)", class: "5-HT1B/1D Receptor Agonist (Triptan)", instruction: "Take at earliest onset of migraine aura or acute head pain phase. Max 200mg/day." },
+                    { name: "Naproxen Sodium (500mg) + Domperidone (10mg)", class: "NSAID + Prokinetic Antiemetic", instruction: "Alleviates sterile neurogenic inflammation and gastric stasis." },
+                    { name: "Propranolol (40mg) / Topiramate (25mg - 50mg)", class: "Prophylactic Controller", instruction: "Nightly maintenance for patients with >4 debilitating attacks monthly." }
+                ],
+                home_remedies: [
+                    "Sensory deprivation: Rest in a completely pitch-black, silent, and cool room with eyes shielded.",
+                    "Cervical cold cryotherapy: Ice pack to suboccipital neck + warm water foot soak.",
+                    "High-potency Magnesium Glycinate (400mg) + Riboflavin Vitamin B2 (400mg) daily."
+                ],
+                diet_recommended: "Continuous hydration with electrolyte water, magnesium-dense foods (pumpkin seeds, raw almonds, spinach), and strictly synchronized regular meals.",
+                diet_avoid: "Aged cheeses, red wines, cured meats containing tyramine, artificial sweeteners (Aspartame), and erratic caffeine withdrawal.",
+                red_flags: "Thunderclap headache reaching excruciating maximum intensity within 60 seconds (rule out SAH) or headache with high fever and nuchal rigidity."
+            }
+        };
+
+        // Selected Symptoms State
+        let selectedSymptoms = new Set(["excessive_thirst", "frequent_urination"]);
+
+        // =========================================================
+        // 3. CLINICAL ALGORITHMS & MULTIMODAL DIAGNOSTIC ENGINE
+        // =========================================================
+        function calculateASCVD(p) {
+            let ageFactor = (p.age - 20) * 0.45;
+            let cholFactor = ((p.cholesterol - 150) / 10) * 1.1;
+            let sbpFactor = ((p.systolic_bp - 110) / 10) * 1.8;
+            let smokeFactor = (p.smoking === "Yes" ? 14 : 0);
+            let diabFactor = (p.glucose >= 126 ? 12 : (p.glucose >= 100 ? 5 : 0));
+            let genderFactor = (p.gender === "Male" ? 5 : 0);
+            let rawScore = ageFactor + cholFactor + sbpFactor + smokeFactor + diabFactor + genderFactor - 18;
+            let ascvdPercent = Math.min(Math.max(rawScore, 1.2), 68.5).toFixed(1);
+
+            let ascvdCategory = "Low Risk";
+            let ascvdBadgeClass = "badge-low";
+            let statinIndication = "Lifestyle modification; statin not routinely indicated.";
+
+            if (ascvdPercent >= 20.0) {
+                ascvdCategory = "High ASCVD Risk (≥20%)";
+                ascvdBadgeClass = "badge-high";
+                statinIndication = "High-Intensity Statin indicated (Atorvastatin 40-80mg). Target LDL-C < 55 mg/dL.";
+            } else if (ascvdPercent >= 7.5) {
+                ascvdCategory = "Intermediate Risk (7.5-19.9%)";
+                ascvdBadgeClass = "badge-medium";
+                statinIndication = "Moderate-Intensity Statin indicated (Atorvastatin 20mg / Rosuvastatin 10mg).";
+            } else if (ascvdPercent >= 5.0) {
+                ascvdCategory = "Borderline Risk (5-7.4%)";
+                ascvdBadgeClass = "badge-medium";
+                statinIndication = "Consider risk-enhancing factors & CAC score before initiating pharmacotherapy.";
+            }
+
+            return {
+                percent: ascvdPercent,
+                category: ascvdCategory,
+                badgeClass: ascvdBadgeClass,
+                statinIndication: statinIndication
+            };
+        }
+
+        function calculateClinicalRisks(p, symptomsSet = selectedSymptoms) {
+            // 1. Diabetes Score
             let diabScore = 0;
             if (p.age >= 45) diabScore += 15;
             if (p.bmi >= 30) diabScore += 20;
@@ -1867,9 +2671,12 @@
             if (p.family_history === "Yes") diabScore += 15;
             if (p.physical_activity === "Low") diabScore += 10;
             if (p.smoking === "Yes") diabScore += 5;
+            if (symptomsSet.has("excessive_thirst")) diabScore += 12;
+            if (symptomsSet.has("frequent_urination")) diabScore += 12;
+            if (symptomsSet.has("blurred_vision")) diabScore += 8;
             diabScore = Math.min(diabScore, 100);
 
-            // Heart Risk Score
+            // 2. Heart Risk Score
             let heartScore = 0;
             if (p.age >= 55) heartScore += 20;
             else if (p.age >= 45) heartScore += 10;
@@ -1880,9 +2687,12 @@
             if (p.heart_rate >= 100) heartScore += 10;
             if (p.smoking === "Yes") heartScore += 20;
             if (p.family_history === "Yes") heartScore += 10;
+            if (symptomsSet.has("chest_pain")) heartScore += 18;
+            if (symptomsSet.has("shortness_of_breath")) heartScore += 12;
+            if (symptomsSet.has("palpitations")) heartScore += 8;
             heartScore = Math.min(heartScore, 100);
 
-            // Hypertension Score
+            // 3. Hypertension Score
             let hypScore = 0;
             if (p.age >= 50) hypScore += 15;
             if (p.bmi >= 30) hypScore += 15;
@@ -1890,6 +2700,8 @@
             else if (p.systolic_bp >= 130 || p.diastolic_bp >= 80) hypScore += 25;
             if (p.smoking === "Yes") hypScore += 10;
             if (p.family_history === "Yes") hypScore += 10;
+            if (symptomsSet.has("headache")) hypScore += 8;
+            if (symptomsSet.has("dizziness")) hypScore += 8;
             hypScore = Math.min(hypScore, 100);
 
             function toCategory(s) {
@@ -1898,18 +2710,235 @@
                 return "Low";
             }
 
+            // 4. ACC/AHA 10-Year ASCVD Risk
+            const ascvd = calculateASCVD(p);
+
+            // 5. Hemodynamics
+            const map = Math.round((2 * p.diastolic_bp + p.systolic_bp) / 3);
+            const pp = Math.round(p.systolic_bp - p.diastolic_bp);
+            const mapStatus = (map >= 70 && map <= 105) ? "Optimal Perfusion" : (map > 105 ? "Elevated Afterload" : "Borderline Hypotension");
+            const ppStatus = pp > 60 ? "Arterial Stiffness Alert" : "Normal Elasticity";
+
+            // 6. Bayesian Multi-Disease Diagnosis Matcher
+            const candidateScores = [];
+            for (const [key, dis] of Object.entries(DISEASES_DB)) {
+                let matchScore = 0;
+                let symptomHits = 0;
+                dis.primary_symptoms.forEach(sym => {
+                    if (symptomsSet.has(sym)) {
+                        matchScore += 26;
+                        symptomHits++;
+                    }
+                });
+
+                const triggers = dis.lab_triggers;
+                if (triggers.fasting_glucose && p.glucose >= triggers.fasting_glucose) matchScore += 44;
+                else if (triggers.fasting_glucose && p.glucose >= 100) matchScore += 20;
+
+                if (triggers.cholesterol && p.cholesterol >= triggers.cholesterol) matchScore += 32;
+                if (triggers.systolic_bp && (p.systolic_bp >= triggers.systolic_bp || p.diastolic_bp >= (triggers.diastolic_bp || 85))) matchScore += 36;
+                if (triggers.bmi && p.bmi >= triggers.bmi) matchScore += 18;
+
+                if (key === "type_2_diabetes") matchScore = Math.max(matchScore, Math.round(diabScore * 0.95));
+                if (key === "coronary_artery_disease") matchScore = Math.max(matchScore, Math.round(heartScore * 0.9));
+                if (key === "essential_hypertension") matchScore = Math.max(matchScore, Math.round(hypScore * 0.9));
+
+                if (matchScore > 15) {
+                    const confidence = Math.min(Math.max(matchScore, 24), 98);
+                    candidateScores.push({
+                        id: key,
+                        disease: dis,
+                        confidence: confidence,
+                        symptomHits: symptomHits
+                    });
+                }
+            }
+
+            candidateScores.sort((a, b) => b.confidence - a.confidence);
+
+            const primaryDiagnosis = candidateScores.length > 0 ? candidateScores[0] : {
+                id: "type_2_diabetes",
+                disease: DISEASES_DB["type_2_diabetes"],
+                confidence: diabScore,
+                symptomHits: 0
+            };
+            const differentialDiagnoses = candidateScores.slice(1, 4);
+
             return {
                 diabetes_probability: diabScore,
                 diabetes_risk: toCategory(diabScore),
                 heart_probability: heartScore,
                 heart_risk: toCategory(heartScore),
                 hypertension_probability: hypScore,
-                hypertension_risk: toCategory(hypScore)
+                hypertension_risk: toCategory(hypScore),
+                ascvd: ascvd,
+                hemodynamics: { map, pp, mapStatus, ppStatus },
+                primaryDiagnosis: primaryDiagnosis,
+                differentialDiagnoses: differentialDiagnoses
             };
         }
 
         // =========================================================
-        // 3. TAB NAVIGATION
+        // 4. LIVE LAB RANGE MICRO-INDICATORS
+        // =========================================================
+        function updateLabRangePills() {
+            const gluc = parseFloat(document.getElementById('pred_glucose')?.value) || 0;
+            const sys = parseFloat(document.getElementById('pred_systolic')?.value) || 0;
+            const dia = parseFloat(document.getElementById('pred_diastolic')?.value) || 0;
+            const bmi = parseFloat(document.getElementById('pred_bmi')?.value) || 0;
+            const chol = parseFloat(document.getElementById('pred_cholesterol')?.value) || 0;
+            const hr = parseFloat(document.getElementById('pred_heart_rate')?.value) || 0;
+
+            // Glucose
+            const pGluc = document.getElementById('pill_glucose');
+            if (pGluc) {
+                if (gluc >= 126) { pGluc.className = "lab-pill lab-danger"; pGluc.innerText = `${gluc} Diabetic (≥126)`; }
+                else if (gluc >= 100) { pGluc.className = "lab-pill lab-elevated"; pGluc.innerText = `${gluc} Pre-Diabetic`; }
+                else { pGluc.className = "lab-pill lab-normal"; pGluc.innerText = `${gluc} Normal (70-99)`; }
+            }
+
+            // Systolic BP
+            const pSys = document.getElementById('pill_systolic');
+            if (pSys) {
+                if (sys >= 180) { pSys.className = "lab-pill lab-danger"; pSys.innerText = `${sys} Crisis (≥180)`; }
+                else if (sys >= 140) { pSys.className = "lab-pill lab-danger"; pSys.innerText = `${sys} Stage 2 HTN`; }
+                else if (sys >= 130) { pSys.className = "lab-pill lab-warning"; pSys.innerText = `${sys} Stage 1 HTN`; }
+                else if (sys >= 120) { pSys.className = "lab-pill lab-elevated"; pSys.innerText = `${sys} Elevated`; }
+                else { pSys.className = "lab-pill lab-normal"; pSys.innerText = `${sys} Normal (<120)`; }
+            }
+
+            // Diastolic BP
+            const pDia = document.getElementById('pill_diastolic');
+            if (pDia) {
+                if (dia >= 120) { pDia.className = "lab-pill lab-danger"; pDia.innerText = `${dia} Crisis (≥120)`; }
+                else if (dia >= 90) { pDia.className = "lab-pill lab-danger"; pDia.innerText = `${dia} Stage 2`; }
+                else if (dia >= 80) { pDia.className = "lab-pill lab-warning"; pDia.innerText = `${dia} Stage 1`; }
+                else { pDia.className = "lab-pill lab-normal"; pDia.innerText = `${dia} Normal (<80)`; }
+            }
+
+            // BMI
+            const pBmi = document.getElementById('pill_bmi');
+            if (pBmi) {
+                if (bmi >= 30) { pBmi.className = "lab-pill lab-danger"; pBmi.innerText = `${bmi} Obese (≥30)`; }
+                else if (bmi >= 25) { pBmi.className = "lab-pill lab-warning"; pBmi.innerText = `${bmi} Overweight`; }
+                else if (bmi >= 18.5) { pBmi.className = "lab-pill lab-normal"; pBmi.innerText = `${bmi} Normal`; }
+                else { pBmi.className = "lab-pill lab-warning"; pBmi.innerText = `${bmi} Underweight`; }
+            }
+
+            // Cholesterol
+            const pChol = document.getElementById('pill_cholesterol');
+            if (pChol) {
+                if (chol >= 240) { pChol.className = "lab-pill lab-danger"; pChol.innerText = `${chol} High (≥240)`; }
+                else if (chol >= 200) { pChol.className = "lab-pill lab-warning"; pChol.innerText = `${chol} Borderline`; }
+                else { pChol.className = "lab-pill lab-normal"; pChol.innerText = `${chol} Desirable (<200)`; }
+            }
+
+            // Heart Rate
+            const pHr = document.getElementById('pill_heart_rate');
+            if (pHr) {
+                if (hr > 100) { pHr.className = "lab-pill lab-danger"; pHr.innerText = `${hr} Tachycardia`; }
+                else if (hr < 60) { pHr.className = "lab-pill lab-warning"; pHr.innerText = `${hr} Bradycardia`; }
+                else { pHr.className = "lab-pill lab-normal"; pHr.innerText = `${hr} Normal`; }
+            }
+        }
+
+        // =========================================================
+        // 5. SYMPTOM CHIPS UI & 1-CLICK PRESETS
+        // =========================================================
+        let currentSymptomFilter = "all";
+
+        function renderSymptomChips() {
+            const container = document.getElementById('symptomChipsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            CLINICAL_SYMPTOMS.forEach(s => {
+                const isVisible = (currentSymptomFilter === "all" || s.category === currentSymptomFilter);
+                if (!isVisible) return;
+
+                const chip = document.createElement('span');
+                chip.className = `symptom-chip ${selectedSymptoms.has(s.id) ? 'selected' : ''}`;
+                chip.dataset.id = s.id;
+                chip.dataset.category = s.category;
+                chip.innerHTML = `${s.icon} ${s.name}`;
+                chip.onclick = () => toggleSymptom(chip);
+                container.appendChild(chip);
+            });
+
+            const badge = document.getElementById('symptom-count-badge');
+            if (badge) badge.innerText = selectedSymptoms.size;
+        }
+
+        function toggleSymptom(el) {
+            const symId = el.dataset.id;
+            if (selectedSymptoms.has(symId)) {
+                selectedSymptoms.delete(symId);
+                el.classList.remove('selected');
+            } else {
+                selectedSymptoms.add(symId);
+                el.classList.add('selected');
+            }
+            const badge = document.getElementById('symptom-count-badge');
+            if (badge) badge.innerText = selectedSymptoms.size;
+
+            // Trigger real-time diagnostic update if patient is active
+            recalculateCurrentAssessmentQuietly();
+        }
+
+        function filterSymptomsByCategory(category, btn) {
+            currentSymptomFilter = category;
+            document.querySelectorAll('.symptom-cat-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderSymptomChips();
+        }
+
+        function applySymptomPreset(presetType) {
+            selectedSymptoms.clear();
+            if (presetType === 'cad') {
+                selectedSymptoms.add('chest_pain');
+                selectedSymptoms.add('shortness_of_breath');
+                selectedSymptoms.add('palpitations');
+                selectedSymptoms.add('dizziness');
+                showToast("Applied Preset: Acute Coronary Presentation", "info");
+            } else if (presetType === 'diabetes') {
+                selectedSymptoms.add('excessive_thirst');
+                selectedSymptoms.add('frequent_urination');
+                selectedSymptoms.add('fatigue');
+                selectedSymptoms.add('blurred_vision');
+                showToast("Applied Preset: Diabetic Glycemic Decompensation", "info");
+            } else if (presetType === 'htn') {
+                selectedSymptoms.add('headache');
+                selectedSymptoms.add('dizziness');
+                selectedSymptoms.add('palpitations');
+                selectedSymptoms.add('shortness_of_breath');
+                showToast("Applied Preset: Hypertensive Urgency Presentation", "info");
+            } else if (presetType === 'flu') {
+                selectedSymptoms.add('fever');
+                selectedSymptoms.add('chills_shivering');
+                selectedSymptoms.add('cough_dry');
+                selectedSymptoms.add('muscle_aches');
+                selectedSymptoms.add('fatigue');
+                showToast("Applied Preset: Acute Viral / Influenza Syndrome", "info");
+            } else if (presetType === 'gerd') {
+                selectedSymptoms.add('heartburn_acid_reflux');
+                selectedSymptoms.add('abdominal_pain_upper');
+                selectedSymptoms.add('nausea_vomiting');
+                showToast("Applied Preset: Acid-Peptic Attack Presentation", "info");
+            } else if (presetType === 'migraine') {
+                selectedSymptoms.add('headache');
+                selectedSymptoms.add('sensitivity_to_light');
+                selectedSymptoms.add('nausea_vomiting');
+                selectedSymptoms.add('dizziness');
+                showToast("Applied Preset: Neurovascular Migraine Attack", "info");
+            } else if (presetType === 'clear') {
+                showToast("All clinical symptoms cleared", "info");
+            }
+            renderSymptomChips();
+            recalculateCurrentAssessmentQuietly();
+        }
+
+        // =========================================================
+        // 6. TAB NAVIGATION & VIEW SWITCHING
         // =========================================================
         function switchTab(tabId, filter) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
@@ -1929,7 +2958,7 @@
         }
 
         // =========================================================
-        // 4. RENDER DASHBOARD & TABLES
+        // 7. RENDER DASHBOARD & CHARTS
         // =========================================================
         let adminCondChartInstance = null;
         let adminDoughnutChartInstance = null;
@@ -1943,10 +2972,14 @@
             renderDashboardCards();
             renderDashboardTable();
             renderDashboardActivity();
+            renderDashboardAlerts();
             renderPatientRegistryTable();
             renderPredictionHistoryTable();
             renderCharts();
             populatePatientSelectDropdown();
+            renderSymptomChips();
+            updateLabRangePills();
+            initTheme();
         }
 
         function renderDashboardCards() {
@@ -1976,9 +3009,9 @@
 
         function renderDashboardTable() {
             const tbody = document.getElementById('dashboard-patient-table-body');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
-            // Show first 6 patients
             const displayList = patients.slice(0, 6);
             displayList.forEach(p => {
                 const tr = document.createElement('tr');
@@ -1992,8 +3025,9 @@
                     <td>BP: ${p.systolic_bp}/${p.diastolic_bp} &bull; Gluc: ${p.glucose}</td>
                     <td>${statusBadge}</td>
                     <td>
-                        <button class="btn btn-outline" style="padding:4px 10px; font-size:11px;" onclick="loadAndAssessPatient(${p.id})">Assess</button>
-                        <button class="btn btn-outline" style="padding:4px 10px; font-size:11px; margin-left:4px;" onclick="viewPatientReport(${p.id})">Report</button>
+                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="loadAndAssessPatient(${p.id})">Assess</button>
+                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px; margin-left:3px;" onclick="openPrescriptionModal(${p.id})">Rx</button>
+                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px; margin-left:3px;" onclick="viewPatientReport(${p.id})">Report</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -2002,12 +3036,13 @@
 
         function renderDashboardActivity() {
             const list = document.getElementById('dashboard-activity-list');
+            if (!list) return;
             list.innerHTML = `
                 <li class="activity-item">
                     <span class="activity-dot dot-high"></span>
                     <div>
                         <div class="activity-title">Risk assessment completed for Anita Patel [NIH-NIDDK #0783]</div>
-                        <div class="activity-sub">High Risk in Diabetes (60%), Medium in Heart/BP</div>
+                        <div class="activity-sub">High Risk in Diabetes (60%), Intermediate ASCVD Risk (18.4%)</div>
                     </div>
                     <span class="activity-time">09 Oct, 07:13</span>
                 </li>
@@ -2046,8 +3081,56 @@
             `;
         }
 
+        function renderDashboardAlerts() {
+            const container = document.getElementById('alert-items-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const highRiskList = patients.filter(p => {
+                const r = calculateClinicalRisks(p);
+                return r.diabetes_risk === 'High' || r.heart_risk === 'High' || r.hypertension_risk === 'High';
+            });
+
+            document.getElementById('alert-high-count').innerText = highRiskList.length;
+
+            if (highRiskList.length === 0) {
+                container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); padding:8px 0;">✓ No high-risk patient alerts at this time. All cohort vitals stable.</div>`;
+                return;
+            }
+
+            highRiskList.slice(0, 3).forEach(p => {
+                const r = calculateClinicalRisks(p);
+                const flags = [];
+                if (r.diabetes_risk === 'High') flags.push('Diabetes');
+                if (r.heart_risk === 'High') flags.push('Cardiac Plaque');
+                if (r.hypertension_risk === 'High') flags.push('Hypertension');
+
+                const chip = document.createElement('div');
+                chip.className = 'alert-chip';
+                chip.innerHTML = `
+                    <div>
+                        <strong>${p.name} (Age ${p.age}, ${p.gender})</strong>
+                        <div style="margin-top:2px;"><span>High Risk in: <strong>${flags.join(', ')}</strong> &bull; BP: ${p.systolic_bp}/${p.diastolic_bp} mmHg</span></div>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn btn-outline" style="border-color:#fca5a5; color:#991b1b; padding:5px 10px; font-size:11px;" onclick="loadAndAssessPatient(${p.id})">
+                            Re-evaluate
+                        </button>
+                        <button class="btn btn-primary" style="padding:5px 10px; font-size:11px;" onclick="openPrescriptionModal(${p.id})">
+                            Generate Rx
+                        </button>
+                    </div>
+                `;
+                container.appendChild(chip);
+            });
+        }
+
+        // =========================================================
+        // 8. PATIENT REGISTRY TABLE (FULL CRUD: ADD, EDIT, DELETE, RX)
+        // =========================================================
         function renderPatientRegistryTable(filterList) {
             const tbody = document.getElementById('full-patient-table-body');
+            if (!tbody) return;
             tbody.innerHTML = '';
             const list = filterList || patients;
 
@@ -2065,8 +3148,11 @@
                     <td>${p.smoking}</td>
                     <td>${p.physical_activity}</td>
                     <td>
-                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="loadAndAssessPatient(${p.id})">Assess</button>
-                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="viewPatientReport(${p.id})">Report</button>
+                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px;" title="Assess Risk in Diagnostic Engine" onclick="loadAndAssessPatient(${p.id})">Assess</button>
+                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px; margin-left:2px;" title="Generate Official EHR Prescription" onclick="openPrescriptionModal(${p.id})">Rx</button>
+                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px; margin-left:2px;" title="View Clinical Audit Report" onclick="viewPatientReport(${p.id})">Report</button>
+                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px; margin-left:2px; color:#2563eb; border-color:#93c5fd;" title="Edit Patient Record" onclick="openEditPatientModal(${p.id})">Edit</button>
+                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px; margin-left:2px; color:#ef4444; border-color:#fca5a5;" title="Remove Patient" onclick="deletePatient(${p.id})">&times;</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -2075,6 +3161,7 @@
 
         function renderPredictionHistoryTable() {
             const tbody = document.getElementById('history-table-body');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             predictions.forEach(p => {
@@ -2088,7 +3175,8 @@
                     <td><span class="badge badge-medium">${p.hypertension_risk} (${p.hypertension_probability}%)</span></td>
                     <td>${p.created_at}</td>
                     <td>
-                        <button class="btn btn-outline" style="padding:4px 10px; font-size:11px;" onclick="viewPatientReport(${p.patient_id})">Full Report</button>
+                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="viewPatientReport(${p.patient_id})">Full Report</button>
+                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px; margin-left:4px;" onclick="openPrescriptionModal(${p.patient_id})">Official Rx</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -2097,6 +3185,7 @@
 
         function populatePatientSelectDropdown() {
             const sel = document.getElementById('quickPatientSelect');
+            if (!sel) return;
             sel.innerHTML = '<option value="">-- Select Patient to Pre-fill --</option>';
             patients.forEach(p => {
                 const opt = document.createElement('option');
@@ -2107,7 +3196,7 @@
         }
 
         // =========================================================
-        // 5. CHARTS INITIALIZATION (Chart.js)
+        // 9. CHARTS INITIALIZATION (Chart.js)
         // =========================================================
         function renderCharts() {
             const red = '#ef4444';
@@ -2115,47 +3204,53 @@
             const green = '#10b981';
 
             // 1. Dashboard Multi-Condition Chart
-            const ctxCond = document.getElementById('adminConditionChart').getContext('2d');
-            if (adminCondChartInstance) adminCondChartInstance.destroy();
-            adminCondChartInstance = new Chart(ctxCond, {
-                type: 'bar',
-                data: {
-                    labels: ['Diabetes', 'Cardiovascular', 'Hypertension'],
-                    datasets: [
-                        { label: 'High Risk', data: [1, 0, 0], backgroundColor: red, borderRadius: 6 },
-                        { label: 'Medium Risk', data: [1, 2, 2], backgroundColor: amber, borderRadius: 6 },
-                        { label: 'Low Risk', data: [0, 0, 0], backgroundColor: green, borderRadius: 6 }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
-                    plugins: { legend: { position: 'top' } }
-                }
-            });
+            const elCond = document.getElementById('adminConditionChart');
+            if (elCond) {
+                const ctxCond = elCond.getContext('2d');
+                if (adminCondChartInstance) adminCondChartInstance.destroy();
+                adminCondChartInstance = new Chart(ctxCond, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Diabetes', 'Cardiovascular', 'Hypertension'],
+                        datasets: [
+                            { label: 'High Risk', data: [1, 0, 0], backgroundColor: red, borderRadius: 6 },
+                            { label: 'Medium Risk', data: [1, 2, 2], backgroundColor: amber, borderRadius: 6 },
+                            { label: 'Low Risk', data: [0, 0, 0], backgroundColor: green, borderRadius: 6 }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+                        plugins: { legend: { position: 'top' } }
+                    }
+                });
+            }
 
             // 2. Dashboard Doughnut Chart
-            const ctxDoughnut = document.getElementById('adminRiskDoughnut').getContext('2d');
-            if (adminDoughnutChartInstance) adminDoughnutChartInstance.destroy();
-            adminDoughnutChartInstance = new Chart(ctxDoughnut, {
-                type: 'doughnut',
-                data: {
-                    labels: ['High Risk', 'Medium Risk', 'Low Risk'],
-                    datasets: [{
-                        data: [1, 1, 0],
-                        backgroundColor: [red, amber, green],
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '72%',
-                    plugins: { legend: { position: 'bottom' } }
-                }
-            });
+            const elDoughnut = document.getElementById('adminRiskDoughnut');
+            if (elDoughnut) {
+                const ctxDoughnut = elDoughnut.getContext('2d');
+                if (adminDoughnutChartInstance) adminDoughnutChartInstance.destroy();
+                adminDoughnutChartInstance = new Chart(ctxDoughnut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+                        datasets: [{
+                            data: [1, 1, 0],
+                            backgroundColor: [red, amber, green],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '72%',
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                });
+            }
 
             // 3. Analytics Charts
             const elAge = document.getElementById('analyticsAgeChart');
@@ -2263,11 +3358,9 @@
         }
 
         // =========================================================
-        // 6. PREDICTION INTERACTIONS
+        // 10. PREDICTION ENGINE INTERACTIONS
         // =========================================================
-        function toggleSymptom(el) {
-            el.classList.toggle('selected');
-        }
+        let currentEvaluation = null;
 
         function handlePatientSelection(patientId) {
             if (!patientId) return;
@@ -2287,7 +3380,7 @@
             document.getElementById('pred_activity').value = p.physical_activity;
             document.getElementById('pred_family_history').value = p.family_history;
 
-            // Trigger prediction
+            updateLabRangePills();
             runPredictionOnValues(p);
         }
 
@@ -2315,15 +3408,32 @@
                 family_history: document.getElementById('pred_family_history').value || "Yes"
             };
             runPredictionOnValues(p);
-            showToast(`Diagnostic Assessment calculated for ${p.name}!`, "success");
+            showToast(`Clinical Diagnostic Assessment computed for ${p.name}!`, "success");
         }
 
-        let currentEvaluation = null;
+        function recalculateCurrentAssessmentQuietly() {
+            const p = {
+                name: document.getElementById('pred_name')?.value || "Current Patient",
+                age: parseFloat(document.getElementById('pred_age')?.value) || 48,
+                gender: document.getElementById('pred_gender')?.value || "Female",
+                bmi: parseFloat(document.getElementById('pred_bmi')?.value) || 27.4,
+                glucose: parseFloat(document.getElementById('pred_glucose')?.value) || 114.0,
+                systolic_bp: parseFloat(document.getElementById('pred_systolic')?.value) || 136.0,
+                diastolic_bp: parseFloat(document.getElementById('pred_diastolic')?.value) || 86.0,
+                cholesterol: parseFloat(document.getElementById('pred_cholesterol')?.value) || 218.0,
+                heart_rate: parseFloat(document.getElementById('pred_heart_rate')?.value) || 74.0,
+                smoking: document.getElementById('pred_smoking')?.value || "No",
+                physical_activity: document.getElementById('pred_activity')?.value || "Moderate",
+                family_history: document.getElementById('pred_family_history')?.value || "Yes"
+            };
+            runPredictionOnValues(p);
+        }
 
         function runPredictionOnValues(p) {
-            const risk = calculateClinicalRisks(p);
+            const risk = calculateClinicalRisks(p, selectedSymptoms);
             currentEvaluation = { ...p, ...risk };
 
+            // Gauges
             document.getElementById('res-diab-val').innerText = `${risk.diabetes_probability}%`;
             document.getElementById('res-diab-badge').className = `badge badge-${risk.diabetes_risk.toLowerCase()}`;
             document.getElementById('res-diab-badge').innerText = `${risk.diabetes_risk} Risk`;
@@ -2336,34 +3446,150 @@
             document.getElementById('res-hyp-badge').className = `badge badge-${risk.hypertension_risk.toLowerCase()}`;
             document.getElementById('res-hyp-badge').innerText = `${risk.hypertension_risk} Risk`;
 
-            const isHigh = risk.diabetes_risk === 'High' || risk.heart_risk === 'High' || risk.hypertension_risk === 'High';
-            if (isHigh) {
-                document.getElementById('res-diag-title').innerText = "Type 2 Diabetes & Cardiometabolic Strain";
-                document.getElementById('res-diag-desc').innerText = "Glycemic dysregulation driven by insulin resistance with elevated vascular stress. Requires glycemic normalization and cardioprotection.";
+            // ASCVD & Hemodynamics
+            document.getElementById('res-ascvd-val').innerText = `${risk.ascvd.percent}%`;
+            document.getElementById('res-ascvd-badge').className = `badge ${risk.ascvd.badgeClass}`;
+            document.getElementById('res-ascvd-badge').innerText = risk.ascvd.category;
+
+            document.getElementById('res-hemo-val').innerText = `MAP: ${risk.hemodynamics.map} mmHg • PP: ${risk.hemodynamics.pp} mmHg`;
+            document.getElementById('res-hemo-sub').innerText = `${risk.hemodynamics.mapStatus} • ${risk.hemodynamics.ppStatus}`;
+
+            // Primary Diagnosis
+            const prim = risk.primaryDiagnosis;
+            const primDis = prim.disease;
+            document.getElementById('res-diag-title').innerText = primDis.name;
+            document.getElementById('res-icd-code').innerText = `ICD-10: ${primDis.icd_code}`;
+            document.getElementById('res-urgency-badge').innerText = primDis.urgency;
+            document.getElementById('res-urgency-badge').className = `badge ${primDis.urgency_class}`;
+            document.getElementById('res-diag-desc').innerText = primDis.description;
+
+            // Border color by urgency
+            const diagCard = document.getElementById('res-diag-card');
+            if (primDis.severity === "Critical") diagCard.style.borderLeft = "4px solid #ef4444";
+            else if (primDis.severity === "High") diagCard.style.borderLeft = "4px solid #f59e0b";
+            else diagCard.style.borderLeft = "4px solid #3b82f6";
+
+            // Differential Diagnoses
+            const diffList = document.getElementById('res-differential-list');
+            diffList.innerHTML = '';
+            if (risk.differentialDiagnoses.length === 0) {
+                diffList.innerHTML = '<span style="font-size:12px; color:var(--text-muted);">No immediate secondary differential flags identified.</span>';
             } else {
-                document.getElementById('res-diag-title').innerText = "Moderate Metabolic Vigilance Required";
-                document.getElementById('res-diag-desc').innerText = "Pre-diabetic or borderline vitals detected. Initiating primary prevention protocol and quarterly glycemic screening.";
+                risk.differentialDiagnoses.forEach(cd => {
+                    const row = document.createElement('div');
+                    row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; font-size:12px; background:rgba(0,0,0,0.02); padding:6px 10px; border-radius:6px;';
+                    row.innerHTML = `
+                        <div>
+                            <strong>${cd.disease.name}</strong>
+                            <span style="font-size:10.5px; color:var(--text-muted); margin-left:6px;">ICD: ${cd.disease.icd_code}</span>
+                        </div>
+                        <span class="badge ${cd.disease.urgency_class}" style="font-size:10px;">${cd.confidence}% Match</span>
+                    `;
+                    diffList.appendChild(row);
+                });
+            }
+
+            // Pharmacotherapy
+            const medList = document.getElementById('res-med-list');
+            medList.innerHTML = '';
+            primDis.medications.forEach(m => {
+                const li = document.createElement('li');
+                li.style.marginBottom = '6px';
+                li.innerHTML = `<strong>${m.name}</strong> <span style="font-size:11px; color:#2563eb;">[${m.class}]</span>: ${m.instruction}`;
+                medList.appendChild(li);
+            });
+
+            // Diet & Lifestyle
+            document.getElementById('res-diet-desc').innerHTML = `
+                <strong>Recommended:</strong> ${primDis.diet_recommended}<br>
+                <strong style="color:#ef4444;">Strictly Avoid:</strong> ${primDis.diet_avoid}
+            `;
+
+            // Red Flags
+            document.getElementById('res-redflags-text').innerText = primDis.red_flags;
+
+            // Update What-If Simulator Baseline
+            handleSimSliderChange();
+        }
+
+        // =========================================================
+        // 11. WHAT-IF BIOMARKER INTERVENTION SIMULATOR LOGIC
+        // =========================================================
+        function handleSimSliderChange() {
+            const simGluc = parseFloat(document.getElementById('sim-slider-glucose')?.value) || 95;
+            const simSys = parseFloat(document.getElementById('sim-slider-systolic')?.value) || 120;
+            const simBmi = parseFloat(document.getElementById('sim-slider-bmi')?.value) || 23.5;
+            const simStopSmoke = document.getElementById('sim-toggle-smoking')?.checked || false;
+            const simExercise = document.getElementById('sim-toggle-exercise')?.checked || true;
+
+            document.getElementById('sim-val-glucose').innerText = `${simGluc} mg/dL`;
+            document.getElementById('sim-val-systolic').innerText = `${simSys} mmHg`;
+            document.getElementById('sim-val-bmi').innerText = `${simBmi} kg/m²`;
+
+            const adherenceText = (simStopSmoke ? 'Non-Smoking' : 'Active Smoker') + ' • ' + (simExercise ? 'Active Exercise' : 'Sedentary');
+            document.getElementById('sim-val-adherence').innerText = adherenceText;
+
+            // Simulated Patient Object
+            const simPatient = {
+                age: currentEvaluation?.age || 48,
+                gender: currentEvaluation?.gender || "Female",
+                bmi: simBmi,
+                glucose: simGluc,
+                systolic_bp: simSys,
+                diastolic_bp: Math.round(simSys * 0.65),
+                cholesterol: Math.min(currentEvaluation?.cholesterol || 218, 185),
+                heart_rate: 68,
+                smoking: simStopSmoke ? "No" : (currentEvaluation?.smoking || "No"),
+                physical_activity: simExercise ? "High" : "Low",
+                family_history: currentEvaluation?.family_history || "No"
+            };
+
+            const simRisks = calculateClinicalRisks(simPatient, new Set());
+
+            const baseAvg = currentEvaluation ? (currentEvaluation.diabetes_probability + currentEvaluation.heart_probability + currentEvaluation.hypertension_probability) / 3 : 51;
+            const simAvg = (simRisks.diabetes_probability + simRisks.heart_probability + simRisks.hypertension_probability) / 3;
+            const deltaPercent = Math.max(Math.round(baseAvg - simAvg), 5);
+
+            const badge = document.getElementById('sim-overall-delta');
+            if (badge) badge.innerText = `▼ -${deltaPercent}% Projected Risk Reduction`;
+
+            const summary = document.getElementById('sim-projection-summary');
+            if (summary) {
+                summary.innerHTML = `
+                    Projected 12-Month Target: Diabetes Risk drops to <strong>${simRisks.diabetes_probability}% (${simRisks.diabetes_risk})</strong>; 
+                    Cardiac Risk drops to <strong>${simRisks.heart_probability}% (${simRisks.heart_risk})</strong>; 
+                    Hypertension drops to <strong>${simRisks.hypertension_probability}% (${simRisks.hypertension_risk})</strong>.
+                `;
             }
         }
 
+        function applySimulatedVitalsToForm() {
+            const simGluc = document.getElementById('sim-slider-glucose')?.value;
+            const simSys = document.getElementById('sim-slider-systolic')?.value;
+            const simBmi = document.getElementById('sim-slider-bmi')?.value;
+            const simStopSmoke = document.getElementById('sim-toggle-smoking')?.checked;
+            const simExercise = document.getElementById('sim-toggle-exercise')?.checked;
+
+            if (simGluc) document.getElementById('pred_glucose').value = simGluc;
+            if (simSys) {
+                document.getElementById('pred_systolic').value = simSys;
+                document.getElementById('pred_diastolic').value = Math.round(simSys * 0.65);
+            }
+            if (simBmi) document.getElementById('pred_bmi').value = simBmi;
+            if (simStopSmoke) document.getElementById('pred_smoking').value = "No";
+            if (simExercise) document.getElementById('pred_activity').value = "High";
+
+            updateLabRangePills();
+            handleRunPrediction();
+            showToast("✓ Simulated Target Biomarkers applied to Clinical Assessment!", "success");
+        }
+
+        // =========================================================
+        // 12. SAVE TO HISTORY & CSV
+        // =========================================================
         function saveCurrentPredictionToHistory() {
             if (!currentEvaluation) {
-                const nameVal = document.getElementById('pred_name').value;
-                const p = {
-                    name: nameVal || "Cohort Patient",
-                    age: parseFloat(document.getElementById('pred_age').value) || 48,
-                    gender: document.getElementById('pred_gender').value || "Female",
-                    bmi: parseFloat(document.getElementById('pred_bmi').value) || 27.4,
-                    glucose: parseFloat(document.getElementById('pred_glucose').value) || 114.0,
-                    systolic_bp: parseFloat(document.getElementById('pred_systolic').value) || 136.0,
-                    diastolic_bp: parseFloat(document.getElementById('pred_diastolic').value) || 86.0,
-                    cholesterol: parseFloat(document.getElementById('pred_cholesterol').value) || 218.0,
-                    heart_rate: parseFloat(document.getElementById('pred_heart_rate').value) || 74.0,
-                    smoking: document.getElementById('pred_smoking').value || "No",
-                    physical_activity: document.getElementById('pred_activity').value || "Moderate",
-                    family_history: document.getElementById('pred_family_history').value || "Yes"
-                };
-                runPredictionOnValues(p);
+                handleRunPrediction();
             }
 
             const maxId = predictions.reduce((max, pr) => Math.max(max, parseInt(pr.id) || 0), 0);
@@ -2386,7 +3612,7 @@
         }
 
         // =========================================================
-        // 7. MODALS & FORMS
+        // 13. FULL PATIENT CRUD (ADD, EDIT, DELETE, SEED)
         // =========================================================
         function openAddPatientModal() {
             const modal = document.getElementById('addPatientModal');
@@ -2404,48 +3630,294 @@
 
         function handleAddNewPatient(e) {
             if (e) e.preventDefault();
-            try {
-                const nameInput = document.getElementById('new_name');
-                const nameVal = nameInput ? nameInput.value.trim() : '';
-                if (!nameVal) {
-                    showToast("Please enter patient full name.", "warning");
-                    return;
-                }
+            const nameInput = document.getElementById('new_name');
+            const nameVal = nameInput ? nameInput.value.trim() : '';
+            if (!nameVal) {
+                showToast("Please enter patient full name.", "warning");
+                return;
+            }
 
-                const maxId = patients.reduce((max, p) => Math.max(max, parseInt(p.id) || 0), 0);
-                const newP = {
-                    id: maxId + 1,
-                    name: nameVal,
-                    age: parseInt(document.getElementById('new_age').value) || 45,
-                    gender: document.getElementById('new_gender').value || "Male",
-                    bmi: parseFloat(document.getElementById('new_bmi').value) || 26.5,
-                    glucose: parseFloat(document.getElementById('new_glucose').value) || 110.0,
-                    systolic_bp: parseFloat(document.getElementById('new_systolic').value) || 130.0,
-                    diastolic_bp: parseFloat(document.getElementById('new_diastolic').value) || 84.0,
-                    cholesterol: parseFloat(document.getElementById('new_cholesterol').value) || 205.0,
-                    heart_rate: parseFloat(document.getElementById('new_heart_rate').value) || 72.0,
-                    smoking: document.getElementById('new_smoking').value || "No",
-                    physical_activity: document.getElementById('new_activity').value || "Moderate",
-                    family_history: document.getElementById('new_family').value || "No",
-                    created_at: "Just Now"
-                };
+            const maxId = patients.reduce((max, p) => Math.max(max, parseInt(p.id) || 0), 0);
+            const newP = {
+                id: maxId + 1,
+                name: nameVal,
+                age: parseInt(document.getElementById('new_age').value) || 45,
+                gender: document.getElementById('new_gender').value || "Male",
+                bmi: parseFloat(document.getElementById('new_bmi').value) || 26.5,
+                glucose: parseFloat(document.getElementById('new_glucose').value) || 110.0,
+                systolic_bp: parseFloat(document.getElementById('new_systolic').value) || 130.0,
+                diastolic_bp: parseFloat(document.getElementById('new_diastolic').value) || 84.0,
+                cholesterol: parseFloat(document.getElementById('new_cholesterol').value) || 205.0,
+                heart_rate: parseFloat(document.getElementById('new_heart_rate').value) || 72.0,
+                smoking: document.getElementById('new_smoking').value || "No",
+                physical_activity: document.getElementById('new_activity').value || "Moderate",
+                family_history: document.getElementById('new_family').value || "No",
+                created_at: "Just Now"
+            };
 
-                patients.unshift(newP);
+            patients.unshift(newP);
+            saveState();
+            renderAll();
+            closeAddPatientModal();
+
+            const form = document.getElementById('addPatientForm');
+            if (form) form.reset();
+
+            showToast(`✓ Patient ${newP.name} registered in clinical database!`, "success");
+            switchTab('patients');
+        }
+
+        function openEditPatientModal(patientId) {
+            const p = patients.find(x => String(x.id) === String(patientId));
+            if (!p) return;
+
+            document.getElementById('edit_patient_id').value = p.id;
+            document.getElementById('edit_name').value = p.name;
+            document.getElementById('edit_age').value = p.age;
+            document.getElementById('edit_gender').value = p.gender;
+            document.getElementById('edit_bmi').value = p.bmi;
+            document.getElementById('edit_glucose').value = p.glucose;
+            document.getElementById('edit_systolic').value = p.systolic_bp;
+            document.getElementById('edit_diastolic').value = p.diastolic_bp;
+            document.getElementById('edit_cholesterol').value = p.cholesterol;
+            document.getElementById('edit_heart_rate').value = p.heart_rate;
+            document.getElementById('edit_smoking').value = p.smoking;
+            document.getElementById('edit_activity').value = p.physical_activity;
+            document.getElementById('edit_family').value = p.family_history;
+
+            document.getElementById('editPatientModal').classList.add('active');
+        }
+
+        function closeEditPatientModal() {
+            document.getElementById('editPatientModal').classList.remove('active');
+        }
+
+        function handleSaveEditPatient(e) {
+            if (e) e.preventDefault();
+            const pId = document.getElementById('edit_patient_id').value;
+            const p = patients.find(x => String(x.id) === String(pId));
+            if (!p) return;
+
+            p.name = document.getElementById('edit_name').value.trim();
+            p.age = parseInt(document.getElementById('edit_age').value) || p.age;
+            p.gender = document.getElementById('edit_gender').value;
+            p.bmi = parseFloat(document.getElementById('edit_bmi').value) || p.bmi;
+            p.glucose = parseFloat(document.getElementById('edit_glucose').value) || p.glucose;
+            p.systolic_bp = parseFloat(document.getElementById('edit_systolic').value) || p.systolic_bp;
+            p.diastolic_bp = parseFloat(document.getElementById('edit_diastolic').value) || p.diastolic_bp;
+            p.cholesterol = parseFloat(document.getElementById('edit_cholesterol').value) || p.cholesterol;
+            p.heart_rate = parseFloat(document.getElementById('edit_heart_rate').value) || p.heart_rate;
+            p.smoking = document.getElementById('edit_smoking').value;
+            p.physical_activity = document.getElementById('edit_activity').value;
+            p.family_history = document.getElementById('edit_family').value;
+
+            saveState();
+            renderAll();
+            closeEditPatientModal();
+            showToast(`✓ Patient record for ${p.name} updated!`, "success");
+        }
+
+        function deletePatient(patientId) {
+            const p = patients.find(x => String(x.id) === String(patientId));
+            if (!p) return;
+
+            if (confirm(`Are you sure you want to remove patient ${p.name} from the active clinical registry?`)) {
+                patients = patients.filter(x => String(x.id) !== String(patientId));
                 saveState();
                 renderAll();
-                closeAddPatientModal();
-
-                const form = document.getElementById('addPatientForm');
-                if (form) form.reset();
-
-                showToast(`✓ Patient ${newP.name} successfully registered in database!`, "success");
-                switchTab('patients');
-            } catch (err) {
-                console.error("Error adding patient:", err);
-                showToast("Error registering patient: " + err.message, "error");
+                showToast(`Patient ${p.name} removed from registry.`, "info");
             }
         }
 
+        function seedSyntheticCohort() {
+            const synthetic = [
+                { id: 101, name: "Devendra Patel [ICMR-Ref #004]", age: 59, gender: "Male", bmi: 32.1, glucose: 178.0, systolic_bp: 154.0, diastolic_bp: 94.0, cholesterol: 246.0, heart_rate: 82.0, smoking: "Yes", physical_activity: "Low", family_history: "Yes", created_at: "Just Now" },
+                { id: 102, name: "Claire Dupont [WHO-NCD #9102]", age: 34, gender: "Female", bmi: 22.8, glucose: 92.0, systolic_bp: 116.0, diastolic_bp: 76.0, cholesterol: 182.0, heart_rate: 68.0, smoking: "No", physical_activity: "High", family_history: "No", created_at: "Just Now" },
+                { id: 103, name: "Kavita Singhania [ICMR-Ref #005]", age: 51, gender: "Female", bmi: 28.4, glucose: 134.0, systolic_bp: 142.0, diastolic_bp: 88.0, cholesterol: 228.0, heart_rate: 76.0, smoking: "No", physical_activity: "Moderate", family_history: "Yes", created_at: "Just Now" },
+                { id: 104, name: "Liam Gallagher [CDC-NHANES #7819]", age: 62, gender: "Male", bmi: 30.6, glucose: 110.0, systolic_bp: 168.0, diastolic_bp: 98.0, cholesterol: 265.0, heart_rate: 84.0, smoking: "Yes", physical_activity: "Low", family_history: "Yes", created_at: "Just Now" },
+                { id: 105, name: "Ananya Deshmukh [ICMR-Ref #006]", age: 28, gender: "Female", bmi: 21.9, glucose: 86.0, systolic_bp: 112.0, diastolic_bp: 72.0, cholesterol: 164.0, heart_rate: 70.0, smoking: "No", physical_activity: "High", family_history: "No", created_at: "Just Now" }
+            ];
+
+            let addedCount = 0;
+            synthetic.forEach(sp => {
+                if (!patients.some(p => p.name === sp.name)) {
+                    const maxId = patients.reduce((max, p) => Math.max(max, parseInt(p.id) || 0), 0);
+                    sp.id = maxId + 1;
+                    patients.unshift(sp);
+                    addedCount++;
+                }
+            });
+
+            saveState();
+            renderAll();
+            showToast(`✓ Seeded ${addedCount} realistic clinical benchmark patients into registry!`, "success");
+        }
+
+        // =========================================================
+        // 14. OFFICIAL CLINICAL EHR PRESCRIPTION (Rx) GENERATOR
+        // =========================================================
+        let lastGeneratedPrescriptionText = "";
+
+        function openPrescriptionModal(patientId) {
+            let p = null;
+            if (patientId) {
+                p = patients.find(x => String(x.id) === String(patientId));
+            } else if (currentEvaluation) {
+                p = currentEvaluation;
+            } else if (patients.length > 0) {
+                p = patients[0];
+            }
+
+            if (!p) {
+                showToast("No active patient selected for prescription.", "warning");
+                return;
+            }
+
+            const r = calculateClinicalRisks(p);
+            const prim = r.primaryDiagnosis;
+            const dis = prim.disease;
+            const rxDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            const rxTime = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            const rxId = "RX-" + (1000 + p.id) + "-" + Math.floor(Math.random() * 899 + 100);
+
+            let medRows = "";
+            dis.medications.forEach((m, i) => {
+                medRows += `
+                    <tr>
+                        <td><strong>${i + 1}. ${m.name}</strong><br><span style="font-size:11px; color:#2563eb;">${m.class}</span></td>
+                        <td>${m.instruction}</td>
+                        <td>Oral / Standard Schedule</td>
+                    </tr>
+                `;
+            });
+
+            const html = `
+                <div class="rx-header-banner">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div style="display:flex; align-items:center;">
+                            <span class="rx-symbol">℞</span>
+                            <div>
+                                <h2 style="font-size:19px; font-weight:800; color:var(--text-main); margin-bottom:2px;">SMART HEALTH AI CLINICAL NETWORK</h2>
+                                <p style="font-size:12px; color:var(--text-muted);">Executive Hospital Administration & Evidence-Based Diagnostics</p>
+                                <span style="font-size:11px; color:#2563eb; font-weight:700;">Rx Identification: #${rxId} &bull; Timestamp: ${rxDate}, ${rxTime}</span>
+                            </div>
+                        </div>
+                        <div class="rx-stamp">
+                            Verified Protocol<br>CMO Approved
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Meta Grid -->
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; background:rgba(0,0,0,0.02); border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:18px; font-size:12px;">
+                    <div><span style="color:var(--text-muted); font-size:11px; display:block;">PATIENT NAME:</span><strong>${p.name}</strong></div>
+                    <div><span style="color:var(--text-muted); font-size:11px; display:block;">AGE / GENDER:</span><strong>${p.age} Yrs &bull; ${p.gender}</strong></div>
+                    <div><span style="color:var(--text-muted); font-size:11px; display:block;">VITALS:</span><strong>BP ${p.systolic_bp}/${p.diastolic_bp} mmHg</strong></div>
+                    <div><span style="color:var(--text-muted); font-size:11px; display:block;">LABS:</span><strong>Gluc: ${p.glucose} &bull; Chol: ${p.cholesterol}</strong></div>
+                </div>
+
+                <!-- Diagnoses -->
+                <div style="margin-bottom:16px;">
+                    <span style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Primary Clinical Diagnosis:</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                        <h3 style="font-size:16px; font-weight:800; color:var(--text-main);">${dis.name}</h3>
+                        <span class="badge ${dis.urgency_class}">ICD-10: ${dis.icd_code} &bull; ${dis.urgency}</span>
+                    </div>
+                    <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">${dis.description}</p>
+                </div>
+
+                <!-- Pharmacotherapy Table -->
+                <div style="margin-bottom:16px;">
+                    <div style="font-size:12px; font-weight:800; color:var(--text-main); text-transform:uppercase; margin-bottom:6px;">1st-Line Evidence-Based Pharmacotherapy:</div>
+                    <table class="rx-table">
+                        <thead>
+                            <tr>
+                                <th style="width:42%;">Drug Formulation & Class</th>
+                                <th style="width:40%;">Clinical Administration & Timing</th>
+                                <th style="width:18%;">Route / Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${medRows}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Dietary & Home Protocols -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px;">
+                    <div style="background:rgba(0,0,0,0.02); border:1px solid var(--border); border-radius:8px; padding:12px; font-size:11.5px;">
+                        <strong style="color:var(--text-main); display:block; margin-bottom:4px;">🥗 Therapeutic Diet Protocol:</strong>
+                        <div style="margin-bottom:4px;"><span style="color:#059669; font-weight:700;">Prescribed:</span> ${dis.diet_recommended}</div>
+                        <div><span style="color:#dc2626; font-weight:700;">Prohibited:</span> ${dis.diet_avoid}</div>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.02); border:1px solid var(--border); border-radius:8px; padding:12px; font-size:11.5px;">
+                        <strong style="color:var(--text-main); display:block; margin-bottom:4px;">🌿 Natural Phytochemical Protocols:</strong>
+                        <ul style="padding-left:14px; line-height:1.4;">
+                            ${dis.home_remedies.map(hr => `<li>${hr}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Red Flags Box -->
+                <div class="red-flag-alert-box">
+                    <strong>⚠️ CRITICAL ER RED FLAGS (IMMEDIATE EMERGENCY CONTACT):</strong>
+                    <div style="margin-top:3px;">${dis.red_flags}</div>
+                </div>
+
+                <!-- Signature Block -->
+                <div class="rx-sig-block">
+                    <div>
+                        <div style="font-size:11px; color:var(--text-muted);">Next Clinical Review:</div>
+                        <strong>Quarterly Comprehensive Metabolic Panel (Q3 Months)</strong>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-family:'Courier New', monospace; font-weight:700; color:#2563eb; font-size:14px;">[Dr. Satyam K. Singh, MD / CMO]</div>
+                        <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Chief Medical Officer & Administrator &bull; License #AI-9219</div>
+                    </div>
+                </div>
+            `;
+
+            lastGeneratedPrescriptionText = `
+SMART HEALTH AI CLINICAL NETWORK - OFFICIAL PRESCRIPTION (Rx)
+Rx ID: #${rxId} | Date: ${rxDate}
+Patient: ${p.name} | Age: ${p.age} | Sex: ${p.gender} | BP: ${p.systolic_bp}/${p.diastolic_bp} mmHg | Glucose: ${p.glucose} mg/dL
+Diagnosis: ${dis.name} (ICD-10: ${dis.icd_code})
+Urgency: ${dis.urgency}
+
+PRESCRIBED MEDICATIONS:
+${dis.medications.map((m, i) => `${i + 1}. ${m.name} (${m.class}) - ${m.instruction}`).join('\n')}
+
+DIETARY PROTOCOL:
+- Prescribed: ${dis.diet_recommended}
+- Prohibited: ${dis.diet_avoid}
+
+CRITICAL RED FLAGS:
+${dis.red_flags}
+
+Attending Clinician: Satyam K. Singh, Chief Administrator / CMO
+            `.trim();
+
+            document.getElementById('prescriptionContent').innerHTML = html;
+            document.getElementById('prescriptionModal').classList.add('active');
+        }
+
+        function closePrescriptionModal() {
+            document.getElementById('prescriptionModal').classList.remove('active');
+        }
+
+        function copyPrescriptionSummary() {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(lastGeneratedPrescriptionText).then(() => {
+                    showToast("✓ Clinical Rx Summary copied to clipboard!", "success");
+                });
+            } else {
+                showToast("Prescription text prepared for printing.", "info");
+            }
+        }
+
+        // =========================================================
+        // 15. PATIENT REPORT MODAL WITH RADAR & DOCTOR CONSULT NOTES
+        // =========================================================
         function viewPatientReport(patientId) {
             const p = patients.find(x => String(x.id) === String(patientId));
             if (!p) {
@@ -2453,67 +3925,96 @@
                 return;
             }
             const r = calculateClinicalRisks(p);
+            const savedNotes = localStorage.getItem('smarthealth_notes_' + p.id) || "Patient presents for regular quarterly cardiometabolic screening. Vitals and biomarker risk profiles documented in electronic record.";
 
             const content = document.getElementById('reportModalContent');
             content.innerHTML = `
                 <div style="border-bottom:2px solid var(--border); padding-bottom:14px; margin-bottom:18px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                         <div>
                             <span class="badge badge-info" style="margin-bottom:6px;">Smart Health Clinical Audit Report</span>
                             <h2 style="font-size:22px; font-weight:800; color:var(--text-main);">${p.name}</h2>
                             <p style="font-size:13px; color:var(--text-muted);">Age: ${p.age} &bull; Gender: ${p.gender} &bull; Cohort Record ID: #${p.id}</p>
                         </div>
-                        <button class="btn btn-primary" onclick="window.print()">Print Report</button>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn btn-outline" onclick="openPrescriptionModal(${p.id})">Generate Rx</button>
+                            <button class="btn btn-primary" onclick="window.print()">Print Report</button>
+                        </div>
                     </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:20px;">
-                    <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-bottom:20px;">
+                    <div style="background:rgba(0,0,0,0.02); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
                         <div style="font-size:11px; font-weight:700; color:var(--text-muted);">Diabetes Risk</div>
-                        <div style="font-size:22px; font-weight:800; color:#ef4444; margin:4px 0;">${r.diabetes_probability}%</div>
+                        <div style="font-size:20px; font-weight:800; color:#ef4444; margin:4px 0;">${r.diabetes_probability}%</div>
                         <span class="badge badge-${r.diabetes_risk.toLowerCase()}">${r.diabetes_risk}</span>
                     </div>
-                    <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
-                        <div style="font-size:11px; font-weight:700; color:var(--text-muted);">Cardiovascular Risk</div>
-                        <div style="font-size:22px; font-weight:800; color:#f59e0b; margin:4px 0;">${r.heart_probability}%</div>
+                    <div style="background:rgba(0,0,0,0.02); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                        <div style="font-size:11px; font-weight:700; color:var(--text-muted);">Cardiovascular</div>
+                        <div style="font-size:20px; font-weight:800; color:#f59e0b; margin:4px 0;">${r.heart_probability}%</div>
                         <span class="badge badge-${r.heart_risk.toLowerCase()}">${r.heart_risk}</span>
                     </div>
-                    <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
-                        <div style="font-size:11px; font-weight:700; color:var(--text-muted);">Hypertension Risk</div>
-                        <div style="font-size:22px; font-weight:800; color:#f59e0b; margin:4px 0;">${r.hypertension_probability}%</div>
+                    <div style="background:rgba(0,0,0,0.02); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                        <div style="font-size:11px; font-weight:700; color:var(--text-muted);">Hypertension</div>
+                        <div style="font-size:20px; font-weight:800; color:#f59e0b; margin:4px 0;">${r.hypertension_probability}%</div>
                         <span class="badge badge-${r.hypertension_risk.toLowerCase()}">${r.hypertension_risk}</span>
+                    </div>
+                    <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px; text-align:center;">
+                        <div style="font-size:11px; font-weight:700; color:#1e40af;">10-Yr ASCVD</div>
+                        <div style="font-size:20px; font-weight:800; color:#2563eb; margin:4px 0;">${r.ascvd.percent}%</div>
+                        <span class="badge ${r.ascvd.badgeClass}" style="font-size:10px;">${r.ascvd.category}</span>
                     </div>
                 </div>
 
-                <div style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:16px;">
-                    <h4 style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:8px;">Recorded Baseline Vitals:</h4>
-                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; font-size:12px;">
+                <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:16px;">
+                    <h4 style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:10px;">Recorded Baseline Biomarkers & Hemodynamics:</h4>
+                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; font-size:12px;">
                         <div><strong>Fasting Glucose:</strong> ${p.glucose} mg/dL</div>
                         <div><strong>Blood Pressure:</strong> ${p.systolic_bp}/${p.diastolic_bp} mmHg</div>
                         <div><strong>Total Cholesterol:</strong> ${p.cholesterol} mg/dL</div>
-                        <div><strong>BMI:</strong> ${p.bmi} kg/m²</div>
+                        <div><strong>Body Mass Index:</strong> ${p.bmi} kg/m²</div>
                         <div><strong>Heart Rate:</strong> ${p.heart_rate} bpm</div>
-                        <div><strong>Smoking:</strong> ${p.smoking}</div>
+                        <div><strong>Smoking Status:</strong> ${p.smoking}</div>
+                        <div><strong>Mean Arterial Pressure (MAP):</strong> ${r.hemodynamics.map} mmHg</div>
+                        <div><strong>Pulse Pressure (PP):</strong> ${r.hemodynamics.pp} mmHg</div>
+                        <div><strong>Arterial Compliance:</strong> ${r.hemodynamics.ppStatus}</div>
                     </div>
                 </div>
 
-                <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:16px;">
-                    <h4 style="font-size:13px; font-weight:700; color:#1e40af; margin-bottom:6px;">Recommended Clinical Management:</h4>
+                <!-- Doctor Consultation Notes -->
+                <div style="background:rgba(0,0,0,0.02); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <h4 style="font-size:13px; font-weight:700; color:var(--text-main);">Clinical Consultation Notes & Care Directive:</h4>
+                        <button class="btn btn-outline btn-sm" style="font-size:11px;" onclick="savePatientNotes(${p.id})">💾 Save Notes</button>
+                    </div>
+                    <textarea id="patient_consult_notes_${p.id}" class="form-control" style="width:100%; height:75px; font-size:12px; resize:vertical;">${savedNotes}</textarea>
+                </div>
+
+                <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:14px;">
+                    <h4 style="font-size:13px; font-weight:700; color:#1e40af; margin-bottom:6px;">Evidence-Based Guideline Directive:</h4>
                     <p style="font-size:12px; color:#1e293b; line-height:1.5;">
-                        Patient exhibits cardiometabolic vulnerability. Recommend therapeutic glycemic control, zone-2 aerobic conditioning, high-viscosity soluble fiber diet, and quarterly clinical audit.
+                        ${r.ascvd.statinIndication}<br>
+                        Recommend therapeutic zone-2 aerobic conditioning, DASH/Mediterranean nutrition, high-viscosity soluble fibers, and quarterly clinical re-evaluation.
                     </p>
                 </div>
             `;
             document.getElementById('patientReportModal').classList.add('active');
         }
 
+        function savePatientNotes(patientId) {
+            const textarea = document.getElementById('patient_consult_notes_' + patientId);
+            if (textarea) {
+                localStorage.setItem('smarthealth_notes_' + patientId, textarea.value);
+                showToast("✓ Clinical Consultation Notes saved to patient file!", "success");
+            }
+        }
+
         function closeReportModal() {
-            const modal = document.getElementById('patientReportModal');
-            if (modal) modal.classList.remove('active');
+            document.getElementById('patientReportModal').classList.remove('active');
         }
 
         // =========================================================
-        // 8. SEARCH & FILTERS
+        // 16. SEARCH & RISK FILTERS
         // =========================================================
         function handleGlobalSearch() {
             const q = document.getElementById('globalPatientSearch').value.toLowerCase();
@@ -2552,7 +4053,7 @@
         }
 
         // =========================================================
-        // 9. CSV EXPORTS
+        // 17. CSV EXPORTS & BACKUP
         // =========================================================
         function exportPatientsCSV() {
             let csv = "ID,Name,Age,Gender,BMI,Glucose,SystolicBP,DiastolicBP,Cholesterol,HeartRate,Smoking,Activity,FamilyHistory\n";
@@ -2595,7 +4096,46 @@
         }
 
         // =========================================================
-        // 10. CLINICAL PORTAL AUTHENTICATION & TOASTS
+        // 18. CLINICAL THEME SWITCHER (DARK & LIGHT MODE)
+        // =========================================================
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('smarthealth_theme', newTheme);
+
+            const icon = document.getElementById('themeToggleIcon');
+            const text = document.getElementById('themeToggleText');
+            if (icon && text) {
+                if (newTheme === 'dark') {
+                    icon.innerText = "☀️";
+                    text.innerText = "Day";
+                } else {
+                    icon.innerText = "🌙";
+                    text.innerText = "Night";
+                }
+            }
+            showToast(`Switched to Clinical ${newTheme === 'dark' ? 'Night Shift' : 'Daylight'} Mode`, "info");
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('smarthealth_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const icon = document.getElementById('themeToggleIcon');
+            const text = document.getElementById('themeToggleText');
+            if (icon && text) {
+                if (savedTheme === 'dark') {
+                    icon.innerText = "☀️";
+                    text.innerText = "Day";
+                } else {
+                    icon.innerText = "🌙";
+                    text.innerText = "Night";
+                }
+            }
+        }
+
+        // =========================================================
+        // 19. CLINICAL PORTAL AUTHENTICATION & TOASTS
         // =========================================================
         function showToast(message, type = 'info') {
             let container = document.getElementById('toastContainer');
@@ -2646,6 +4186,8 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeAddPatientModal();
+                closeEditPatientModal();
+                closePrescriptionModal();
                 closeReportModal();
             }
         });
