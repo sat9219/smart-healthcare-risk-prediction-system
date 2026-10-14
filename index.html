@@ -1334,6 +1334,12 @@
                     <span id="themeToggleText" style="font-size:12px; font-weight:700;">Night</span>
                 </button>
 
+                <!-- Real-Time Clinical Clock -->
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(37,99,235,0.06); border:1px solid rgba(37,99,235,0.15); border-radius:8px; padding:5px 12px; line-height:1.2;">
+                    <span id="clinicalClock" style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:var(--primary); letter-spacing:0.5px;">--:--:--</span>
+                    <span style="font-size:9px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Clinical Time</span>
+                </div>
+
                 <!-- Admin Profile Chip -->
                 <div class="admin-profile-chip" style="cursor:pointer;" onclick="switchTab('login')" title="Clinician Profile & Login Portal">
                     <div class="admin-avatar">SK</div>
@@ -3135,24 +3141,40 @@
             const list = filterList || patients;
 
             list.forEach((p, idx) => {
+                const r = calculateClinicalRisks(p, new Set());
+                const overallRisk = (r.diabetes_risk === 'High' || r.heart_risk === 'High' || r.hypertension_risk === 'High') ? 'High'
+                    : (r.diabetes_risk === 'Medium' || r.heart_risk === 'Medium') ? 'Medium' : 'Low';
+                const riskBadge = overallRisk === 'High'
+                    ? `<span class="badge badge-high" style="font-size:10px;">⚠ High Risk</span>`
+                    : overallRisk === 'Medium'
+                    ? `<span class="badge badge-medium" style="font-size:10px;">◎ Moderate</span>`
+                    : `<span class="badge badge-low" style="font-size:10px;">✓ Stable</span>`;
+
+                const bmiColor = p.bmi >= 30 ? '#ef4444' : p.bmi >= 25 ? '#f59e0b' : '#10b981';
+                const glucColor = p.glucose >= 126 ? '#ef4444' : p.glucose >= 100 ? '#f59e0b' : '#10b981';
+                const bpColor = p.systolic_bp >= 140 ? '#ef4444' : p.systolic_bp >= 130 ? '#f59e0b' : '#10b981';
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${idx + 1}</td>
-                    <td><strong>${p.name}</strong></td>
-                    <td>${p.age} / ${p.gender}</td>
-                    <td>${p.bmi}</td>
-                    <td>${p.glucose} mg/dL</td>
-                    <td>${p.systolic_bp} / ${p.diastolic_bp}</td>
-                    <td>${p.cholesterol}</td>
-                    <td>${p.heart_rate} bpm</td>
-                    <td>${p.smoking}</td>
-                    <td>${p.physical_activity}</td>
+                    <td style="font-size:11px; color:var(--text-muted);">#${idx + 1}</td>
                     <td>
-                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px;" title="Assess Risk in Diagnostic Engine" onclick="loadAndAssessPatient(${p.id})">Assess</button>
-                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px; margin-left:2px;" title="Generate Official EHR Prescription" onclick="openPrescriptionModal(${p.id})">Rx</button>
-                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px; margin-left:2px;" title="View Clinical Audit Report" onclick="viewPatientReport(${p.id})">Report</button>
-                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px; margin-left:2px; color:#2563eb; border-color:#93c5fd;" title="Edit Patient Record" onclick="openEditPatientModal(${p.id})">Edit</button>
-                        <button class="btn btn-outline" style="padding:3px 7px; font-size:11px; margin-left:2px; color:#ef4444; border-color:#fca5a5;" title="Remove Patient" onclick="deletePatient(${p.id})">&times;</button>
+                        <div style="font-weight:700; font-size:13px;">${p.name}</div>
+                        <div style="margin-top:3px;">${riskBadge}</div>
+                    </td>
+                    <td>${p.age} yr / ${p.gender}</td>
+                    <td><span style="color:${bmiColor}; font-weight:600;">${p.bmi}</span></td>
+                    <td><span style="color:${glucColor}; font-weight:600;">${p.glucose}</span> mg/dL</td>
+                    <td><span style="color:${bpColor}; font-weight:600;">${p.systolic_bp}/${p.diastolic_bp}</span></td>
+                    <td>${p.cholesterol} mg/dL</td>
+                    <td>${p.heart_rate} bpm</td>
+                    <td>${p.smoking === 'Yes' ? '<span style="color:#ef4444;">● Smoker</span>' : '<span style="color:#10b981;">● Non-Smoker</span>'}</td>
+                    <td>${p.physical_activity}</td>
+                    <td style="white-space:nowrap;">
+                        <button class="btn btn-outline" style="padding:3px 8px; font-size:11px;" title="Run Diagnostic Assessment" onclick="loadAndAssessPatient(${p.id})">🔬 Assess</button>
+                        <button class="btn btn-outline" style="padding:3px 8px; font-size:11px; margin-left:2px;" title="Generate Official EHR Prescription" onclick="openPrescriptionModal(${p.id})">℞ Rx</button>
+                        <button class="btn btn-outline" style="padding:3px 8px; font-size:11px; margin-left:2px;" title="View Clinical Audit Report" onclick="viewPatientReport(${p.id})">📋 Report</button>
+                        <button class="btn btn-outline" style="padding:3px 8px; font-size:11px; margin-left:2px; color:#2563eb; border-color:#93c5fd;" title="Edit Patient Record" onclick="openEditPatientModal(${p.id})">✏ Edit</button>
+                        <button class="btn btn-outline" style="padding:3px 8px; font-size:11px; margin-left:2px; color:#ef4444; border-color:#fca5a5;" title="Remove Patient from Registry" onclick="deletePatient(${p.id})">✕</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -3164,19 +3186,28 @@
             if (!tbody) return;
             tbody.innerHTML = '';
 
+            function riskBadgeClass(risk) {
+                if (risk === 'High') return 'badge-high';
+                if (risk === 'Medium') return 'badge-medium';
+                return 'badge-low';
+            }
+
             predictions.forEach(p => {
                 const tr = document.createElement('tr');
-                const dBadge = p.diabetes_risk === 'High' ? '<span class="badge badge-high">High (60%)</span>' : '<span class="badge badge-medium">Medium (45%)</span>';
+                const diabProb = p.diabetes_probability || 0;
+                const heartProb = p.heart_probability || 0;
+                const hypProb = p.hypertension_probability || 0;
+
                 tr.innerHTML = `
-                    <td>#ASSESS-${p.id}</td>
+                    <td style="font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-muted);">#CDSS-${String(p.id).padStart(4,'0')}</td>
                     <td><strong>${p.patient_name}</strong></td>
-                    <td>${dBadge}</td>
-                    <td><span class="badge badge-medium">${p.heart_risk} (${p.heart_probability}%)</span></td>
-                    <td><span class="badge badge-medium">${p.hypertension_risk} (${p.hypertension_probability}%)</span></td>
-                    <td>${p.created_at}</td>
-                    <td>
-                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="viewPatientReport(${p.patient_id})">Full Report</button>
-                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px; margin-left:4px;" onclick="openPrescriptionModal(${p.patient_id})">Official Rx</button>
+                    <td><span class="badge ${riskBadgeClass(p.diabetes_risk)}" style="font-size:10.5px;">${p.diabetes_risk} &bull; ${diabProb}%</span></td>
+                    <td><span class="badge ${riskBadgeClass(p.heart_risk)}" style="font-size:10.5px;">${p.heart_risk} &bull; ${heartProb}%</span></td>
+                    <td><span class="badge ${riskBadgeClass(p.hypertension_risk)}" style="font-size:10.5px;">${p.hypertension_risk} &bull; ${hypProb}%</span></td>
+                    <td style="font-size:12px; color:var(--text-muted);">${p.created_at}</td>
+                    <td style="white-space:nowrap;">
+                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="viewPatientReport(${p.patient_id})">📋 Report</button>
+                        <button class="btn btn-outline" style="padding:4px 8px; font-size:11px; margin-left:4px;" onclick="openPrescriptionModal(${p.patient_id})">℞ Rx</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -4182,19 +4213,56 @@ Attending Clinician: Satyam K. Singh, Chief Administrator / CMO
             handleDashboardLogin();
         }
 
-        // Close modal on Escape key press
+        // =========================================================
+        // 20. KEYBOARD SHORTCUTS + REAL-TIME CLOCK
+        // =========================================================
         document.addEventListener('keydown', (e) => {
+            // Escape - close all modals
             if (e.key === 'Escape') {
                 closeAddPatientModal();
                 closeEditPatientModal();
                 closePrescriptionModal();
                 closeReportModal();
             }
+            // Alt+R - Run Assessment
+            if (e.altKey && (e.key === 'r' || e.key === 'R')) {
+                e.preventDefault();
+                handleRunPrediction();
+                showToast('⌨ Alt+R: Running Clinical Diagnostic Assessment...', 'info');
+            }
+            // Alt+P - Open Prescription
+            if (e.altKey && (e.key === 'p' || e.key === 'P')) {
+                e.preventDefault();
+                openPrescriptionModal(null);
+            }
+            // Alt+D - Switch to Dashboard
+            if (e.altKey && (e.key === 'd' || e.key === 'D')) {
+                e.preventDefault();
+                switchTab('dashboard');
+            }
+            // Alt+C - Switch to CDSS Prediction tab
+            if (e.altKey && (e.key === 'c' || e.key === 'C')) {
+                e.preventDefault();
+                switchTab('prediction');
+            }
         });
+
+        function startClinicalClock() {
+            const el = document.getElementById('clinicalClock');
+            if (!el) return;
+            function tick() {
+                const now = new Date();
+                el.innerText = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            }
+            tick();
+            setInterval(tick, 1000);
+        }
 
         // Initialize on Load
         document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
             renderAll();
+            startClinicalClock();
         });
     </script>
 
